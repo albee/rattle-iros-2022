@@ -1,2 +1,2 @@
 # rattle-iros-2022
-Parametric informaiton-aware motion planning. The public release of the modules is a work in progress!
+Parametric information-aware motion planning. The public release of these modules is a work in progress!
