@@ -1,0 +1,12 @@
+string test_num
+int64 USE_EKF_POSE
+int64 USE_PARAMS
+int64 WEIGHT_MODE
+int64 INITIAL_MODEL_MODE
+bool ground
+int64 OOA_TEST
+
+int64 USE_CSV
+int64 OBS_CONFIG
+
+

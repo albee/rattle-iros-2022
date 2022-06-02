@@ -1,0 +1,5 @@
+<library path="lib/libplanner_lqrrrt">
+  <class name="planner_lqrrrt/Planner" type="planner_lqrrrt::Planner" base_class_type="nodelet::Nodelet">
+    <description>Nodelet for mobility::planner::lqrrrt</description>
+  </class>
+</library>

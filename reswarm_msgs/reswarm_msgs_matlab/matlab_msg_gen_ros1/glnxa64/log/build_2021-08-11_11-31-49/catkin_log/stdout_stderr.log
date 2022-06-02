@@ -1,0 +1,173 @@
+ROS_DISTRO was set to 'kinetic' before. Please make sure that the environment does not mix paths from different distributions.
+[0/1] Re-running CMake...
+CMake Warning (dev) in CMakeLists.txt:
+  No project() command is present.  The top-level CMakeLists.txt file must
+  contain a literal, direct call to the project() command.  Add a line of
+  code such as
+
+    project(ProjectName)
+
+  near the top of the file, but after cmake_minimum_required().
+
+  CMake is pretending there is a "project(Project)" command on the first
+  line.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Deprecation Warning at CMakeLists.txt:4 (cmake_minimum_required):
+  Compatibility with CMake < 2.8.12 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value or use a ...<max> suffix to tell
+  CMake that the project does not need compatibility with older versions.
+
+
+-- Using CATKIN_DEVEL_PREFIX: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/devel
+-- Using CMAKE_PREFIX_PATH: /usr/local/MATLAB/R2021a/sys/ros1/glnxa64/ros1;/usr/local/MATLAB/R2021a/toolbox/ros/mlroscpp/custom_messages
+-- This workspace overlays: /usr/local/MATLAB/R2021a/sys/ros1/glnxa64/ros1;/usr/local/MATLAB/R2021a/toolbox/ros/mlroscpp/custom_messages
+-- Using PYTHON_EXECUTABLE: /home/albee/.matlab/R2021a/ros1/glnxa64/venv/bin/python2
+-- Using Debian Python package layout
+-- Using empy: /usr/bin/empy
+-- Using CATKIN_ENABLE_TESTING: off
+-- catkin 0.7.17
+-- BUILD_SHARED_LIBS is on
+-- BUILD_SHARED_LIBS is on
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- ~~  traversing 1 packages in topological order:
+-- ~~  - reswarm_msgs_matlab
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- +++ processing catkin package: 'reswarm_msgs_matlab'
+-- ==> add_subdirectory(reswarm_msgs_matlab)
+-- Disabling the following message generators: geneus;genlisp;gennodejs
+-- Using these message generators: gencpp;genpy
+-- reswarm_msgs_matlab: 9 messages, 1 services
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build
+ninja: no work to do.
+[1/11] cd /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build/reswarm_msgs_matlab && /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build/catkin_generated/env_cached.sh /home/albee/.matlab/R2021a/ros1/glnxa64/venv/bin/python2 /usr/local/MATLAB/R2021a/sys/ros1/glnxa64/ros1/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py reswarm_msgs_matlab /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/src/reswarm_msgs_matlab/msg/ReswarmCasadiStatus.msg
+[2/11] cd /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build/reswarm_msgs_matlab && /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build/catkin_generated/env_cached.sh /home/albee/.matlab/R2021a/ros1/glnxa64/venv/bin/python2 /usr/local/MATLAB/R2021a/sys/ros1/glnxa64/ros1/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py reswarm_msgs_matlab /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/src/reswarm_msgs_matlab/msg/ReswarmUCBoundStatus.msg
+[3/11] cd /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build/reswarm_msgs_matlab && /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build/catkin_generated/env_cached.sh /home/albee/.matlab/R2021a/ros1/glnxa64/venv/bin/python2 /usr/local/MATLAB/R2021a/sys/ros1/glnxa64/ros1/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py reswarm_msgs_matlab /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/src/reswarm_msgs_matlab/msg/ReswarmStatusPrimary.msg
+[4/11] cd /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build/reswarm_msgs_matlab && /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build/catkin_generated/env_cached.sh /home/albee/.matlab/R2021a/ros1/glnxa64/venv/bin/python2 /usr/local/MATLAB/R2021a/sys/ros1/glnxa64/ros1/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py reswarm_msgs_matlab /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/src/reswarm_msgs_matlab/msg/ReswarmStatusSecondary.msg
+[5/11] cd /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build/reswarm_msgs_matlab && /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build/catkin_generated/env_cached.sh /home/albee/.matlab/R2021a/ros1/glnxa64/venv/bin/python2 /usr/local/MATLAB/R2021a/sys/ros1/glnxa64/ros1/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py reswarm_msgs_matlab /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/src/reswarm_msgs_matlab/msg/ReswarmCasadiDebug.msg geometry_msgs/Wrench:std_msgs/MultiArrayDimension:std_msgs/Float64MultiArray:geometry_msgs/Vector3:std_msgs/Float64:geometry_msgs/Point:std_msgs/Header:std_msgs/MultiArrayLayout:std_msgs/String
+[6/11] cd /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build/reswarm_msgs_matlab && /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build/catkin_generated/env_cached.sh /home/albee/.matlab/R2021a/ros1/glnxa64/venv/bin/python2 /usr/local/MATLAB/R2021a/sys/ros1/glnxa64/ros1/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py reswarm_msgs_matlab /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/src/reswarm_msgs_matlab/msg/ReswarmInfoStatus.msg
+[7/11] cd /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build/reswarm_msgs_matlab && /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build/catkin_generated/env_cached.sh /home/albee/.matlab/R2021a/ros1/glnxa64/venv/bin/python2 /usr/local/MATLAB/R2021a/sys/ros1/glnxa64/ros1/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py reswarm_msgs_matlab /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/src/reswarm_msgs_matlab/msg/ReswarmMsgMRPI.msg std_msgs/Float64MultiArray:std_msgs/MultiArrayDimension:std_msgs/Bool:std_msgs/MultiArrayLayout
+[8/11] cd /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build/reswarm_msgs_matlab && /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build/catkin_generated/env_cached.sh /home/albee/.matlab/R2021a/ros1/glnxa64/venv/bin/python2 /usr/local/MATLAB/R2021a/sys/ros1/glnxa64/ros1/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py reswarm_msgs_matlab /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/src/reswarm_msgs_matlab/msg/ReswarmPlannerStatus.msg
+[9/11] cd /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build/reswarm_msgs_matlab && /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build/catkin_generated/env_cached.sh /home/albee/.matlab/R2021a/ros1/glnxa64/venv/bin/python2 /usr/local/MATLAB/R2021a/sys/ros1/glnxa64/ros1/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py reswarm_msgs_matlab /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/src/reswarm_msgs_matlab/msg/ReswarmTestNumber.msg
+[10/11] cd /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build/reswarm_msgs_matlab && /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build/catkin_generated/env_cached.sh /home/albee/.matlab/R2021a/ros1/glnxa64/venv/bin/python2 /usr/local/MATLAB/R2021a/sys/ros1/glnxa64/ros1/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py reswarm_msgs_matlab /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/src/reswarm_msgs_matlab/srv/ReswarmSrvMRPI.srv std_msgs/Float64MultiArray:std_msgs/MultiArrayDimension:std_msgs/MultiArrayLayout
+[10/11] Install the project...
+-- Install configuration: "Release"
+-- Installing: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/_setup_util.py
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/env.sh
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/setup.bash
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/local_setup.bash
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/setup.sh
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/local_setup.sh
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/setup.zsh
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/local_setup.zsh
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/.rosinstall
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/share/reswarm_msgs_matlab/msg/ReswarmCasadiDebug.msg
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/share/reswarm_msgs_matlab/msg/ReswarmCasadiStatus.msg
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/share/reswarm_msgs_matlab/msg/ReswarmInfoStatus.msg
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/share/reswarm_msgs_matlab/msg/ReswarmMsgMRPI.msg
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/share/reswarm_msgs_matlab/msg/ReswarmPlannerStatus.msg
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/share/reswarm_msgs_matlab/msg/ReswarmStatusPrimary.msg
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/share/reswarm_msgs_matlab/msg/ReswarmStatusSecondary.msg
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/share/reswarm_msgs_matlab/msg/ReswarmTestNumber.msg
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/share/reswarm_msgs_matlab/msg/ReswarmUCBoundStatus.msg
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/share/reswarm_msgs_matlab/srv/ReswarmSrvMRPI.srv
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/share/reswarm_msgs_matlab/cmake/reswarm_msgs_matlab-msg-paths.cmake
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/include/reswarm_msgs_matlab
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/include/reswarm_msgs_matlab/ReswarmUCBoundStatus.h
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/include/reswarm_msgs_matlab/ReswarmStatusPrimary.h
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/include/reswarm_msgs_matlab/ReswarmCasadiStatus.h
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/include/reswarm_msgs_matlab/ReswarmPlannerStatus.h
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/include/reswarm_msgs_matlab/ReswarmSrvMRPI.h
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/include/reswarm_msgs_matlab/ReswarmStatusSecondary.h
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/include/reswarm_msgs_matlab/ReswarmTestNumber.h
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/include/reswarm_msgs_matlab/ReswarmInfoStatus.h
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/include/reswarm_msgs_matlab/ReswarmCasadiDebug.h
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/include/reswarm_msgs_matlab/ReswarmSrvMRPIRequest.h
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/include/reswarm_msgs_matlab/ReswarmMsgMRPI.h
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/include/reswarm_msgs_matlab/ReswarmSrvMRPIResponse.h
+Listing /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/devel/lib/python2.7/dist-packages/reswarm_msgs_matlab ...
+Listing /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/devel/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg ...
+Listing /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/devel/lib/python2.7/dist-packages/reswarm_msgs_matlab/srv ...
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg/_ReswarmStatusSecondary.py
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg/_ReswarmStatusPrimary.py
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg/_ReswarmUCBoundStatus.py
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg/_ReswarmTestNumber.py
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg/_ReswarmStatusPrimary.pyc
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg/_ReswarmMsgMRPI.pyc
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg/_ReswarmInfoStatus.pyc
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg/__init__.pyc
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg/_ReswarmCasadiDebug.pyc
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg/_ReswarmPlannerStatus.pyc
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg/_ReswarmCasadiDebug.py
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg/_ReswarmCasadiStatus.pyc
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg/__init__.py
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg/_ReswarmMsgMRPI.py
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg/_ReswarmInfoStatus.py
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg/_ReswarmStatusSecondary.pyc
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg/_ReswarmTestNumber.pyc
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg/_ReswarmUCBoundStatus.pyc
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg/_ReswarmPlannerStatus.py
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/msg/_ReswarmCasadiStatus.py
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/__init__.pyc
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/__init__.py
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/srv
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/srv/__init__.pyc
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/srv/__init__.py
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/srv/_ReswarmSrvMRPI.pyc
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/python2.7/dist-packages/reswarm_msgs_matlab/srv/_ReswarmSrvMRPI.py
+-- Installing: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/pkgconfig/reswarm_msgs_matlab.pc
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/share/reswarm_msgs_matlab/cmake/reswarm_msgs_matlab-msg-extras.cmake
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/share/reswarm_msgs_matlab/cmake/reswarm_msgs_matlabConfig.cmake
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/share/reswarm_msgs_matlab/cmake/reswarm_msgs_matlabConfig-version.cmake
+-- Installing: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/share/reswarm_msgs_matlab/package.xml
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/include
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/include/reswarm_msgs_matlab
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/include/reswarm_msgs_matlab/visibility_control.h
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/lib/libreswarm_msgs_matlab_matlab.so
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m/
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal/+ros
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal/+ros/+custommessages
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal/+ros/+custommessages/+reswarm_msgs_matlab
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal/+ros/+custommessages/+reswarm_msgs_matlab/reswarmCasadiStatus.m
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal/+ros/+custommessages/+reswarm_msgs_matlab/reswarmSrvMRPIResponse.m
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal/+ros/+custommessages/+reswarm_msgs_matlab/reswarmPlannerStatus.m
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal/+ros/+custommessages/+reswarm_msgs_matlab/reswarmCasadiDebug.m
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal/+ros/+custommessages/+reswarm_msgs_matlab/reswarmTestNumber.m
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal/+ros/+custommessages/+reswarm_msgs_matlab/reswarmInfoStatus.m
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal/+ros/+custommessages/+reswarm_msgs_matlab/reswarmStatusSecondary.m
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal/+ros/+custommessages/+reswarm_msgs_matlab/reswarmSrvMRPIRequest.m
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal/+ros/+custommessages/+reswarm_msgs_matlab/reswarmMsgMRPI.m
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal/+ros/+custommessages/+reswarm_msgs_matlab/reswarmStatusPrimary.m
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+internal/+ros/+custommessages/+reswarm_msgs_matlab/reswarmUCBoundStatus.m
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+msggen
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+msggen/+reswarm_msgs_matlab
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+msggen/+reswarm_msgs_matlab/ReswarmCasadiDebug.m
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+msggen/+reswarm_msgs_matlab/ReswarmTestNumber.m
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+msggen/+reswarm_msgs_matlab/ReswarmMsgMRPI.m
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+msggen/+reswarm_msgs_matlab/ReswarmSrvMRPIRequest.m
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+msggen/+reswarm_msgs_matlab/ReswarmInfoStatus.m
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+msggen/+reswarm_msgs_matlab/ReswarmUCBoundStatus.m
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+msggen/+reswarm_msgs_matlab/ReswarmCasadiStatus.m
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+msggen/+reswarm_msgs_matlab/ReswarmStatusSecondary.m
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+msggen/+reswarm_msgs_matlab/ReswarmStatusPrimary.m
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+msggen/+reswarm_msgs_matlab/ReswarmPlannerStatus.m
+-- Up-to-date: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install/m//+ros/+msggen/+reswarm_msgs_matlab/ReswarmSrvMRPIResponse.m
+Base path: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64
+Source space: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/src
+Build space: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build
+Devel space: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/devel
+Install space: /home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/install
+####
+#### Running command: "ninja build.ninja" in "/home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build"
+####
+####
+#### Running command: "ninja install install -j12 -l12" in "/home/albee/workspaces/astrobee-ws-reswarm/freeflyer-reswarm/develop/reswarm_msgs/reswarm_msgs_matlab/matlab_msg_gen_ros1/glnxa64/build"
+####

@@ -1,0 +1,28 @@
+# Parameters for the primary coordinator node.
+/reswarm/primary/reg_time: 20.0  # seconds to wait after regulation is complete before starting test
+
+# Regulation error thresholds
+/reswarm/primary/pos_reg_thresh: 0.05
+/reswarm/primary/vel_reg_thresh: 0.015
+/reswarm/primary/att_reg_thresh: 0.05
+/reswarm/primary/omega_reg_thresh: 0.05
+
+# ReSWARM setpoints
+/reswarm/primary/point_a_granite: [0.0, 0.6, -0.76, 0.0, 0.0, -0.7071068, 0.7071068]
+/reswarm/primary/point_a_iss: [10.8, -9.6, 4.8, 0.0, 0.0, -0.7071068, 0.7071068]
+
+/reswarm/primary/point_b_granite: [-0.4, -0.4, -0.76, 0.0, 0.0, 0.0, 1.0]
+/reswarm/primary/point_b_iss: [10.8, -7.75, 5.2, 0.0, 0.0, -0.7071068, 0.7071068]
+
+/reswarm/primary/point_c_granite: [0.4, -0.4, -0.76, 0.0, 0.0, 1.0, 0.0]
+/reswarm/primary/point_c_iss: [10.8, -7.75, 4.3, 0.0, 0.0, -0.7071068, 0.7071068]
+
+#------------------
+# DEPRECATED
+#------------------
+
+# rate to feed setpoints to ctl [Hz]
+/reswarm/primary/gnc_ctl_setpoint_rate_: 5.0
+
+# whether or not to override with default control need to add!
+/reswarm/primary/use_pd: false

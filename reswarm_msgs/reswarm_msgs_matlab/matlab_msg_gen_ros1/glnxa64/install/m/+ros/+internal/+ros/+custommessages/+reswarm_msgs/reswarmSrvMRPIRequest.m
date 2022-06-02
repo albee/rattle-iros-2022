@@ -1,0 +1,43 @@
+function [data, info] = reswarmSrvMRPIRequest
+%ReswarmSrvMRPI gives an empty data for reswarm_msgs/ReswarmSrvMRPIRequest
+% Copyright 2019-2020 The MathWorks, Inc.
+%#codegen
+data = struct();
+data.MessageType = 'reswarm_msgs/ReswarmSrvMRPIRequest';
+[data.W, info.W] = ros.internal.ros.messages.std_msgs.float64MultiArray;
+info.W.MLdataType = 'struct';
+[data.UMax, info.UMax] = ros.internal.ros.messages.std_msgs.float64MultiArray;
+info.UMax.MLdataType = 'struct';
+[data.Dt, info.Dt] = ros.internal.ros.messages.ros.default_type('double',1);
+[data.Mass, info.Mass] = ros.internal.ros.messages.ros.default_type('double',1);
+[data.QPosAnc, info.QPosAnc] = ros.internal.ros.messages.ros.default_type('double',1);
+[data.QVelAnc, info.QVelAnc] = ros.internal.ros.messages.ros.default_type('double',1);
+[data.RAnc, info.RAnc] = ros.internal.ros.messages.ros.default_type('double',1);
+info.MessageType = 'reswarm_msgs/ReswarmSrvMRPIRequest';
+info.constant = 0;
+info.default = 0;
+info.maxstrlen = NaN;
+info.MaxLen = 1;
+info.MinLen = 1;
+info.MatPath = cell(1,21);
+info.MatPath{1} = 'w';
+info.MatPath{2} = 'w.layout';
+info.MatPath{3} = 'w.layout.dim';
+info.MatPath{4} = 'w.layout.dim.label';
+info.MatPath{5} = 'w.layout.dim.size';
+info.MatPath{6} = 'w.layout.dim.stride';
+info.MatPath{7} = 'w.layout.data_offset';
+info.MatPath{8} = 'w.data';
+info.MatPath{9} = 'u_max';
+info.MatPath{10} = 'u_max.layout';
+info.MatPath{11} = 'u_max.layout.dim';
+info.MatPath{12} = 'u_max.layout.dim.label';
+info.MatPath{13} = 'u_max.layout.dim.size';
+info.MatPath{14} = 'u_max.layout.dim.stride';
+info.MatPath{15} = 'u_max.layout.data_offset';
+info.MatPath{16} = 'u_max.data';
+info.MatPath{17} = 'dt';
+info.MatPath{18} = 'mass';
+info.MatPath{19} = 'Q_pos_anc';
+info.MatPath{20} = 'Q_vel_anc';
+info.MatPath{21} = 'R_anc';

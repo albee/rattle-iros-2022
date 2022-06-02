@@ -1,0 +1,124 @@
+<!-- Launch a limited set of nodes for debugging -->
+
+<launch>
+  <arg name="robot" default="$(optenv ASTROBEE_ROBOT sim)" />
+  <arg name="world" default="$(optenv ASTROBEE_WORLD iss)" />
+  <arg name="rviz"  default="false" />          <!-- Use RViz?           -->
+  <arg name="sviz"  default="false" />          <!-- Use SimulationViz (Gazebo)?           -->
+  <arg name="ns" default="" />                  <!-- Robot namespace           -->
+  <arg if="$(eval arg('world')=='iss')"
+    name="pose" default="11.0500   -9.6500    4.9000 0.0 0.0 0.0 1.0" />
+  <arg if="$(eval arg('world')=='granite')"
+    name="pose" default="0 -0.5 -0.76         1.0 0.0 0.0 0.0" />
+                                                <!-- Pose           -->
+
+  <!-- Payload options for RViz and inertial params -->
+  <arg name="top_aft" default="perching_arm" /> <!-- Payload bays            -->
+  <arg name="bot_aft" default="empty" />        <!-- Payload bays            -->
+  <arg name="bot_front" default="empty" />      <!-- Payload bays            -->
+
+  <!-- Junk for Astrobee nodelets -->
+  <?comment launch-prefix="x-terminal-emulator -e gdb -ex run --args" ?>
+  <env name="ASTROBEE_ROBOT" value="$(arg robot)" />
+  <env name="ASTROBEE_WORLD" value="$(arg world)" />
+  <env if="$(eval optenv('ASTROBEE_CONFIG_DIR','')=='')"
+       name="ASTROBEE_CONFIG_DIR" value="$(find astrobee)/config" />
+  <env if="$(eval optenv('ASTROBEE_RESOURCE_DIR','')=='')"
+       name="ASTROBEE_RESOURCE_DIR" value="$(find astrobee)/resources" />
+  <env if="$(eval optenv('ROSCONSOLE_CONFIG_FILE','')=='')"
+       name="ROSCONSOLE_CONFIG_FILE" value="$(find astrobee)/resources/logging.config"/>
+
+  <arg name="spurn" default=""/>                 <!-- Prevent a specific node   -->
+  <arg name="nodes" default=""/>                 <!-- Launch specific nodes     -->
+  <arg name="extra" default=""/>                 <!-- Inject an additional node -->
+  <arg name="debug" default=""/>                 <!-- Debug a node set          -->
+  <arg name="dds" default="false"/>              <!-- Should DDS be started     -->
+  <arg name="output" default="screen"/>          <!-- Where nodes should log    -->
+
+  <!-- Declare our global logging format -->
+  <env name="ROSCONSOLE_FORMAT" value="[${severity}] [${node}] -- ${message}"/>
+
+  <!-- RATTLE nodes/nodelets -->
+  <rosparam command="load" file="$(find execute_asap)/config/primary_coord_params.yaml"/>
+  <rosparam command="load" file="$(find execute_asap)/config/casadi_nmpc_params.yaml"/>
+  <rosparam command="load" file="$(find execute_asap)/config/rattle_coordinator_params.yaml"/>
+
+  <!--rattle_coordinator -->
+  <node pkg="rattle_coordinator" type="rattle_coordinator_node.py" name="rattle_coordinator"
+      required="false" respawn="false"
+      output="$(arg output)"/>
+
+  <!--primary_coordinator -->
+  <node pkg="nodelet" type="nodelet" name="primary_coordinator"
+      required="false" respawn="false"
+      args="standalone PrimaryNodelet"
+      output="$(arg output)"/>
+
+  <!-- rattle_rrt (global planner) -->
+  <node pkg="nodelet" type="nodelet" name="rattle_rrt"
+        required="false" respawn="false"
+        args="standalone rrt/RRTNodelet "
+        output="$(arg output)"/>
+
+  <!-- rattle_acado_planner (info_aware_planner) -->
+  <node pkg="rattle_acado_planner" type="rattle_acado_planner_node" name="rattle_acado_planner"
+    required="false" respawn="false"
+    output="$(arg output)"/>
+
+  <!-- casadi_nmpc (robust mpc) -->
+  <node pkg="nodelet" type="nodelet" name="casadi_nmpc"
+     required="false" respawn="false"
+     args="standalone casadi_nmpc/CasadiNMPCNodelet"
+     output="$(arg output)"/>
+
+  <!-- RViz -->
+  <group if="$(eval arg('rviz') == true)">
+    <!-- Start RViz -->
+    <node pkg="rviz" type="rviz" name="rviz"
+      output="$(arg output)"
+      args="-d $(find astrobee)/resources/rviz/$(arg world)_rattle.rviz"/>
+
+    <!-- Publish an RViz world model (to visualize) -->
+    <param if="$(eval arg('world')=='granite')" name="/granite/robot_description"
+    textfile="$(find astrobee_granite)/urdf/model.urdf" />
+    <param if="$(eval arg('world')=='iss')" name="/iss/robot_description"
+    textfile="$(find astrobee_iss)/urdf/model.urdf" />
+    <param name="/dock/robot_description"
+    textfile="$(find astrobee_dock)/urdf/model.urdf" />
+
+    <!-- We must publish global transforms in case no robot has been spawned -->
+    <node name="global_transforms" pkg="framestore" type="global_transforms" output="screen"/>
+
+
+    <!-- Publish an RViz robot model (to visualize) -->
+    <!-- Start the joint_state publisher (taken from spawn_astrobee.lauch)-->
+    <?comment
+    <node
+      name="spawn_astrobee" pkg="astrobee_gazebo" type="spawn_model"
+      args="-param /robot_description -model bsharp -urdf -pose  $(arg pose)" 
+      output="screen"/>
+
+    <!-- Start the TF2 publisher, which takes in joint_state -->
+    <group if="$(eval arg('world')=='iss')">
+      <param name="robot_description"
+        command='$(find xacro)/xacro --inorder $(find description)/urdf/model.urdf.xacro world:="$(arg world)" top_aft:="$(arg top_aft)" bot_aft:="$(arg bot_aft)" bot_front:="$(arg bot_front)" ns:="_$(arg ns)" prefix:="$(arg ns)/"'/>
+      <node pkg="robot_state_publisher" type="robot_state_publisher" name="astrobee_state_publisher"/>
+    </group>
+
+    <group if="$(eval arg('world')=='granite')">
+      <param name="robot_description"
+        command='$(find xacro)/xacro --inorder $(find description)/urdf/model.urdf.xacro world:="$(arg world)" top_aft:="$(arg top_aft)" bot_aft:="$(arg bot_aft)" bot_front:="$(arg bot_front)" ns:="_$(arg ns)" prefix:="/"'/>
+      <node pkg="robot_state_publisher" type="robot_state_publisher" name="astrobee_state_publisher">
+          <param name="tf_prefix" value="/$(arg ns)"/>
+      </node>
+    </group>
+
+    <!-- Gazebo (required for Astrobee visualization) -->
+    <include file="$(find astrobee_gazebo)/launch/start_simulation.launch">
+      <arg name="world" value="$(find astrobee_gazebo)/worlds/$(arg world).world"/>
+      <arg name="gui" value="$(arg sviz)"/>
+    </include>
+    ?>
+
+  </group>
+</launch>

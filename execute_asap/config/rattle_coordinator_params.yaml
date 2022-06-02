@@ -1,0 +1,7 @@
+# Parameters for RATTLE
+/rattle/rrt/ymin: -9.8  # minimum y constraint for RRT
+
+/rattle/planner/max_RTI_iter_: 10 # max number of RTI iterations allowed
+/rattle/planner/Wx: [10, 10, 10, 5, 5, 5, 1, 1, 1, 1, 1, 1]  # state weightings
+/rattle/planner/Wu: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]  # input weightings
+/rattle/planner/WN: [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0]  # terminal weightings

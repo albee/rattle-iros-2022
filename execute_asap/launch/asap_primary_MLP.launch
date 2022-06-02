@@ -1,0 +1,80 @@
+<!--
+asap_primary_MLP.launch
+
+Keenan Albee and Charles Oestreich, 2021
+MIT Space Systems Laboratory
+-->
+
+
+<launch>
+
+    <!-- Additional options -->
+    <arg name="spurn" default=""/>                 <!-- PRevent a specific node   -->
+    <arg name="nodes" default=""/>                 <!-- Launch specific nodes     -->
+    <arg name="extra" default=""/>                 <!-- Inject an additional node -->
+    <arg name="debug" default=""/>                 <!-- Debug a node set          -->
+    <arg name="output" default="screen"/>          <!-- Where nodes should log    -->
+    <arg name="ns" default="" />                   <!-- Robot namespace           -->
+    <arg name="ground" default="false" />          <!-- Is this a ground test? (optional use) -->
+    <arg name="sim" default="false" />             <!-- Is this a sim test? (optional use)    -->
+
+    <!-- Debug options-->
+    <?comment launch-prefix="x-terminal-emulator -e gdb -ex run --args" ?>
+    <?comment launch-prefix="gdb -ex run --args" ?>
+    <?comment launch-prefix="valgrind --leak-check=full" ?>
+
+    <!-- Load params for queen -->
+    <rosparam command="load" file="$(find execute_asap)/config/uc_bound_params.yaml"/>
+    <rosparam command="load" file="$(find execute_asap)/config/primary_coord_params.yaml"/>
+    <rosparam command="load" file="$(find execute_asap)/config/rattle_coordinator_params.yaml"/>
+
+    <node pkg="nodelet" type="nodelet" name="primary_coordinator"
+        required="false" respawn="false"
+        args="standalone PrimaryNodelet"
+        output="$(arg output)"/>
+
+    <!-- <node pkg="nodelet" type="nodelet" name="uc_bound"
+        required="false" respawn="false"
+        args="standalone uc_bound/UCBoundNodelet"
+        output="$(arg output)"/> -->
+
+
+    <!-- rattle_rrt (global planner) -->
+    <node pkg="nodelet" type="nodelet" name="rattle_rrt"
+            required="false" respawn="false"
+            args="standalone rrt/RRTNodelet "
+            output="$(arg output)"/>
+
+    <node pkg="z_poly_calc" type="z_poly_calc.py" name="z_poly_calc"
+        required="false" respawn="false"
+        output="$(arg output)"/>
+
+    <node pkg="rattle_coordinator" type="rattle_coordinator_node.py" name="rattle_coordinator"
+        required="false" respawn="false"
+        output="$(arg output)"/>
+
+    <!-- rattle_acado_planner (info_aware_planner) -->
+    <node pkg="rattle_acado_planner" type="rattle_acado_planner_node" name="rattle_acado_planner"
+        required="false" respawn="false"
+        output="$(arg output)"/>
+
+    <node pkg="info_rich_traj" type="info_rich_traj_gen.py" name="info_rich_traj"
+        required="false" respawn="false"
+        output="$(arg output)"/>
+
+    <!-- calls up traj_smoother.py-->
+    <include file="$(find planner_lqrrrt)/launch/planner_lqrrrt.launch">
+        <arg name="nspace" value="$(arg ns)" />      <!-- Namespace -->
+        <arg name="ground" value="$(arg ground)" />  <!-- Is it ground?  -->
+    </include>
+
+    <node pkg="inv_fam" type="inverse_FAM_implementation.py" name="inv_fam"
+        required="false" respawn="false"
+        output="$(arg output)"/>
+    
+    <node pkg="param_est" type="param_estimate.py" name="param_est" 
+        required="false" respawn="false"
+        output="$(arg output)"/>
+
+</launch>
+

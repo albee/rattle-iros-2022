@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>rattle_rrt</name>
+  <version>0.0.0</version>
+  <description>
+    High level RRT planner for RATTLE
+  </description>
+  <license>
+    Apache License, Version 2.0
+  </license>
+  <author email="astrobee-fsw@nx.arc.nasa.gov">
+    Astrobee Flight Software
+  </author>
+  <maintainer email="astrobee-fsw@nx.arc.nasa.gov">
+    Astrobee Flight Software
+  </maintainer>
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>eigen_conversions</build_depend>
+  <exec_depend>eigen_conversions</exec_depend>
+  <depend>roscpp</depend>
+  <depend>nodelet</depend>
+  <depend>eigen3</depend>
+  <depend>pluginlib</depend>
+  <depend>actionlib</depend>
+  <depend>tf</depend>
+  <depend>ff_msgs</depend>
+  <depend>ff_util</depend>
+  <depend>message_generation</depend>
+
+  <exec_depend>message_runtime</exec_depend>
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <nodelet plugin="${prefix}/nodelet_plugins.xml" />
+  </export>
+</package>

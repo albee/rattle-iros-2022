@@ -1,0 +1,455 @@
+%{
+# plot_bags.m
+
+Plot rosbag data for Astrobee topics.
+Uses MATLAB's rosbag interface.
+
+## Usage
+
+(1) Select bag settings. (Each set of bags has different topic naming.)
+(2) Read in desired data. get_data_xxx.m files specify which bags to use.
+(3) (Optional) Select trajectory type to use (ROAM). Plots updated or
+non-updated trajectory.
+(4) Perform plotting. Select desired plotting types.
+
+Keenan Albee, 2021.
+%}
+
+%% -----------------------------------------------------------------
+% (1) Select bag settings.
+%-------------------------------------------------------------------
+make_plots_purdy();
+ROAM_PATH = '~/workspaces/astrobee-ws-td/freeflyer-shared-td';
+addpath(genpath(strcat(ROAM_PATH, '/develop/data/scripts')));  % add tumble plotting
+
+% Read settings
+SIM = 0;  % {0: hardware; 1: sim}
+bag_type = 'reswarm';  % {reswarm, roam}
+
+
+%% -----------------------------------------------------------------
+% (2) Read in desired data.
+%-------------------------------------------------------------------
+%% chaser/primary
+topic_prefix = "/honey";
+if (SIM ~= 1)
+  topic_prefix = "";
+end
+% [ROSBAG_PATH, ROSBAG_NAME] = get_data_granite_lab_testing_05_27_21('chaser');  %{chaser, target}
+% [ROSBAG_PATH, ROSBAG_NAME] = get_data_sim('chaser');  %{chaser, target}
+% [ROSBAG_PATH, ROSBAG_NAME] = get_data_iss_05_03_21('chaser');  %{chaser, target}
+[ROSBAG_PATH, ROSBAG_NAME] = get_data_iss_08_19_21('primary')  %{primary, secondary}
+
+%% target/secondary
+topic_prefix = "/bumble";
+if (SIM ~= 1)
+  topic_prefix = "";
+end
+% [ROSBAG_PATH, ROSBAG_NAME] = get_data_granite_lab_testing_05_27_21('target');  %{chaser, target}
+% [ROSBAG_PATH, ROSBAG_NAME] = get_data_iss_07_07_21('target');  %{chaser, target}
+[ROSBAG_PATH, ROSBAG_NAME] = get_data_iss_05_03_21('target');  %{chaser, target}
+
+%% Read bag data (for either Target/Secondary or Chaser/Primary)
+rosbag_path = ROSBAG_PATH + ROSBAG_NAME;
+bag_data_struct = read_bags(rosbag_path, topic_prefix, bag_type);
+
+if bag_type == 'reswarm'
+  track = bag_data_struct.track
+  traj
+  ekf_msgs
+  mpc_msgs
+  ctl_msgs, t_traj_start, t_delay, ...
+   bag, bag_info, dlr_msgs, traj_body, traj_updated_msgs, ...
+   q_targ_0_hist, mrpi_msgs, q_targ_slam_hist, t_slam_start, uc_msgs, fam_msgs, ...
+   loc_features, rrt_traj_msgs]
+traj_to_plot = traj;
+
+
+%% -----------------------------------------------------------------
+% (3) (Optional) Select trajectory type to use (ROAM).
+%-------------------------------------------------------------------
+%% Use online-updated ref trajectory
+[online_traj, traj_updated_vec] = get_online_traj(mpc_msgs, traj_updated_msgs);
+traj_to_plot = online_traj;
+
+
+%% -----------------------------------------------------------------
+% (4) Perform plotting.
+%-------------------------------------------------------------------
+%% Plot Bryce lqrrrt
+x_lqr_traj = plot_lqr_rrt(rrt_traj_msgs);
+
+%% Plot quats of Target
+plot_quats_targ(t_traj_start, t_slam_start, q_targ_0_hist, q_targ_slam_hist)
+
+%% Number of features
+plot_features(loc_features, t_traj_start);
+% plot_fam(t_feats, feats)
+
+%% DLR stuff (only for MP runs)
+mpMIT_args = dlr_msgs{3}.Data(3:30);
+TRAJ_PATH_ = dlr_msgs{4}.Data;
+
+%% Plot gnc/ekf history(3D)
+state = plot_gnc_ekf(ekf_msgs);
+
+%% Plot ref traj history (3D)
+r0_mat = traj(:, 2:4);
+R0_mat = traj(:, 8:11);
+des_traj = r0_mat;
+anim_tumble(r0_mat, R0_mat, des_traj)
+
+%% Plot MPC timing
+[avg_t, sig_t] = plot_mpc_timing(mpc_msgs)
+
+%% Plot ekf timing
+plot_ekf_timing(ekf_msgs)
+
+%% Plot pos, vel, and 3d traj multi-plot (only for MP runs)
+plot_mp_multi(traj_to_plot)
+
+%% Plot track and trajectory
+plot_track_and_traj(track, traj_to_plot)
+
+%% Plot track, traj and traj_body
+traj_updated = plot_traj_and_traj_body(track, traj_to_plot, traj_body, traj_updated_msgs, mpc_msgs);
+
+%% Animate traj_updated
+animate_traj_updated(traj_updated);
+
+%% Plot FAM
+plot_fam(fam_msgs, t_traj_start)
+
+%% Plot MPC
+plot_mpc(track, traj_to_plot, ekf_msgs, mpc_msgs, ctl_msgs, t_traj_start, t_delay)
+
+%% Plot tube MPC
+plot_tube_mpc(track, traj_to_plot, ekf_msgs, mpc_msgs, ctl_msgs, t_traj_start, t_delay)
+
+%% Plot z0 (tube MPC runs only)
+plot_z0_from_msgs(mrpi_msgs, mpc_msgs, ekf_msgs, track, traj_to_plot,  t_traj_start)
+
+%% Plot attitude control history
+plot_att_controller(track, traj_to_plot, ekf_msgs, mpc_msgs, ctl_msgs, t_traj_start, t_delay);
+
+%% Plot translational control history
+ if strcmp(bags7_1.flags{k}.ControlMode,'track')
+     ctl_on(k)=1;
+ elseif strcmp(bags7_1.flags{k}.ControlMode,'track_tube')
+     ctl_on(k)=2;
+ end
+
+%% Plot actual commanded inputs
+plot_gnc_ctl_command(ctl_msgs, mpc_msgs, t_delay, t_traj_start)
+
+%% Compute RMSE
+x_des = ctl_state2loc_state(traj')';
+t_x_des = traj(:, 1);
+
+x_real = track;
+t_x_real = get_t_from_epoch(ekf_msgs, t_traj_start);
+
+t_start = 10.0;
+t_end = 135.0;
+[RMS, vec_RMS] = calc_RMS_error(t_start, t_end, t_x_des, t_x_real, x_des, x_real, false, true, 'translation');  % sync times, translation states only
+RMS
+
+%% TODO: compute normal to trajectory error
+
+%%
+function plot_quats_targ(t_traj_start, t_slam_start, q_targ_0_hist, q_targ_slam_hist)
+  %{ Plot quaternions of the target (history and SLAM)
+  %}
+  
+  % the q_targ poses go out after slam_activate is true
+  % the motion plan starts when track control_mode is activated
+  figure;
+  hold on;
+  t_extra = t_traj_start - t_slam_start;
+  idx = floor(t_extra/0.2);
+  q_targ_0_hist(1, :)
+  plot(q_targ_0_hist(:, 1), 'black');
+  plot(q_targ_0_hist(:, 4), 'black');
+  plot(q_targ_slam_hist(idx:end, 1), 'red');
+  plot(q_targ_slam_hist(idx:end, 4), 'red');
+end
+
+
+function plot_z0_from_msgs(mrpi_msgs, mpc_msgs, ekf_msgs, track, traj,  t_traj_start)
+    % AZ and bZ
+    AZ= array2mat(mrpi_msgs{1}.AZ)';
+    bZ = array2mat(mrpi_msgs{1}.BZ)';
+
+    % X_hist
+    X_hist = track(:, 1:6);  % ~62.5 Hz, starts @ t_begin
+    epoch_times = [];
+    for i = 1:1:length(ekf_msgs)
+        epoch_times(i) = stamp2time(ekf_msgs{i}.Header.Stamp);
+    end
+    [~, idx] = min(abs(t_traj_start - epoch_times));
+    t_X_hist = epoch_times(idx:end) - t_traj_start;
+    X_hist = X_hist(idx:end, :);  % X_hist trimmed for start time
+        
+    % x0_mpc_hist
+    x0_mpc_hist = [];
+    epoch_times = [];
+    for i = 1:1:length(mpc_msgs)
+        x0_mpc_hist(i, :) = array2mat(mpc_msgs{i}.XNom)';
+        epoch_times(i) = stamp2time(mpc_msgs{i}.Header.Stamp);
+    end
+    [~, idx] = min(abs(t_traj_start - epoch_times));
+    t_x0_hist = epoch_times(idx:end) - t_traj_start;
+    num_t = length(t_x0_hist);  % length of history
+    x0_mpc_hist = x0_mpc_hist(idx:idx+num_t-1, :);  % U_hist trimmed for start time
+
+    X_des_hist = traj(:, 2:7);
+    
+    % correct for ISS coordinates to view
+    X_hist_zeroed = X_hist;
+    X_hist_zeroed(:, 1:3) = X_hist_zeroed(:, 1:3) - [10.9 -8.15 4.9];
+    
+    x0_mpc_hist_zeroed = x0_mpc_hist;
+    x0_mpc_hist_zeroed(:, 1:3) = x0_mpc_hist_zeroed(:, 1:3) - [10.9 -8.15 4.9];
+
+    X_des_hist_zeroed = X_des_hist;
+    X_des_hist_zeroed(:, 1:3) = X_des_hist_zeroed(:, 1:3) - [10.9 -8.15 4.9];
+    
+    plot_z0(AZ, bZ, X_hist_zeroed', x0_mpc_hist_zeroed', X_des_hist_zeroed')
+end
+
+
+function plot_tube_mpc(track, traj, ekf_msgs, mpc_msgs, ctl_msgs, t_traj_start, t_delay)
+    % X_hist
+    X_hist = track(:, 1:6);  % ~62.5 Hz, starts @ t_begin
+    epoch_times = [];
+    for i = 1:1:length(ekf_msgs)
+        epoch_times(i) = stamp2time(ekf_msgs{i}.Header.Stamp);
+    end
+    [~, idx] = min(abs(t_traj_start - epoch_times));
+    t_X_hist = epoch_times(idx:end) - t_traj_start;
+    X_hist = X_hist(idx:end, :);  % X_hist trimmed for start time
+
+    % U_hist
+    U_hist = [];  % ~5 Hz, starts @ t_regulate
+    U_dr_hist = [];
+    U_mpc_hist = [];
+    epoch_times = [];
+    for i = 1:1:length(mpc_msgs)
+        U_hist(i, :) = wrench2input(mpc_msgs{i}.Wrench);
+        U_dr_hist(i, :) = [mpc_msgs{i}.U0Dr.X; mpc_msgs{i}.U0Dr.Y; mpc_msgs{i}.U0Dr.Z];
+        U_mpc_hist(i, :) = [mpc_msgs{i}.U0Mpc.X; mpc_msgs{i}.U0Mpc.Y; mpc_msgs{i}.U0Mpc.Z];
+        epoch_times(i) = stamp2time(mpc_msgs{i}.Header.Stamp);
+    end
+    [~, idx] = min(abs(t_traj_start - epoch_times));
+    t_U_hist = epoch_times(idx:end) - t_traj_start;
+    num_t = length(t_U_hist);  % lenght of history
+    U_hist = U_hist(idx:idx+num_t-1, :);  % U_hist trimmed for start time
+    U_dr_hist = U_dr_hist(idx:idx+num_t-1, :);  % U_hist trimmed for start time
+    U_mpc_hist = U_mpc_hist(idx:idx+num_t-1, :);  % U_hist trimmed for start time
+    
+    % X_des_hist
+    t_X_des_hist = traj(:, 1);  % 5 Hz, starts @ t_traj_start
+    X_des_hist = traj(:, 2:7);
+
+    % U_ctl
+    U_ctl = [];  % 62.5 Hz, starts @ t_regulate
+    epoch_times = [];
+    for i = 1:1:length(ctl_msgs)
+        U_ctl(i, :) = wrench2input(ctl_msgs{i}.Wrench);
+        epoch_times(i) = stamp2time(ctl_msgs{i}.Header.Stamp);
+    end
+    % we have NO timing data from TS1 bags for famcommand---assume 62.5 Hz
+    idx = floor(t_delay*62.5);
+    U_ctl = U_ctl(idx:end, :);
+    t_U_ctl = (0:1:size(U_ctl, 1)-1)/62.5;
+    
+    % plot_mpc_and_ctl_command(t_U_hist, t_U_ctl, U_hist', U_ctl')
+
+    X_hist_zeroed = X_hist;
+    X_hist_zeroed(:, 1:3) = X_hist_zeroed(:, 1:3) - [10.9 -8.15 4.9];
+
+    X_des_hist_zeroed = X_des_hist;
+    X_des_hist_zeroed(:, 1:3) = X_des_hist_zeroed(:, 1:3) - [10.9 -8.15 4.9];
+
+
+    plot_tube_mpc_multi_start(t_X_hist, t_U_hist, t_U_hist, t_U_hist, t_X_des_hist, ...
+        X_hist_zeroed', U_hist', U_dr_hist', U_mpc_hist', X_des_hist_zeroed');
+end
+
+
+function animate_traj_updated(traj_updated)
+    %{
+    Animate the updated trajectory
+    %}
+    anim_traj(traj_updated);
+end
+
+
+function traj_updated = plot_traj_and_traj_body(track, traj, traj_body, traj_updated_vec, mpc_msgs)
+    %{
+    Plot track and des traj
+    %}
+	ISS_xyz = [10.9, -8.15, 4.9];
+    
+  figure;
+  view(45, 45);
+  axis equal;
+  hold on;
+
+  plot3(track(:, 1) - ISS_xyz(1), track(:, 2) - ISS_xyz(2), track(:, 3) - ISS_xyz(3), 'color', 'black');
+
+  scatter3(traj(1, 2) - ISS_xyz(1), traj(1, 3) - ISS_xyz(2), traj(1, 4) - ISS_xyz(3), 40, 'green', 'filled')
+  plot3(traj(:, 2) - ISS_xyz(1), traj(:, 3) - ISS_xyz(2), traj(:, 4) - ISS_xyz(3), 'color', 'green');
+  scatter3(traj_body(1, 2), traj_body(1, 3) - 1.5, traj_body(1, 4), 40, 'red', 'filled')
+  plot3(traj_body(:, 2), traj_body(:, 3) - 1.5, traj_body(:, 4), 'color', 'red');
+
+  % find when tracking begins
+  track_start_idx = get_track_start_idx(mpc_msgs);
+
+  [rows, cols] = traj_updated_vec{track_start_idx}.Layout.Dim.Size;
+  traj_updated = reshape(traj_updated_vec{track_start_idx}.Data, cols, rows)';
+  scatter3(traj_updated(1, 2) - ISS_xyz(1), traj_updated(1, 3) - ISS_xyz(2), traj_updated(1, 4) - ISS_xyz(3), 40, 'blue', 'filled')
+  plot3(traj_updated(:, 2) - ISS_xyz(1), traj_updated(:, 3) - ISS_xyz(2), traj_updated(:, 4) - ISS_xyz(3), 'color', 'blue', 'LineWidth', 1);
+end
+
+
+function plot_mpc(track, traj, ekf_msgs, mpc_msgs, ctl_msgs, t_traj_start, t_delay)
+    % X_hist
+    X_hist = track(:, 1:6);  % ~62.5 Hz, starts @ t_begin
+    [t_X_hist, idx] = get_t_from_epoch(ekf_msgs, t_traj_start);
+    X_hist = X_hist(idx:end, :);  % X_hist trimmed for start time
+
+    % U_hist
+    U_hist = [];  % ~5 Hz, starts @ t_regulate
+    epoch_times = [];
+    for i = 1:1:length(mpc_msgs)
+        U_hist(i, :) = wrench2input(mpc_msgs{i}.Wrench);
+    end
+    [t_U_hist, idx] = get_t_from_epoch(mpc_msgs, t_traj_start);
+    num_t = length(t_U_hist);  % lenght of history
+    U_hist = U_hist(idx:idx+num_t-1, :);  % U_hist trimmed for start time
+
+    % X_des_hist
+    epoch_times = [];
+    for i = 1:1:length(ekf_msgs)
+        epoch_times(i) = stamp2time(ekf_msgs{i}.Header.Stamp);
+    end
+    t_X_des_hist = traj(:, 1);  % 5 Hz, starts @ t_traj_start
+    X_des_hist = traj(:, 2:7);
+    
+    t_final = epoch_times(end) - t_traj_start;
+    [~, idx] = min(abs(t_final - t_X_des_hist));  % get idx of final t_X_des_hist
+    t_X_des_hist = t_X_des_hist(1:idx);
+    X_des_hist = X_des_hist(1:idx, :);
+
+    % U_ctl
+    U_ctl = [];  % 62.5 Hz, starts @ t_regulate
+    epoch_times = [];
+    for i = 1:1:length(ctl_msgs)
+        U_ctl(i, :) = wrench2input(ctl_msgs{i}.Wrench);
+        epoch_times(i) = stamp2time(ctl_msgs{i}.Header.Stamp);
+    end
+    % we have NO timing data from TS1 bags for famcommand---assume 62.5 Hz
+    idx = floor(t_delay*62.5);
+    U_ctl = U_ctl(idx:end, :);
+    t_U_ctl = (0:1:size(U_ctl, 1)-1)/62.5;
+    
+    % plot_mpc_and_ctl_command(t_U_hist, t_U_ctl, U_hist', U_ctl')
+
+    X_hist_zeroed = X_hist;
+    X_hist_zeroed(:, 1:3) = X_hist_zeroed(:, 1:3) - [10.9 -9.65 4.9];
+
+    X_des_hist_zeroed = X_des_hist;
+    X_des_hist_zeroed(:, 1:3) = X_des_hist_zeroed(:, 1:3) - [10.9 -9.65 4.9];
+
+    plot_mpc_multi_start(t_X_hist, t_U_hist, t_X_des_hist, X_hist_zeroed', U_hist', X_des_hist_zeroed')
+    
+%     figure;
+%     hold on;
+%     plot(U_ctl(:, 1));
+%     plot(U_ctl(:, 2));
+%     plot(U_ctl(:, 3));
+end
+
+
+function X_hist = plot_att_controller(track, traj, ekf_msgs, mpc_msgs, ctl_msgs, t_traj_start, t_delay)
+    %{
+    Plot attitude controller performance. Show computed inputs, desired
+    trajectory, and gnc/ekf reference trajectory.
+    Inputs:
+    track, gnc/ekf with real history in Ames convention
+        % [n x 13], x y z xd yd zd qx qy qz qw wx wy wz
+    traj, td/tube_mpc/traj with desired trajectory
+        [n x 20], t x y z xd yd zd qx qy qz qw wx wy wz xdd ydd zdd wxd wyd wzd
+        Target is [n x 14] in same order, but only angular data
+    mpc_msgs, /td/tube_mpc/debug with pd controller inputs
+    %}
+
+    % X_hist
+    X_hist = track(:, 7:13);  % ~62.5 Hz, starts @ t_begin
+    epoch_times = [];
+    for i = 1:1:length(ekf_msgs)
+        epoch_times(i) = stamp2time(ekf_msgs{i}.Header.Stamp);
+    end
+    [~, idx] = min(abs(t_traj_start - epoch_times));
+    t_X_hist = epoch_times(idx:end) - t_traj_start;
+    X_hist = X_hist(idx:end, :);  % X_hist trimmed for start time
+    
+    % U_hist
+    U_hist = [];  % ~5 Hz, starts @ t_regulate
+    epoch_times = [];
+    for i = 1:1:length(mpc_msgs)
+        U_hist(i, :) = wrench2input(mpc_msgs{i}.Wrench);
+        epoch_times(i) = stamp2time(mpc_msgs{i}.Header.Stamp);
+    end
+    [~, idx] = min(abs(t_traj_start - epoch_times));
+    t_U_hist = epoch_times(idx:end) - t_traj_start;
+    num_t = length(t_U_hist);  % lenght of history
+    U_hist = U_hist(idx:idx+num_t-1, :);  % U_hist trimmed for start time
+
+    % X_des_hist
+%     t_X_des_hist = traj(:, 1);  
+    t_X_des_hist = 0:0.2:0.2*(size(traj, 1)-1);  % 5 Hz, starts @ t_traj_startf
+    X_des_hist = traj(:, 8:14);
+    
+    plot_att_multi_start(t_X_hist, t_U_hist, t_X_des_hist, X_hist', U_hist', X_des_hist');
+end
+
+
+function [avg_comp_time, std_comp_time] = plot_mpc_timing(mpc_msgs)
+    comp_time = [];
+    for i = 1:1:length(mpc_msgs)
+        comp_time(i) = mpc_msgs{i}.CasadiCompTime.Data;
+    end
+    plot(comp_time)
+    avg_comp_time = mean(comp_time)
+    std_comp_time = std(comp_time)
+    yline(avg_comp_time);
+    title('MPC Comp Time')
+    ylabel('[s]')
+    xlabel('[-]')
+end
+
+
+function anim_traj(traj)
+    x = traj(:, 2:4);
+    quat = traj(:, 8:11);
+    anim_tumble(x, quat, x);
+end
+
+
+function mat = array2mat(array_msg)
+    data = array_msg.Data;
+    [rows, cols] = array_msg.Layout.Dim.Size;
+    mat = reshape(data, cols, rows);
+end
+
+
+function make_plots_purdy()
+  set(0,'DefaultAxesFontName', 'CMU Serif')
+  set(0, 'DefaultLineLineWidth', 3);
+  set(groot,'defaulttextinterpreter','latex');  
+  set(groot, 'defaultAxesTickLabelInterpreter','latex');  
+  set(groot, 'defaultLegendInterpreter','latex');
+  set(0,'defaultAxesFontSize', 32)
+end

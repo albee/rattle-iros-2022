@@ -1,0 +1,33 @@
+<!--
+asap_secondary_MLP.launch
+
+Keenan Albee and Charles Oestreich, 2021
+MIT Space Systems Laboratory
+-->
+
+<launch>
+
+  <!-- Additional options -->
+  <arg name="spurn" default=""/>                 <!-- PRevent a specific node   -->
+  <arg name="nodes" default=""/>                 <!-- Launch specific nodes     -->
+  <arg name="extra" default=""/>                 <!-- Inject an additional node -->
+  <arg name="debug" default=""/>                 <!-- Debug a node set          -->
+  <arg name="output" default="screen"/>          <!-- Where nodes should log    -->
+  <arg name="ns" default="" />                   <!-- Robot namespace           -->
+  <arg name="ground" default="false" />          <!-- Is this a ground test? (optional use) -->
+  <arg name="sim" default="false" />             <!-- Is this a sim test? (optional use)    -->
+
+  <!-- Debug options-->
+  <?comment launch-prefix="x-terminal-emulator -e gdb -ex run --args" ?>
+  <?comment launch-prefix="gdb -ex run --args" ?>
+  <?comment launch-prefix="valgrind --leak-check=full" ?>
+
+  <!-- Load params for bumble -->
+  <rosparam command="load" file="$(find execute_asap)/config/secondary_coord_params.yaml"/>
+  <!-- <rosparam command="load" file="$(find execute_asap)/config/casadi_nmpc_params.yaml"/> -->
+
+  <node pkg="nodelet" type="nodelet" name="secondary_coordinator"
+    required="false" respawn="false"
+    args="standalone SecondaryNodelet"
+    output="$(arg output)"/>
+</launch>

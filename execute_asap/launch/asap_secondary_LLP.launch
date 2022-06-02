@@ -1,0 +1,28 @@
+<!--
+asap_secondary_LLP.launch
+
+Keenan Albee and Charles Oestreich, 2021
+MIT Space Systems Laboratory
+-->
+
+<launch>
+
+  <!-- Additional options -->
+  <arg name="drivers"/>                       <!-- Should we launch drivers? -->
+  <arg name="spurn" default=""/>              <!-- PRevent a specific node   -->
+  <arg name="nodes" default=""/>              <!-- Launch specific nodes     -->
+  <arg name="extra" default=""/>              <!-- Inject an additional node -->
+  <arg name="debug" default=""/>                 <!-- Debug a node set          -->
+  <arg name="output" default="log"/>          <!-- Where to log              -->
+  <arg name="ns"    default="" />             <!-- Robot namespace           -->
+  <arg name="loc_only" default="false"/>           <!-- Only run localization     -->
+  <arg name="ground" default="false" />          <!-- Is this a ground test? (optional use) -->
+  <arg name="sim" default="false" />             <!-- Is this a sim test? (optional use)    -->
+
+  <?comment launch-prefix="x-terminal-emulator -e gdb -ex run --args" ?>
+
+  <!-- <node pkg="nodelet" type="nodelet" name="casadi_nmpc"
+        required="false" respawn="false"
+        args="standalone casadi_nmpc/CasadiNMPCNodelet"
+        output="$(arg output)"/> -->
+</launch>

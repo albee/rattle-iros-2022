@@ -1,0 +1,17 @@
+# Parameters for the secondary coordinator node.
+
+# Length of time (s) before secondary is considered settled.
+/reswarm/secondary/target_settle_length: 20
+
+# Regulation error thresholds
+/reswarm/secondary/pos_reg_thresh: 0.05
+/reswarm/secondary/vel_reg_thresh: 0.015
+/reswarm/secondary/att_reg_thresh: 0.05
+/reswarm/secondary/omega_reg_thresh: 0.05
+
+#------------------
+# DEPRECATED
+#------------------
+
+# Max limits on velocity for setpoints (sanity check)
+/reswarm/secondary/max_omega: 0.2

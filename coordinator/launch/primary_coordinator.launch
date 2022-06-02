@@ -1,0 +1,53 @@
+<!-- To create a standalone launchfile for your nodelet:
+1) Enter the nodelet names as below for the manager nodelet and the actual nodelet.
+2) Set desired logging levels for your nodelet in astrobee/resources/logging.config
+3) Roslaunch this launchfile, and any individual nodelets that you need.
+-->
+
+<launch>
+    <?comment launch-prefix="gdb -ex run --args" ?>
+    <?comment launch-prefix="valgrind --leak-check=full" ?>
+
+    <arg name="robot" default="$(optenv ASTROBEE_ROBOT sim)" />
+    <arg name="world" default="$(optenv ASTROBEE_WORLD iss)" />
+
+    <env name="ASTROBEE_ROBOT" value="$(arg robot)" />
+    <env name="ASTROBEE_WORLD" value="$(arg world)" />
+    <env if="$(eval optenv('ASTROBEE_CONFIG_DIR','')=='')"
+        name="ASTROBEE_CONFIG_DIR" value="$(find astrobee)/config" />
+    <env if="$(eval optenv('ASTROBEE_RESOURCE_DIR','')=='')"
+        name="ASTROBEE_RESOURCE_DIR" value="$(find astrobee)/resources" />
+    <env if="$(eval optenv('ROSCONSOLE_CONFIG_FILE','')=='')"
+        name="ROSCONSOLE_CONFIG_FILE" value="$(find astrobee)/resources/logging.config"/>
+
+    <arg name="spurn" default=""/>                 <!-- Prevent a specific node   -->
+    <arg name="nodes" default=""/>                 <!-- Launch specific nodes     -->
+    <arg name="extra" default=""/>                 <!-- Inject an additional node -->
+    <arg name="debug" default=""/>                 <!-- Debug a node set          -->
+    <arg name="dds" default="false"/>              <!-- Should DDS be started     -->
+    <arg name="output" default="screen"/>          <!-- Where nodes should log    -->
+
+    <rosparam command="load" file="$(find execute_asap)/config/primary_coord_params.yaml"/>
+
+    <arg name="llp" default="local" />              <!-- LLP IP address              -->
+    <arg name="mlp" default="local" />              <!-- MLP IP address              -->
+
+    <param name="/reswarm/sim" type="String" value="true"/>
+    <param name="/reswarm/ground" type="String" value="false"/>
+
+    <node
+        pkg="execute_asap" type="execute_asap.py" name="execute_asap"
+        args="/ $(arg llp)"
+        output="$(arg output)"/>
+
+    <!-- <node
+        pkg="nodelet" type="nodelet" name="manager"
+        args="manager"
+        output="$(arg output)"/> -->
+
+    <!-- Now inject the nodelet into the nodelet manager -->
+    <node pkg="nodelet" type="nodelet" name="primary_coordinator"
+        required="false" respawn="false"
+        args="standalone PrimaryNodelet"
+            output="$(arg output)"/>
+</launch>

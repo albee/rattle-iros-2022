@@ -1,0 +1,69 @@
+<!--
+asap_secondary.launch
+
+Keenan Albee and Charles Oestreich, 2021
+MIT Space Systems Laboratory
+-->
+
+<launch>
+  <arg name="robot" default="$(optenv ASTROBEE_ROBOT honey)" />
+  <arg name="world" default="$(optenv ASTROBEE_WORLD iss)" />
+  <arg name="llp" default="local" />          <!-- LLP IP address            -->
+  <arg name="mlp" default="local" />          <!-- MLP IP address           -->
+  <arg name="spurn" default=""/>              <!-- PRevent a specific node   -->
+  <arg name="nodes" default=""/>              <!-- Launch specific nodes     -->
+  <arg name="extra" default=""/>              <!-- Inject an additional node -->
+  <arg name="debug" default=""/>              <!-- Debug node group          -->
+  <arg name="output" default="screen"/>
+
+  <arg name="ns" default="" />                <!-- Robot namespace           -->
+  <arg name="ground" default="false" />          <!-- Is this a ground test? (optional use) -->
+  <arg name="sim" default="false" />             <!-- Is this a sim test? (optional use)    -->
+
+  <env name="ASTROBEE_ROBOT" value="$(arg robot)" />
+  <env name="ASTROBEE_WORLD" value="$(arg world)" />
+  <env if="$(eval optenv('ASTROBEE_CONFIG_DIR','')=='')"
+       name="ASTROBEE_CONFIG_DIR" value="$(find astrobee)/config" />
+  <env if="$(eval optenv('ASTROBEE_RESOURCE_DIR','')=='')"
+       name="ASTROBEE_RESOURCE_DIR" value="$(find astrobee)/resources" />
+  <env if="$(eval optenv('ROSCONSOLE_CONFIG_FILE','')=='')"
+       name="ROSCONSOLE_CONFIG_FILE" value="$(find astrobee)/resources/logging.config"/>
+
+     <!-- LLP -->
+     <group unless="$(eval arg('llp')=='disabled')">
+
+       <machine unless="$(eval arg('llp')=='local')" name="llp" address="$(arg llp)">
+       </machine>
+
+       <include file="$(find execute_asap)/launch/asap_secondary_LLP.launch" >
+         <arg name="ns" value="$(arg ns)" />            <!-- Robot namespace           -->
+         <arg name="spurn" value="$(arg spurn)" />      <!-- Prevent node         -->
+         <arg name="nodes" value="$(arg nodes)" />      <!-- Launch node group    -->
+         <arg name="extra" value="$(arg extra)" />      <!-- Inject extra nodes   -->
+         <arg name="debug" value="$(arg debug)" />      <!-- Debug node group     -->
+         <arg name="output" value="$(arg output)" />
+        <arg name="ground" value="$(arg ground)" />
+        <arg name="sim" value="$(arg sim)" />
+       </include>
+     </group>
+
+    <!-- MLP -->
+    <group unless="$(eval arg('mlp')=='disabled')">
+
+      <machine unless="$(eval arg('mlp')=='local')" name="mlp" address="$(arg mlp)">
+      </machine>
+
+      <!-- If we have specified a bag, then play it back into flight software-->
+      <include file="$(find execute_asap)/launch/asap_secondary_MLP.launch" >
+        <arg name="ns" value="$(arg ns)" />            <!-- Robot namespace           -->
+        <arg name="spurn" value="$(arg spurn)" />      <!-- Prevent node         -->
+        <arg name="nodes" value="$(arg nodes)" />      <!-- Launch node group    -->
+        <arg name="extra" value="$(arg extra)" />      <!-- Inject extra nodes   -->
+        <arg name="debug" value="$(arg debug)" />      <!-- Debug node group     -->
+        <arg name="output" value="$(arg output)" />
+        <arg name="ground" value="$(arg ground)" />
+        <arg name="sim" value="$(arg sim)" />
+      </include>
+    </group>
+
+</launch>

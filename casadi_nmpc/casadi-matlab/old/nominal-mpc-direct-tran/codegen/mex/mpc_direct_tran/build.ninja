@@ -1,0 +1,101 @@
+# CompilerName=gcc
+# Mode=optim
+ninja_required_version = 1.3
+
+# Basic folders
+root = .
+builddir = $root/build/glnxa64
+matlabdir = /usr/local/MATLAB/R2020a
+startdir = /home/albee/workspaces/astrobee-ws-td/freeflyer-shared-td/develop/tube_mpc/matlab/export_edition
+
+# Toolchain information
+cc = gcc
+cxx = /usr/bin/g++
+linker = gcc
+linkerxx = /usr/bin/g++
+
+cflags =  -fexceptions -fPIC -fno-omit-frame-pointer -pthread -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -fwrapv -DNDEBUG -fvisibility=hidden -std=c99 -I "$root" -I "$startdir" -I "$root/interface" -I "$matlabdir/extern/include" -I "." -DHAVE_LAPACK_CONFIG_H -DLAPACK_COMPLEX_STRUCTURE -DMW_HAVE_LAPACK_DECLS -DMODEL=mpc_direct_tran_mex -DMW_NEEDS_VERSION_H -c 
+
+cxxflags =  -fexceptions -fPIC -fno-omit-frame-pointer -pthread -std=c++11 -D_GNU_SOURCE -DMATLAB_MEX_FILE  -O2 -fwrapv -DNDEBUG -fvisibility=hidden -std=c++11 -I "$root" -I "$startdir" -I "$root/interface" -I "$matlabdir/extern/include" -I "." -DHAVE_LAPACK_CONFIG_H -DLAPACK_COMPLEX_STRUCTURE -DMW_HAVE_LAPACK_DECLS -DMODEL=mpc_direct_tran_mex -DMW_NEEDS_VERSION_H -c 
+
+ldflags =  -pthread -Wl,--no-undefined  -shared -Wl,--as-needed -Wl,-rpath-link,$matlabdir/bin/glnxa64 -L"$matlabdir/bin/glnxa64" -Wl,-rpath-link,$matlabdir/extern/bin/glnxa64 -L"$matlabdir/extern/bin/glnxa64" -lMatlabDataArray -lmx -lmex -lmat -lm -lstdc++  -o mpc_direct_tran_mex.mexa64 -L"$matlabdir/bin/glnxa64" -lmwblas -lmwlapack -lemlrt -lcovrt -lut -lmwmathutil 
+
+# Build Rules
+rule cc
+    command = $cc $cflags $in -o $out
+
+rule cxx
+    command = $cxx $cxxflags $in -o $out
+
+rule link
+    command = $linker $in $ldflags
+
+rule linkxx
+    command = $linkerxx $in $ldflags
+
+# Build
+build $builddir/rt_nonfinite.o : cxx $root/rt_nonfinite.cpp
+build $builddir/mpc_direct_tran_data.o : cxx $root/mpc_direct_tran_data.cpp
+build $builddir/mpc_direct_tran_initialize.o : cxx $root/mpc_direct_tran_initialize.cpp
+build $builddir/mpc_direct_tran_terminate.o : cxx $root/mpc_direct_tran_terminate.cpp
+build $builddir/mpc_direct_tran.o : cxx $root/mpc_direct_tran.cpp
+build $builddir/get_dynamics_for_dt.o : cxx $root/get_dynamics_for_dt.cpp
+build $builddir/diag.o : cxx $root/diag.cpp
+build $builddir/eml_int_forloop_overflow_check.o : cxx $root/eml_int_forloop_overflow_check.cpp
+build $builddir/eye.o : cxx $root/eye.cpp
+build $builddir/assertValidSizeArg.o : cxx $root/assertValidSizeArg.cpp
+build $builddir/repmat.o : cxx $root/repmat.cpp
+build $builddir/quadprog.o : cxx $root/quadprog.cpp
+build $builddir/validateattributes.o : cxx $root/validateattributes.cpp
+build $builddir/all.o : cxx $root/all.cpp
+build $builddir/checkLinearInputs.o : cxx $root/checkLinearInputs.cpp
+build $builddir/xcopy.o : cxx $root/xcopy.cpp
+build $builddir/computeGrad_StoreHx.o : cxx $root/computeGrad_StoreHx.cpp
+build $builddir/computeFval_ReuseHx.o : cxx $root/computeFval_ReuseHx.cpp
+build $builddir/computeFval.o : cxx $root/computeFval.cpp
+build $builddir/linearForm_.o : cxx $root/linearForm_.cpp
+build $builddir/factorQRE.o : cxx $root/factorQRE.cpp
+build $builddir/factorQR.o : cxx $root/factorQR.cpp
+build $builddir/deleteColMoveEnd.o : cxx $root/deleteColMoveEnd.cpp
+build $builddir/factor.o : cxx $root/factor.cpp
+build $builddir/solve.o : cxx $root/solve.cpp
+build $builddir/fullColLDL2_.o : cxx $root/fullColLDL2_.cpp
+build $builddir/partialColLDL3_.o : cxx $root/partialColLDL3_.cpp
+build $builddir/factoryConstruct.o : cxx $root/factoryConstruct.cpp
+build $builddir/initActiveSet.o : cxx $root/initActiveSet.cpp
+build $builddir/removeAllIneqConstr.o : cxx $root/removeAllIneqConstr.cpp
+build $builddir/maxConstraintViolation.o : cxx $root/maxConstraintViolation.cpp
+build $builddir/modifyOverheadPhaseOne_.o : cxx $root/modifyOverheadPhaseOne_.cpp
+build $builddir/modifyOverheadRegularized_.o : cxx $root/modifyOverheadRegularized_.cpp
+build $builddir/moveConstraint_.o : cxx $root/moveConstraint_.cpp
+build $builddir/addBoundToActiveSetMatrix_.o : cxx $root/addBoundToActiveSetMatrix_.cpp
+build $builddir/computePhaseOneRelativeTolerances.o : cxx $root/computePhaseOneRelativeTolerances.cpp
+build $builddir/updateRelativeTolerancesForPhaseTwo.o : cxx $root/updateRelativeTolerancesForPhaseTwo.cpp
+build $builddir/driver.o : cxx $root/driver.cpp
+build $builddir/PresolveWorkingSet.o : cxx $root/PresolveWorkingSet.cpp
+build $builddir/RemoveDependentEq_.o : cxx $root/RemoveDependentEq_.cpp
+build $builddir/xgeqp3.o : cxx $root/xgeqp3.cpp
+build $builddir/xgemv.o : cxx $root/xgemv.cpp
+build $builddir/computeQ_.o : cxx $root/computeQ_.cpp
+build $builddir/countsort.o : cxx $root/countsort.cpp
+build $builddir/RemoveDependentIneq_.o : cxx $root/RemoveDependentIneq_.cpp
+build $builddir/feasibleX0ForWorkingSet.o : cxx $root/feasibleX0ForWorkingSet.cpp
+build $builddir/xgeqrf.o : cxx $root/xgeqrf.cpp
+build $builddir/xgemm.o : cxx $root/xgemm.cpp
+build $builddir/phaseone.o : cxx $root/phaseone.cpp
+build $builddir/iterate.o : cxx $root/iterate.cpp
+build $builddir/xrot.o : cxx $root/xrot.cpp
+build $builddir/compute_deltax.o : cxx $root/compute_deltax.cpp
+build $builddir/compute_lambda.o : cxx $root/compute_lambda.cpp
+build $builddir/feasibleratiotest.o : cxx $root/feasibleratiotest.cpp
+build $builddir/ratiotest.o : cxx $root/ratiotest.cpp
+build $builddir/checkStoppingAndUpdateFval.o : cxx $root/checkStoppingAndUpdateFval.cpp
+build $builddir/computeFirstOrderOpt.o : cxx $root/computeFirstOrderOpt.cpp
+build $builddir/indexShapeCheck.o : cxx $root/indexShapeCheck.cpp
+build $builddir/_coder_mpc_direct_tran_api.o : cxx $root/interface/_coder_mpc_direct_tran_api.cpp
+build $builddir/_coder_mpc_direct_tran_mex.o : cxx $root/interface/_coder_mpc_direct_tran_mex.cpp
+build $builddir/_coder_mpc_direct_tran_info.o : cxx $root/interface/_coder_mpc_direct_tran_info.cpp
+build $builddir/cpp_mexapi_version.o : cxx $matlabdir/extern/version/cpp_mexapi_version.cpp
+
+# Link
+build $root/mpc_direct_tran_mex.mexa64 : linkxx $builddir/rt_nonfinite.o $builddir/mpc_direct_tran_data.o $builddir/mpc_direct_tran_initialize.o $builddir/mpc_direct_tran_terminate.o $builddir/mpc_direct_tran.o $builddir/get_dynamics_for_dt.o $builddir/diag.o $builddir/eml_int_forloop_overflow_check.o $builddir/eye.o $builddir/assertValidSizeArg.o $builddir/repmat.o $builddir/quadprog.o $builddir/validateattributes.o $builddir/all.o $builddir/checkLinearInputs.o $builddir/xcopy.o $builddir/computeGrad_StoreHx.o $builddir/computeFval_ReuseHx.o $builddir/computeFval.o $builddir/linearForm_.o $builddir/factorQRE.o $builddir/factorQR.o $builddir/deleteColMoveEnd.o $builddir/factor.o $builddir/solve.o $builddir/fullColLDL2_.o $builddir/partialColLDL3_.o $builddir/factoryConstruct.o $builddir/initActiveSet.o $builddir/removeAllIneqConstr.o $builddir/maxConstraintViolation.o $builddir/modifyOverheadPhaseOne_.o $builddir/modifyOverheadRegularized_.o $builddir/moveConstraint_.o $builddir/addBoundToActiveSetMatrix_.o $builddir/computePhaseOneRelativeTolerances.o $builddir/updateRelativeTolerancesForPhaseTwo.o $builddir/driver.o $builddir/PresolveWorkingSet.o $builddir/RemoveDependentEq_.o $builddir/xgeqp3.o $builddir/xgemv.o $builddir/computeQ_.o $builddir/countsort.o $builddir/RemoveDependentIneq_.o $builddir/feasibleX0ForWorkingSet.o $builddir/xgeqrf.o $builddir/xgemm.o $builddir/phaseone.o $builddir/iterate.o $builddir/xrot.o $builddir/compute_deltax.o $builddir/compute_lambda.o $builddir/feasibleratiotest.o $builddir/ratiotest.o $builddir/checkStoppingAndUpdateFval.o $builddir/computeFirstOrderOpt.o $builddir/indexShapeCheck.o $builddir/_coder_mpc_direct_tran_api.o $builddir/_coder_mpc_direct_tran_mex.o $builddir/_coder_mpc_direct_tran_info.o $builddir/cpp_mexapi_version.o 

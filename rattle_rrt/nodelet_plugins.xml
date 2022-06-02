@@ -1,0 +1,9 @@
+<library path="lib/librattle_rrt_nodelet">
+  <class name="rrt/RRTNodelet"
+  	type="rrt::RRTNodelet"
+  	base_class_type="nodelet::Nodelet">
+    <description>
+    	Nodelet for RRT
+    </description>
+  </class>
+</library>

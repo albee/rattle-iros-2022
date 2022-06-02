@@ -1,0 +1,34 @@
+<!-- Launch a limited set of nodes for debugging -->
+
+<launch>
+  <!-- Junk for Astrobee nodelets -->
+  <?comment launch-prefix="x-terminal-emulator -e gdb -ex run --args" ?>
+
+  <arg name="robot" default="$(optenv ASTROBEE_ROBOT sim)" />
+  <arg name="world" default="$(optenv ASTROBEE_WORLD iss)" />
+
+  <env name="ASTROBEE_ROBOT" value="$(arg robot)" />
+  <env name="ASTROBEE_WORLD" value="$(arg world)" />
+  <env if="$(eval optenv('ASTROBEE_CONFIG_DIR','')=='')"
+       name="ASTROBEE_CONFIG_DIR" value="$(find astrobee)/config" />
+  <env if="$(eval optenv('ASTROBEE_RESOURCE_DIR','')=='')"
+       name="ASTROBEE_RESOURCE_DIR" value="$(find astrobee)/resources" />
+  <env if="$(eval optenv('ROSCONSOLE_CONFIG_FILE','')=='')"
+       name="ROSCONSOLE_CONFIG_FILE" value="$(find astrobee)/resources/logging.config"/>
+
+  <arg name="spurn" default=""/>                 <!-- Prevent a specific node   -->
+  <arg name="nodes" default=""/>                 <!-- Launch specific nodes     -->
+  <arg name="extra" default=""/>                 <!-- Inject an additional node -->
+  <arg name="debug" default=""/>                 <!-- Debug a node set          -->
+  <arg name="dds" default="false"/>              <!-- Should DDS be started     -->
+  <arg name="output" default="screen"/>          <!-- Where nodes should log    -->
+
+  <!-- Load params for queen -->
+  <rosparam command="load" file="$(find execute_asap)/config/uc_bound_params.yaml"/>
+  <rosparam command="load" file="$(find execute_asap)/config/primary_coord_params.yaml"/>
+  <rosparam command="load" file="$(find execute_asap)/config/rattle_coordinator_params.yaml"/>
+
+  <node
+    name="rattle_coordinator" pkg="rattle_coordinator" type="rattle_coordinator_node.py"
+    output="$(arg output)"/>
+</launch>

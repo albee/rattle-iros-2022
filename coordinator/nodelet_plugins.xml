@@ -1,0 +1,20 @@
+<library path="lib/libPrimaryNodelet">
+  <!-- Primary coordinator nodelet -->
+  <class name="PrimaryNodelet"
+  	type="PrimaryNodelet"
+  	base_class_type="nodelet::Nodelet">
+    <description>
+    	Nodelet for primary coordinator.
+    </description>
+  </class>
+</library>
+<library path="lib/libSecondaryNodelet">
+  <!-- Secondary coordinator nodelet -->
+  <class name="SecondaryNodelet"
+  	type="SecondaryNodelet"
+  	base_class_type="nodelet::Nodelet">
+    <description>
+    	Nodelet for secondary coordinator.
+    </description>
+  </class>
+</library>
