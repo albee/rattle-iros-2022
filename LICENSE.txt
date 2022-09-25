@@ -1,1 +1,2 @@
+MIT License
 © 2022 Massachusetts Institute of Technology and Instituto Superior Técnico, Universidade de Lisboa 

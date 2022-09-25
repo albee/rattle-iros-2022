@@ -1,2 +1,39 @@
 # rattle-iros-2022
-Parametric information-aware motion planning. The public release of these modules is a work in progress!
+Parametric information-aware motion planning using the [RATTLE method](https://ieeexplore.ieee.org/document/9851849), as published in IROS/RA-L 2022.
+
+## What is this?
+RATTLE is a set of modules that perform parametric information-aware motion planning; in other words, RATTLE creates motion plans for robots to follow that try to be both *useful for learning about system unknowns* while also *attempting to reach a goal/minimize fuel use*. Uniquely, RATTLE includes capabilities to *use learned system information on-the-fly*, allowing the robot to better understand its own system model, while reasoning at a control level about how cautious it should be. Please see [the paper](https://ieeexplore.ieee.org/document/9851849) for more detail.
+
+RATTLE is implemented here for a 6DOF free-flying robot, though its interfaces and methods are more general to robotic systems with parameteric unknowns in their system dynamics. Specifically, RATTLE has been tested on the International Space Station using the [Astrobee robots](https://github.com/nasa/astrobee).
+
+## Requirements
+TODO
+- CasADi
+- ACADO
+
+## ROS Packages
+RATTLE's functions are implemented here as separate ROS packages:
+
+- Global planning
+    - `rattle_rrt`: A "long-horizon" sampling-based planner that also acconts for, in this case, translational dynamics.
+
+- Local information-aware planning
+    - `rattle_acado_planner`: A mid-level "local" planner that also considers information content of planned trajectories. Implemented using ACADO.
+
+- Low-level robust control
+    - `casadi_nmpc` : A robust tube MPC control implementation, for the translational dynamics.
+    - `z_poly_calc`: An mRPI (minimum robust postiviely invariant set) calculator, using Rakovic's method.
+
+- Online parameter estimation
+    - `inv_fam`: TODO get Monica's permission!
+    - `param_est`: TODO get Monica's permission!
+
+- ROS
+    - `rattle_msgs`: Custom msg types used by these packages.
+    - `rattle_coordinator`: The coordinator node that runs eveything and oversees execution. Uses a messy version of [ASAP](https://github.com/albee/ASAP), which has shiny cleaned up interfaces now.
+    - `execute_asap`: A manager node that launches all other nodes. Useful if hardware testing, especially using Astrobee.
+    - `data`: Miscellaneous I/O.
+
+## Installation
+
+## Usage
