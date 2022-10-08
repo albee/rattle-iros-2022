@@ -4,8 +4,6 @@ The primary coordinator, which derives from CoorindatorBase and adds methods for
 */
 
 #include "coordinator/primary_nodelet.h"
-#include "coordinator/primary_dmpc_methods.hpp"
-#include "coordinator/primary_ooa_methods.hpp"
 #include "coordinator/primary_rattle_methods.hpp"
 
 /* ************************************************************************** */
@@ -22,10 +20,10 @@ void PrimaryNodelet::Initialize(ros::NodeHandle* nh) {
 
   // publishers
   pub_flight_mode_ = nh->advertise<ff_msgs::FlightMode>(TOPIC_MOBILITY_FLIGHT_MODE, 1, true);  // FlightMode
-  pub_status_ = nh->advertise<reswarm_msgs::ReswarmStatusPrimary>(TOPIC_RESWARM_STATUS, 5, true);
+  pub_status_ = nh->advertise<rattle_msgs::RattleStatusPrimary>(TOPIC_RESWARM_STATUS, 5, true);
   pub_x_des_traj_ = nh->advertise<std_msgs::Float64MultiArray>(TOPIC_RESWARM_TUBE_MPC_TRAJ, 5, true);  // always global, full traj to send to tube MPC
   pub_uc_bound_ = nh->advertise<std_msgs::Float64MultiArray>(UC_BOUND_TOPIC, 5, true);  // always global
-  pub_rattle_test_instruct_ = nh->advertise<reswarm_msgs::RattleTestInstruct>(RATTLE_TEST_INSTRUCT_TOPIC, 5, true);
+  pub_rattle_test_instruct_ = nh->advertise<rattle_msgs::RattleTestInstruct>(RATTLE_TEST_INSTRUCT_TOPIC, 5, true);
   pub_reg_setpoint_ = nh->advertise<geometry_msgs::Pose>(TOPIC_RESWARM_TUBE_MPC_REG_SETPOINT, 5, true);
   
   // subscribers
@@ -33,23 +31,23 @@ void PrimaryNodelet::Initialize(ros::NodeHandle* nh) {
     boost::bind(&PrimaryNodelet::flight_mode_callback, this, _1));  // flight mode getter
   sub_ekf_ = nh->subscribe<ff_msgs::EkfState>("gnc/ekf", 5,
     boost::bind(&PrimaryNodelet::ekf_callback, this, _1));;
-  sub_reswarm_test_number_ = nh->subscribe<reswarm_msgs::ReswarmTestNumber>(TOPIC_RESWARM_TEST_NUMBER, 5,
+  sub_rattle_test_number_ = nh->subscribe<rattle_msgs::RattleTestNumber>(TOPIC_RESWARM_TEST_NUMBER, 5,
     boost::bind(&PrimaryNodelet::test_num_callback, this, _1));
   sub_flight_mode_= nh->subscribe<ff_msgs::FlightMode>(TOPIC_MOBILITY_FLIGHT_MODE, 5,
     boost::bind(&PrimaryNodelet::flight_mode_callback, this, _1));  // flight mode setter
   sub_ekf_ = nh->subscribe<ff_msgs::EkfState>("gnc/ekf", 5,
     boost::bind(&PrimaryNodelet::ekf_callback, this, _1));
-  sub_info_status_ = nh->subscribe<reswarm_msgs::ReswarmInfoStatus>("reswarm/info_traj_status", 5,
+  sub_info_status_ = nh->subscribe<rattle_msgs::RattleInfoStatus>("rattle/info_traj_status", 5,
     boost::bind(&PrimaryNodelet::info_status_callback, this, _1));
-  sub_casadi_status_ = nh->subscribe<reswarm_msgs::ReswarmCasadiStatus>("reswarm/casadi_nmpc/status", 5,
+  sub_casadi_status_ = nh->subscribe<rattle_msgs::RattleCasadiStatus>("rattle/casadi_nmpc/status", 5,
     boost::bind(&PrimaryNodelet::casadi_status_callback, this, _1));
-  sub_planner_status_ = nh->subscribe<reswarm_msgs::ReswarmPlannerStatus>("/reswarm/planner_lqrrrt/status", 5,
+  sub_planner_status_ = nh->subscribe<rattle_msgs::RattlePlannerStatus>("/rattle/planner_lqrrrt/status", 5,
     boost::bind(&PrimaryNodelet::planner_status_callback, this, _1));
   sub_control_mode_ = nh->subscribe<std_msgs::String>(CONTROL_MODE_TOPIC, 5,
     boost::bind(&PrimaryNodelet::control_mode_callback, this, _1)); 
-  sub_dmpc_status_ = nh->subscribe<reswarm_dmpc::DMPCTestStatusStamped>("reswarm/dmpc_status", 5,
+  sub_dmpc_status_ = nh->subscribe<rattle_dmpc::DMPCTestStatusStamped>("rattle/dmpc_status", 5,
     boost::bind(&PrimaryNodelet::dmpc_status_cb, this, _1));   
-  sub_rattle_status_ = nh->subscribe<reswarm_msgs::ReswarmRattleStatus>("reswarm/rattle/status", 5,
+  sub_rattle_status_ = nh->subscribe<rattle_msgs::RattleRattleStatus>("rattle/rattle/status", 5,
     boost::bind(&PrimaryNodelet::rattle_status_callback, this, _1));     
 
   // services
@@ -58,17 +56,17 @@ void PrimaryNodelet::Initialize(ros::NodeHandle* nh) {
   // tracking points
   try{
     std::vector<double> param_data;
-    nh->getParam("/reswarm/primary/point_a_granite", param_data);
+    nh->getParam("/rattle/primary/point_a_granite", param_data);
     POINT_A_GRANITE = Eigen::Matrix<double, 7, 1>(param_data.data());  // init from std::vector param
-    nh->getParam("/reswarm/primary/point_a_iss", param_data);
+    nh->getParam("/rattle/primary/point_a_iss", param_data);
     POINT_A_ISS = Eigen::Matrix<double, 7, 1>(param_data.data());  
-    nh->getParam("/reswarm/primary/point_b_granite", param_data);
+    nh->getParam("/rattle/primary/point_b_granite", param_data);
     POINT_B_GRANITE = Eigen::Matrix<double, 7, 1>(param_data.data());  
-    nh->getParam("/reswarm/primary/point_b_iss", param_data);
+    nh->getParam("/rattle/primary/point_b_iss", param_data);
     POINT_B_ISS= Eigen::Matrix<double, 7, 1>(param_data.data());  
-    nh->getParam("/reswarm/primary/point_c_granite", param_data);
+    nh->getParam("/rattle/primary/point_c_granite", param_data);
     POINT_C_GRANITE = Eigen::Matrix<double, 7, 1>(param_data.data());  
-    nh->getParam("/reswarm/primary/point_c_iss", param_data);
+    nh->getParam("/rattle/primary/point_c_iss", param_data);
     POINT_C_ISS = Eigen::Matrix<double, 7, 1>(param_data.data()); 
   }
   catch (const std::exception &exc) {
@@ -82,81 +80,81 @@ void PrimaryNodelet::Initialize(ros::NodeHandle* nh) {
 }
 
 /* ************************************************************************** */
-void PrimaryNodelet::get_reswarm_status_msg(reswarm_msgs::ReswarmStatusPrimary& msg){
+void PrimaryNodelet::get_rattle_status_msg(rattle_msgs::RattleStatusPrimary& msg){
   /**
-   * @brief Fills the ReswarmStatus message with the state of the private
+   * @brief Fills the RattleStatus message with the state of the private
    * variables. Published by a coordinator Timer.
-   * Inputs: base_reswarm_status_ and primary_reswarm_status_
+   * Inputs: base_rattle_status_ and primary_rattle_status_
    * 
    */
   msg.stamp = ros::Time::now();
-  msg.test_number = base_reswarm_status_.test_number;
-  msg.default_control = base_reswarm_status_.default_control;
-  msg.flight_mode = base_reswarm_status_.flight_mode;
-  msg.test_finished = base_reswarm_status_.test_finished;
-  msg.coord_ok = base_reswarm_status_.coord_ok;
-  msg.control_mode = primary_reswarm_status_.control_mode;
+  msg.test_number = base_rattle_status_.test_number;
+  msg.default_control = base_rattle_status_.default_control;
+  msg.flight_mode = base_rattle_status_.flight_mode;
+  msg.test_finished = base_rattle_status_.test_finished;
+  msg.coord_ok = base_rattle_status_.coord_ok;
+  msg.control_mode = primary_rattle_status_.control_mode;
 
-  msg.regulate_finished = base_reswarm_status_.regulate_finished;
+  msg.regulate_finished = base_rattle_status_.regulate_finished;
 
-  // msg.uc_bound_activated = primary_reswarm_status_.reswarm_uc_bound_activated;
-  msg.uc_bound_finished = primary_reswarm_status_.uc_bound_finished;
+  // msg.uc_bound_activated = primary_rattle_status_.rattle_uc_bound_activated;
+  msg.uc_bound_finished = primary_rattle_status_.uc_bound_finished;
 
-  msg.mrpi_finished = primary_reswarm_status_.mrpi_finished;
-  msg.traj_finished = primary_reswarm_status_.traj_finished;
-  msg.gain_mode = primary_reswarm_status_.reswarm_gain_mode;
-  msg.activate_rattle = primary_reswarm_status_.activate_rattle;
-  msg.lqrrrt_activated = primary_reswarm_status_.lqrrrt_activated;
-  msg.lqrrrt_finished = primary_reswarm_status_.lqrrrt_finished;
-  msg.traj_sent = primary_reswarm_status_.traj_sent;
+  msg.mrpi_finished = primary_rattle_status_.mrpi_finished;
+  msg.traj_finished = primary_rattle_status_.traj_finished;
+  msg.gain_mode = primary_rattle_status_.rattle_gain_mode;
+  msg.activate_rattle = primary_rattle_status_.activate_rattle;
+  msg.lqrrrt_activated = primary_rattle_status_.lqrrrt_activated;
+  msg.lqrrrt_finished = primary_rattle_status_.lqrrrt_finished;
+  msg.traj_sent = primary_rattle_status_.traj_sent;
 
-  msg.info_traj_send = primary_reswarm_status_.info_traj_send;
+  msg.info_traj_send = primary_rattle_status_.info_traj_send;
 
   // DMPC status
-  msg.solver_status = primary_reswarm_status_.solver_status;
-  msg.cost_value = primary_reswarm_status_.cost_value;
-  msg.kkt_value = primary_reswarm_status_.kkt_value;
-  msg.sol_time = primary_reswarm_status_.sol_time;
+  msg.solver_status = primary_rattle_status_.solver_status;
+  msg.cost_value = primary_rattle_status_.cost_value;
+  msg.kkt_value = primary_rattle_status_.kkt_value;
+  msg.sol_time = primary_rattle_status_.sol_time;
 
-   msg.description = primary_reswarm_status_.description;
+   msg.description = primary_rattle_status_.description;
 
-  msg.rattle_use_params = primary_reswarm_status_.rattle_use_params;
-  msg.rattle_weight_mode = primary_reswarm_status_.rattle_weight_mode;
-  msg.rattle_initial_model_mode = primary_reswarm_status_.rattle_initial_model_mode;
+  msg.rattle_use_params = primary_rattle_status_.rattle_use_params;
+  msg.rattle_weight_mode = primary_rattle_status_.rattle_weight_mode;
+  msg.rattle_initial_model_mode = primary_rattle_status_.rattle_initial_model_mode;
 }
 
 /* ************************************************************************** */
 void PrimaryNodelet::load_params(){
   // Get sim and ground flags
   std::string sim_str, ground_str;
-  ros::param::get("/reswarm/sim", sim_str);
+  ros::param::get("/rattle/sim", sim_str);
   sim_ = !std::strcmp(sim_str.c_str(), "true"); // convert to bool
-  ros::param::get("/reswarm/ground", ground_str);
+  ros::param::get("/rattle/ground", ground_str);
   ground_ = !std::strcmp(ground_str.c_str(), "true");  // convert to bool, 1 if it's true
   
   // regulation
-  ros::param::getCached("/reswarm/primary/reg_time", reg_time_);
-  ros::param::getCached("/reswarm/primary/x_start", x0_(0));
-  ros::param::getCached("/reswarm/primary/y_start", x0_(1));
-  ros::param::getCached("/reswarm/primary/z_start", x0_(2));
-  ros::param::getCached("/reswarm/primary/qx_start", a0_(0));
-  ros::param::getCached("/reswarm/primary/qy_start", a0_(1));
-  ros::param::getCached("/reswarm/primary/qz_start", a0_(2));
-  ros::param::getCached("/reswarm/primary/qw_start", a0_(3));
-  ros::param::getCached("/reswarm/primary/pos_reg_thresh", pos_reg_thresh_);
-  ros::param::getCached("/reswarm/primary/vel_reg_thresh", vel_reg_thresh_);
-  ros::param::getCached("/reswarm/primary/att_reg_thresh", att_reg_thresh_);
-  ros::param::getCached("/reswarm/primary/omega_reg_thresh", omega_reg_thresh_);
+  ros::param::getCached("/rattle/primary/reg_time", reg_time_);
+  ros::param::getCached("/rattle/primary/x_start", x0_(0));
+  ros::param::getCached("/rattle/primary/y_start", x0_(1));
+  ros::param::getCached("/rattle/primary/z_start", x0_(2));
+  ros::param::getCached("/rattle/primary/qx_start", a0_(0));
+  ros::param::getCached("/rattle/primary/qy_start", a0_(1));
+  ros::param::getCached("/rattle/primary/qz_start", a0_(2));
+  ros::param::getCached("/rattle/primary/qw_start", a0_(3));
+  ros::param::getCached("/rattle/primary/pos_reg_thresh", pos_reg_thresh_);
+  ros::param::getCached("/rattle/primary/vel_reg_thresh", vel_reg_thresh_);
+  ros::param::getCached("/rattle/primary/att_reg_thresh", att_reg_thresh_);
+  ros::param::getCached("/rattle/primary/omega_reg_thresh", omega_reg_thresh_);
 
   // target pos IC (INERTIAL frame)
-  ros::param::getCached("/reswarm/primary/targ_offset_x", targ_offset_(0));
-  ros::param::getCached("/reswarm/primary/targ_offset_y", targ_offset_(1));
-  ros::param::getCached("/reswarm/primary/targ_offset_z", targ_offset_(2));
+  ros::param::getCached("/rattle/primary/targ_offset_x", targ_offset_(0));
+  ros::param::getCached("/rattle/primary/targ_offset_y", targ_offset_(1));
+  ros::param::getCached("/rattle/primary/targ_offset_z", targ_offset_(2));
 
   // translation of TVR frame w/r to ISS frame
-  ros::param::getCached("/reswarm/primary/r_RI_ISS_x", r_RI_(0));
-  ros::param::getCached("/reswarm/primary/r_RI_ISS_y", r_RI_(1));
-  ros::param::getCached("/reswarm/primary/r_RI_ISS_z", r_RI_(2));
+  ros::param::getCached("/rattle/primary/r_RI_ISS_x", r_RI_(0));
+  ros::param::getCached("/rattle/primary/r_RI_ISS_y", r_RI_(1));
+  ros::param::getCached("/rattle/primary/r_RI_ISS_z", r_RI_(2));
 
   // NODELET_INFO_STREAM("[PRIMARY COORD] Parameters Loaded...");
 }

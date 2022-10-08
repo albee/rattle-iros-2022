@@ -44,7 +44,7 @@ MIT Space Systems Lab
 #include <geometry_msgs/TwistStamped.h>
 #include <visualization_msgs/Marker.h>
 #include <param_est/Params.h>
-#include <reswarm_msgs/RattleTestInstruct.h>
+#include <rattle_msgs/RattleTestInstruct.h>
 
 // RRT includes
 #include <rattle_rrt/types.h>
@@ -123,7 +123,7 @@ class RRTNodelet : public ff_util::FreeFlyerNodelet {
   void rrt_params_callback(const rattle_rrt::RRTParams::ConstPtr param_msg);
   void rrt_obs_callback(const rattle_rrt::ellipsoidArray::ConstPtr ellipsoids_msg);
   void update_parameters_callback(const param_est::Params::ConstPtr& msg);
-  void rattle_instruct_callback(const reswarm_msgs::RattleTestInstruct::ConstPtr& msg);
+  void rattle_instruct_callback(const rattle_msgs::RattleTestInstruct::ConstPtr& msg);
 
   template <typename T>
   void rrt_path_publish(const T &path, double start_pos[7]);

@@ -14,8 +14,8 @@ See `execute_asap` README for usage instructions.
 * A base class is defined in `coordinator_base.tpp`. `primary.h` extends `CoordinatorBase` and implements virtual
 test functions. 
 
-* The resulting nodelet, instantiated by`primary_nodelet.cc` is the `primary_coordinator`, which takes in test numbers on `/reswarm/test_number`, and sends out
-`/reswarm/status` msgs which command other nodes. 
+* The resulting nodelet, instantiated by`primary_nodelet.cc` is the `primary_coordinator`, which takes in test numbers on `/rattle/test_number`, and sends out
+`/rattle/status` msgs which command other nodes. 
 
 * A number of methods are defined in `primary_*.hpp` files for specific tests. 
   e.g., see `primary_ooa_methods.hpp` for test commanding methods specific to on-orbit assembly tests.
@@ -30,7 +30,7 @@ The coordinator::CoordinatorNodelet class had to be created, extending FreeFlyer
 New publishers, subscribers, and services monitored/advertised by `primary_coordinator` are created in `primary_nodelet.cc`,
 
 ```C++
-  sub_casadi_status_ = nh->subscribe<reswarm_msgs::ReswarmCasadiStatus>("reswarm/casadi_nmpc/status", 5,
+  sub_casadi_status_ = nh->subscribe<rattle_msgs::ReswarmCasadiStatus>("rattle/casadi_nmpc/status", 5,
     boost::bind(&PrimaryNodelet::casadi_status_callback, this, _1));
 ```
 
@@ -56,7 +56,7 @@ void PrimaryNodelet::RunTest0(ros::NodeHandle *nh){
     ros::Duration(5.0).sleep();
 
     NODELET_DEBUG_STREAM("[PRIMARY COORD]: ...test complete!");
-    base_reswarm_status_.test_finished = true;
+    base_rattle_status_.test_finished = true;
 };
 ```
 
@@ -79,7 +79,7 @@ the main `primary_coordinator` loop in `coordinator_base.tpp`,
 ```C++
 void CoordinatorBase<T>::Run(ros::NodeHandle *nh) {
   ...
-  if (base_reswarm_status_.test_number == 0) {
+  if (base_rattle_status_.test_number == 0) {
     RunTest0(nh);
   }
 ```

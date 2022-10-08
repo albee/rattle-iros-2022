@@ -26,8 +26,8 @@ namespace casadi_nmpc {
     ros::NodeHandle MTNH = getMTNodeHandle();  // multithread subscribers
 
     // If in the sim, we need the robot namespace for default topics
-    ros::param::getCached("/reswarm/ground", ground_);
-    ros::param::getCached("/reswarm/sim", sim_);
+    ros::param::getCached("/rattle/ground", ground_);
+    ros::param::getCached("/rattle/sim", sim_);
     // TODO: also check role and prefixes of Astrobee?
 
     // std::string name = ff_util::FreeFlyerNodelet::GetPlatform();
@@ -65,15 +65,15 @@ namespace casadi_nmpc {
     sub_ekf_ = nh->subscribe<ff_msgs::EkfState>(TOPIC_GNC_EKF, 5, boost::bind(&CasadiNMPCNodelet::ekf_callback, this, _1));  // incoming ekf
     sub_x_des_traj_ = nh->subscribe<std_msgs::Float64MultiArray>(TOPIC_RESWARM_TUBE_MPC_TRAJ, 5, boost::bind(&CasadiNMPCNodelet::x_des_traj_callback, this, _1));  // incoming full traj---used once
     sub_uc_bound_ = nh->subscribe<std_msgs::Float64MultiArray>(UC_BOUND_TOPIC, 5, boost::bind(&CasadiNMPCNodelet::w_bound_callback, this, _1));  // incoming uc_bound
-    sub_status_ = nh->subscribe<reswarm_msgs::ReswarmStatusPrimary>(TOPIC_RESWARM_STATUS, 5, boost::bind(&CasadiNMPCNodelet::status_callback, this, _1));
+    sub_status_ = nh->subscribe<rattle_msgs::RattleStatusPrimary>(TOPIC_RESWARM_STATUS, 5, boost::bind(&CasadiNMPCNodelet::status_callback, this, _1));
     sub_reg_setpoint_ = nh->subscribe<geometry_msgs::Pose>(TOPIC_RESWARM_TUBE_MPC_REG_SETPOINT, 5, boost::bind(&CasadiNMPCNodelet::regulation_setpoint_callback, this, _1));
-    sub_rattle_instruct_= nh->subscribe<reswarm_msgs::RattleTestInstruct>(TOPIC_RATTLE_TEST_INSTRUCT, 5, boost::bind(&CasadiNMPCNodelet::rattle_instruct_callback, this, _1));
+    sub_rattle_instruct_= nh->subscribe<rattle_msgs::RattleTestInstruct>(TOPIC_RATTLE_TEST_INSTRUCT, 5, boost::bind(&CasadiNMPCNodelet::rattle_instruct_callback, this, _1));
 
     // Init pubs
     pub_ctl_ = nh->advertise<ff_msgs::FamCommand>(TOPIC_GNC_CTL_COMMAND, 5, true);  // outgoing FAM commands: /which_bee_/gnc/ctl/command
-    pub_debug_ = nh->advertise<reswarm_msgs::ReswarmCasadiDebug>(TOPIC_RESWARM_TUBE_MPC_DEBUG, 5);      // For timing info and MPC inputs calculated
-    pub_casadi_status_ = nh->advertise<reswarm_msgs::ReswarmCasadiStatus>(TOPIC_RESWARM_CASADI_STATUS, 5, true);  // Status
-    pub_mrpi_ = nh->advertise<reswarm_msgs::ReswarmMsgMRPI>(TOPIC_RESWARM_TUBE_MPC_MRPI, 5, true);  // MRPI
+    pub_debug_ = nh->advertise<rattle_msgs::RattleCasadiDebug>(TOPIC_RESWARM_TUBE_MPC_DEBUG, 5);      // For timing info and MPC inputs calculated
+    pub_casadi_status_ = nh->advertise<rattle_msgs::RattleCasadiStatus>(TOPIC_RESWARM_CASADI_STATUS, 5, true);  // Status
+    pub_mrpi_ = nh->advertise<rattle_msgs::RattleMsgMRPI>(TOPIC_RESWARM_TUBE_MPC_MRPI, 5, true);  // MRPI
 
     thread_.reset(new std::thread(&CasadiNMPCNodelet::Run, this));  // hack to get timers to work
   }
@@ -337,7 +337,7 @@ namespace casadi_nmpc {
 
     /// (2) Compute the ancillary controller input and sum
     // u_forces = add_ancillary_input(x_nom, u_forces);
-    ros::param::set("/reswarm/tube_mpc/unit_test_complete", true);
+    ros::param::set("/rattle/tube_mpc/unit_test_complete", true);
   }
 }  // end namespace casadi_nmpc
 

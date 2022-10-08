@@ -29,13 +29,7 @@ target_link_libraries(PrimaryNodelet ${catkin_LIBRARIES} ${EIGEN_LIBRARIES} ff_c
 target_include_directories(PrimaryNodelet PUBLIC ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} include)  # src added for templated functions
 add_dependencies(PrimaryNodelet ff_msgs ff_hw_msgs)
 
-# Secondary Nodelet
-add_library(SecondaryNodelet src/secondary_nodelet.cc)
-target_link_libraries(SecondaryNodelet ${catkin_LIBRARIES} ${EIGEN_LIBRARIES} ff_common ff_nodelet msg_conversions ff_flight)
-target_include_directories(SecondaryNodelet PUBLIC ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} include)  # src added for templated functions
-add_dependencies(SecondaryNodelet ff_msgs ff_hw_msgs)
-
-install(TARGETS PrimaryNodelet SecondaryNodelet DESTINATION lib)
+install(TARGETS PrimaryNodelet DESTINATION lib)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
   DESTINATION include
   FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp" PATTERN "*.tpp")

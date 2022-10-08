@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 """
 z_poly_calc.py
 
@@ -19,7 +18,7 @@ import scipy.signal
 from pytope import Polytope
 import time
 
-from reswarm_msgs.srv import ReswarmSrvMRPI, ReswarmSrvMRPIResponse
+from rattle_msgs.srv import RattleSrvMRPI, RattleSrvMRPIResponse
 from std_msgs.msg import Float64MultiArray
 from std_msgs.msg import MultiArrayDimension
 
@@ -87,7 +86,7 @@ class ZPoly:
         """ Start up ROS spin.
         """
         rospy.init_node('z_poly', anonymous=True)
-        s = rospy.Service('mrpi', ReswarmSrvMRPI, self.handle_mrpi)
+        s = rospy.Service('mrpi', RattleSrvMRPI, self.handle_mrpi)
         print('[z_poly_calc] Initialized (service ready).')
 
         rospy.spin()
@@ -167,7 +166,7 @@ class ZPoly:
         print("...mrpi response sent.")
 
         # format is Au * u <= bu, for u = [ux, uy, uz]
-        return ReswarmSrvMRPIResponse(K_dr_msg, Autight_msg, butight_msg, AZ_msg, bZ_msg)
+        return RattleSrvMRPIResponse(K_dr_msg, Autight_msg, butight_msg, AZ_msg, bZ_msg)
 
     def check_LQR(self):
         """Check 3D case dlqr gain
@@ -765,8 +764,8 @@ class ZPoly:
 
         return F_alpha_s, result
 
-    def unit_test_reswarm(self):
-        """ Run using reswarm parameters.
+    def unit_test_rattle(self):
+        """ Run using rattle parameters.
         """
         w_bound = np.array([[0.0331, 0.0260, 0.0537, 0.0069, 0.0055, 0.0073]]).T
         dt = 0.2
@@ -786,7 +785,7 @@ class ZPoly:
 if __name__ == '__main__':
     # Initialize TubeMPC
     z_poly = ZPoly()
-    # z_poly.unit_test_reswarm()
+    # z_poly.unit_test_rattle()
     # z_poly.run_gains_test()
 
     # z_poly.unit_test()

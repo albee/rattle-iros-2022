@@ -11,10 +11,10 @@ import rospy
 # msgs
 from ff_msgs.msg import EkfState
 from ff_msgs.msg import FamCommand
-from reswarm_msgs.msg import RattleTestInstruct
-from reswarm_msgs.msg import RattleInfoPlanInstruct  # formerly NMPCInstruct
+from rattle_msgs.msg import RattleTestInstruct
+from rattle_msgs.msg import RattleInfoPlanInstruct  # formerly NMPCInstruct
 from rattle_rrt.msg import ellipsoid, ellipsoidArray, RRTParams, TwistArray, WrenchArray
-from reswarm_msgs.msg import ReswarmRattleStatus
+from rattle_msgs.msg import RattleStatus
 
 # std msgs
 from rospy.numpy_msg import numpy_msg
@@ -202,11 +202,11 @@ class Mixin:
 
         self.rrt_pub_.publish(msg)
 
-    def publish_reswarm_rattle_status(self, traj_finished):
+    def publish_rattle_status(self, traj_finished):
         """
         Signal rattle completion.
         """
-        msg = ReswarmRattleStatus()
+        msg = RattleStatus()
 
         msg.traj_finished = traj_finished
         print(msg)

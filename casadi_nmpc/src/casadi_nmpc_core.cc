@@ -80,7 +80,7 @@ namespace casadi_nmpc {
               float(eigen_x_des_traj_(N_traj_-1, 10)); // final [qx, qy, qz, qw]
         update_regulation_setpoint(x0, a0);
         traj_finished_ = true;
-        regulate_lockout_ = true;  // stop reswarm/status from forcing an update! only okay if new traj received
+        regulate_lockout_ = true;  // stop rattle/status from forcing an update! only okay if new traj received
       }
       else {  // use MPC or Tube MPC
         // Update inertial frame trajectory if getting target attitude estimates
@@ -93,7 +93,7 @@ namespace casadi_nmpc {
       }
     }
 
-    // update /reswarm/casadi_status once every loop
+    // update /rattle/casadi_status once every loop
     publish_casadi_status();
   }
 
@@ -662,7 +662,7 @@ namespace casadi_nmpc {
     using_fallback_mrpi_ = false;  // unset from first call to fallback
 
     // w, u_max, and dt to ROS msg format
-    reswarm_msgs::ReswarmSrvMRPI srv;  // contains .request and .response
+    rattle_msgs::RattleSrvMRPI srv;  // contains .request and .response
 
     std_msgs::Float64MultiArray w_msg;
     tf::matrixEigenToMsg(w, w_msg);  // Eigen --> msg
@@ -682,7 +682,7 @@ namespace casadi_nmpc {
     if (ros::service::call("mrpi", srv))
     {
       NODELET_INFO_STREAM("mrpi service request sent...");
-      reswarm_msgs::ReswarmSrvMRPI::Response res = srv.response;
+      rattle_msgs::RattleSrvMRPI::Response res = srv.response;
 
       // std::vector to Eigen
       // Stride is used for row-major: eigen defaults to column major but numpy uses row major!

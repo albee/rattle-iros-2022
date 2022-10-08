@@ -254,7 +254,7 @@ class Mixin:
             if i != 1:  # for the first iteration, go on ahead to the next immediately
                 replan_rate.sleep()
 
-        # self.publish_reswarm_rattle_status(True)
+        # self.publish_rattle_status(True)
         rospy.loginfo('...maneuver complete!')
         return given_start
 
@@ -319,7 +319,7 @@ class Mixin:
         x_des_traj_msg = Float64MultiArray()
         x_des_traj_msg = self.ref_traj2float64multiarray(self.local_plan_)  # convert local plan to x_des_traj
 
-        # publish on TOPIC_RESWARM_TUBE_MPC_TRAJ = `/reswarm/tube_mpc/traj`
+        # publish on TOPIC_RATTLE_TUBE_MPC_TRAJ = `/rattle/tube_mpc/traj`
 
         self.path_ctl_x_des_traj_pub_.publish(x_des_traj_msg)
         time.sleep(0.3)  # make sure traj received

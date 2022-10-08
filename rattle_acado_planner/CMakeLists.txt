@@ -137,7 +137,7 @@ target_include_directories(test-acado PUBLIC include)
 add_executable(rattle_acado_planner_node src/rattle_acado_planner_node.cpp)
 target_link_libraries(rattle_acado_planner_node rattle_acado_planner_export rattle_acado_planner ff_common msg_conversions ff_flight)
 target_include_directories(rattle_acado_planner_node PUBLIC include)
-add_dependencies(rattle_acado_planner_node ff_msgs ff_hw_msgs reswarm_msgs)
+add_dependencies(rattle_acado_planner_node ff_msgs ff_hw_msgs rattle_msgs)
 
 
 install(TARGETS rattle_acado_planner_export

@@ -27,24 +27,24 @@ Every test has a test#() function available in case it is needed by asap.py
 // msg includes
 #include <ff_msgs/ControlState.h>
 #include <ff_msgs/FlightMode.h>
+#include <ff_msgs/FamCommand.h>
+
 #include <std_msgs/Float64MultiArray.h>
 #include <std_msgs/String.h>
 #include <msg_conversions/msg_conversions.h>
-#include <ff_msgs/FamCommand.h>
 #include <geometry_msgs/PoseWithCovariance.h>
 #include <geometry_msgs/TwistWithCovariance.h>
 #include <geometry_msgs/Inertia.h>
-#include <reswarm_msgs/ReswarmStatusPrimary.h>
-#include <reswarm_msgs/ReswarmStatusSecondary.h>
-#include <reswarm_msgs/ReswarmTestNumber.h>
-#include <reswarm_msgs/ReswarmCasadiStatus.h>
-#include <reswarm_msgs/ReswarmUCBoundStatus.h>
-#include <reswarm_msgs/ReswarmInfoStatus.h>
-#include <reswarm_msgs/ReswarmPlannerStatus.h>
-#include <reswarm_dmpc/DMPCTestStatusStamped.h>
-#include <reswarm_msgs/RattleInfoPlanInstruct.h>
-#include <reswarm_msgs/RattleTestInstruct.h>
-#include <reswarm_msgs/ReswarmRattleStatus.h>
+
+#include <rattle_msgs/RattleStatusPrimary.h>
+#include <rattle_msgs/RattleTestNumber.h>
+#include <rattle_msgs/RattleCasadiStatus.h>
+#include <rattle_msgs/RattleUCBoundStatus.h>
+#include <rattle_msgs/RattleInfoStatus.h>
+#include <rattle_msgs/RattlePlannerStatus.h>
+#include <rattle_msgs/RattleInfoPlanInstruct.h>
+#include <rattle_msgs/RattleTestInstruct.h>
+#include <rattle_msgs/RattleStatus.h>
 
 // Actions
 #include <ff_msgs/ControlAction.h>
@@ -59,13 +59,12 @@ Every test has a test#() function available in case it is needed by asap.py
 #include <chrono>
 #include <string.h>
 
-
-static std::string TOPIC_RESWARM_STATUS = "reswarm/status";
-static std::string TOPIC_RESWARM_TEST_NUMBER = "reswarm/test_number";
+static std::string TOPIC_RATTLE_STATUS = "rattle/status";
+static std::string TOPIC_RATTLE_TEST_NUMBER = "rattle/test_number";
 
 
 // base status struct (key information)
-struct BaseReswarmStatus {
+struct BaseRattleStatus {
   int test_number = -2;
   std::string flight_mode = "nominal";
   bool test_finished = false;
@@ -86,7 +85,7 @@ class CoordinatorBase {
   // Base main functions
   void Run(ros::NodeHandle *nh);
  protected:
-  BaseReswarmStatus base_reswarm_status_;
+  BaseRattleStatus base_rattle_status_;
 
   ros::NodeHandle MTNH;
   std::shared_ptr<std::thread> thread_;
@@ -96,7 +95,7 @@ class CoordinatorBase {
 
   ros::Subscriber sub_flight_mode_;
   ros::Subscriber sub_ekf_;
-  ros::Subscriber sub_reswarm_test_number_;
+  ros::Subscriber sub_rattle_test_number_;
 
   ros::ServiceClient serv_ctl_enable_;
 
@@ -122,11 +121,11 @@ class CoordinatorBase {
   void process_test_number();
   void get_flight_mode();
   
-  void publish_reswarm_status(const ros::TimerEvent&);  // templated for Primary or Secondary status
-  virtual void get_reswarm_status_msg(reswarm_msgs::ReswarmStatusPrimary& msg) {};
-  virtual void get_reswarm_status_msg(reswarm_msgs::ReswarmStatusSecondary& msg) {};
+  void publish_rattle_status(const ros::TimerEvent&);  // templated for Primary or Secondary status
+  virtual void get_rattle_status_msg(rattle_msgs::RattleStatusPrimary& msg) {};
+  virtual void get_rattle_status_msg(rattle_msgs::RattleStatusSecondary& msg) {};
 
-  void test_num_callback(const reswarm_msgs::ReswarmTestNumber::ConstPtr msg);
+  void test_num_callback(const rattle_msgs::RattleTestNumber::ConstPtr msg);
   void flight_mode_callback(const ff_msgs::FlightMode::ConstPtr msg);
   void ekf_callback(const ff_msgs::EkfState::ConstPtr msg);
 
@@ -137,8 +136,8 @@ class CoordinatorBase {
   void disable_default_ctl();
   void enable_default_ctl();
 
-  // define the reswarm_status callback for each robot
-  // virtual void reswarm_status_cb(const reswarm_msgs::ReswarmStatus::ConstPtr msg);
+  // define the rattle_status callback for each robot
+  // virtual void rattle_status_cb(const rattle_msgs::RattleStatus::ConstPtr msg);
 
   // Virtual test list: to be replaced on each derived coordinator
   virtual void RunTest0(ros::NodeHandle *nh) {};
@@ -190,7 +189,7 @@ void CoordinatorBase<T>::Run(ros::NodeHandle *nh) {
 
   // Status publisher in separate thread
   status_timer_ = MTNH.createTimer(ros::Duration(0.2),
-    boost::bind(&CoordinatorBase::publish_reswarm_status, this, _1));  // send commands (5 Hz)
+    boost::bind(&CoordinatorBase::publish_rattle_status, this, _1));  // send commands (5 Hz)
 
   // Controller disabler in separate thread
   // ctl_disable_timer_ = MTNH.createTimer(ros::Duration(5.0),
@@ -200,7 +199,7 @@ void CoordinatorBase<T>::Run(ros::NodeHandle *nh) {
   ros::Rate sleep_rate(10.0);
 
   // (1) Start up and wait for test_number_
-  while (ros::ok() && base_reswarm_status_.test_number == -2) {  // startup test number
+  while (ros::ok() && base_rattle_status_.test_number == -2) {  // startup test number
     ros::spinOnce();
     sleep_rate.sleep();
   }
@@ -212,93 +211,93 @@ void CoordinatorBase<T>::Run(ros::NodeHandle *nh) {
 
   // (3) Execute test_number_ logic
   while (ros::ok()) { 
-    if (!base_reswarm_status_.test_finished) {
+    if (!base_rattle_status_.test_finished) {
       // Tests go below...
-      if (base_reswarm_status_.test_number == 0) {
+      if (base_rattle_status_.test_number == 0) {
         RunTest0(nh);
       }
-      if (base_reswarm_status_.test_number  == 1 ||
-          (base_reswarm_status_.test_number >= 100 && base_reswarm_status_.test_number <= 199) ||
-          (base_reswarm_status_.test_number >= 10000 && base_reswarm_status_.test_number <= 19999) ) {
+      if (base_rattle_status_.test_number  == 1 ||
+          (base_rattle_status_.test_number >= 100 && base_rattle_status_.test_number <= 199) ||
+          (base_rattle_status_.test_number >= 10000 && base_rattle_status_.test_number <= 19999) ) {
         RunTest1(nh);
       }
-      else if(base_reswarm_status_.test_number  == 2 ||
-          (base_reswarm_status_.test_number >= 200 && base_reswarm_status_.test_number <= 299) ||
-          (base_reswarm_status_.test_number >= 20000 && base_reswarm_status_.test_number <= 29999)) {
+      else if(base_rattle_status_.test_number  == 2 ||
+          (base_rattle_status_.test_number >= 200 && base_rattle_status_.test_number <= 299) ||
+          (base_rattle_status_.test_number >= 20000 && base_rattle_status_.test_number <= 29999)) {
         RunTest2(nh);
       }
-      else if(base_reswarm_status_.test_number  == 3 ||
-          (base_reswarm_status_.test_number >= 300 && base_reswarm_status_.test_number <= 399) ||
-          (base_reswarm_status_.test_number >= 30000 && base_reswarm_status_.test_number <= 39999)) {
+      else if(base_rattle_status_.test_number  == 3 ||
+          (base_rattle_status_.test_number >= 300 && base_rattle_status_.test_number <= 399) ||
+          (base_rattle_status_.test_number >= 30000 && base_rattle_status_.test_number <= 39999)) {
         RunTest3(nh);
       }
-      else if(base_reswarm_status_.test_number  == 4) {
+      else if(base_rattle_status_.test_number  == 4) {
         RunTest4(nh);
       }
-      else if(base_reswarm_status_.test_number  == 5) {
+      else if(base_rattle_status_.test_number  == 5) {
         RunTest5(nh);
       }
-      else if(base_reswarm_status_.test_number  == 6) {
+      else if(base_rattle_status_.test_number  == 6) {
         RunTest6(nh);
       }
-      else if(base_reswarm_status_.test_number  == 7) {
+      else if(base_rattle_status_.test_number  == 7) {
         RunTest7(nh);
       }
-      else if(base_reswarm_status_.test_number  == 8) {
+      else if(base_rattle_status_.test_number  == 8) {
         RunTest8(nh);
       }
-      else if(base_reswarm_status_.test_number  == 9) {
+      else if(base_rattle_status_.test_number  == 9) {
         RunTest9(nh);
       }
-      else if(base_reswarm_status_.test_number  == 10) {
+      else if(base_rattle_status_.test_number  == 10) {
         RunTest10(nh);
       }
-      else if(base_reswarm_status_.test_number  == 11) {
+      else if(base_rattle_status_.test_number  == 11) {
         RunTest11(nh);
       }
-      else if(base_reswarm_status_.test_number  == 12) {
+      else if(base_rattle_status_.test_number  == 12) {
         RunTest12(nh);
       }
-      else if(base_reswarm_status_.test_number  == 13) {
+      else if(base_rattle_status_.test_number  == 13) {
         RunTest13(nh);
       }
-      else if(base_reswarm_status_.test_number  == 14) {
+      else if(base_rattle_status_.test_number  == 14) {
         RunTest14(nh);
       }
-      else if(base_reswarm_status_.test_number  == 15) {
+      else if(base_rattle_status_.test_number  == 15) {
         RunTest15(nh);
       }
-      else if(base_reswarm_status_.test_number  == 16) {
+      else if(base_rattle_status_.test_number  == 16) {
         RunTest16(nh);
       }
-      else if(base_reswarm_status_.test_number  == 17) {
+      else if(base_rattle_status_.test_number  == 17) {
         RunTest17(nh);
       }
-      else if(base_reswarm_status_.test_number == 18) {
+      else if(base_rattle_status_.test_number == 18) {
         RunTest18(nh);
       }
-      else if(base_reswarm_status_.test_number == 19) {
+      else if(base_rattle_status_.test_number == 19) {
         RunTest19(nh);
       }
-      else if(base_reswarm_status_.test_number == 20) {
+      else if(base_rattle_status_.test_number == 20) {
         RunTest20(nh);
       }
-      else if(base_reswarm_status_.test_number == 21) {
+      else if(base_rattle_status_.test_number == 21) {
         RunTest21(nh);
       }
-      else if(base_reswarm_status_.test_number == 22) {
+      else if(base_rattle_status_.test_number == 22) {
         RunTest22(nh);
       }
-      else if(base_reswarm_status_.test_number == 77) {  // debug test
+      else if(base_rattle_status_.test_number == 77) {  // debug test
         RunDebug(nh);
       }
-      else if(base_reswarm_status_.test_number == 78) {  // rattle replan test
+      else if(base_rattle_status_.test_number == 78) {  // rattle replan test
         RunTest78(nh);
       }
-      else if (base_reswarm_status_.test_number >= 77000 && base_reswarm_status_.test_number <= 77999) {
+      else if (base_rattle_status_.test_number >= 77000 && base_rattle_status_.test_number <= 77999) {
         RunTest77(nh);
       }
-      base_reswarm_status_.test_finished = true;
+      base_rattle_status_.test_finished = true;
     }
     ros::spinOnce();
     sleep_rate.sleep();
@@ -311,9 +310,9 @@ template <typename T>
 void CoordinatorBase<T>::get_flight_mode() {
   /* Get a nominal flight mode for desired test.
   */
-  if (base_reswarm_status_.test_number != -1 and base_reswarm_status_.test_number != 0) {  // NOT shutdown test number or checkout test
+  if (base_rattle_status_.test_number != -1 and base_rattle_status_.test_number != 0) {  // NOT shutdown test number or checkout test
     // create a nominal FlightMode
-    if (!ff_util::FlightUtil::GetFlightMode(flight_mode_, base_reswarm_status_.flight_mode)) {
+    if (!ff_util::FlightUtil::GetFlightMode(flight_mode_, base_rattle_status_.flight_mode)) {
       return;
     } 
   }
@@ -328,14 +327,14 @@ void CoordinatorBase<T>::get_flight_mode() {
 
 /* ************************************************************************** */
 template <typename T>
-void CoordinatorBase<T>::publish_reswarm_status(const ros::TimerEvent&) {
+void CoordinatorBase<T>::publish_rattle_status(const ros::TimerEvent&) {
   /**
-   * @brief Main coordinator of Base logic. Relies on get_reswarm_status_msg, defined in derived class.
+   * @brief Main coordinator of Base logic. Relies on get_rattle_status_msg, defined in derived class.
    * Uses either Primary or Secondary status logic.
    * 
    */
   T msg;
-  get_reswarm_status_msg(msg);
+  get_rattle_status_msg(msg);
   pub_status_.publish(msg);
 }
 
@@ -345,12 +344,12 @@ template<typename T>
 void CoordinatorBase<T>::process_test_number() {
   /**
    * @brief Process test number logic for parameters
-   * TODO: adapt this for reswarm parameter setting
+   * TODO: adapt this for rattle parameter setting
    * 
    */
 
-  if (base_reswarm_status_.test_number > 100) {
-    std::string test_number_str = std::to_string(base_reswarm_status_.test_number);
+  if (base_rattle_status_.test_number > 100) {
+    std::string test_number_str = std::to_string(base_rattle_status_.test_number);
 
     // Parameter settings xx(xxxxxx)
     // controller
@@ -380,19 +379,19 @@ void CoordinatorBase<T>::process_test_number() {
 
 /* ************************************************************************** */
 template<typename T>
-void CoordinatorBase<T>::test_num_callback(const reswarm_msgs::ReswarmTestNumber::ConstPtr msg) {
+void CoordinatorBase<T>::test_num_callback(const rattle_msgs::RattleTestNumber::ConstPtr msg) {
   /**
    * @brief Updates test numbers received from exec_asap
    * 
    */
-  base_reswarm_status_.test_number = msg->test_number;
-  if (base_reswarm_status_.test_number == -1) {
+  base_rattle_status_.test_number = msg->test_number;
+  if (base_rattle_status_.test_number == -1) {
     // Re-enable default controller
     enable_default_ctl();
 
     // Set flight mode to off
-    base_reswarm_status_.flight_mode = "off";
-    if (!ff_util::FlightUtil::GetFlightMode(flight_mode_, base_reswarm_status_.flight_mode)) {
+    base_rattle_status_.flight_mode = "off";
+    if (!ff_util::FlightUtil::GetFlightMode(flight_mode_, base_rattle_status_.flight_mode)) {
         return;
     }
     pub_flight_mode_.publish(flight_mode_);
@@ -410,7 +409,7 @@ void CoordinatorBase<T>::flight_mode_callback(const ff_msgs::FlightMode::ConstPt
   flight_mode_name_ = msg->name;
 
   // kill ctl if it tries to turn on
-  if (base_reswarm_status_.default_control == false){
+  if (base_rattle_status_.default_control == false){
     auto serv_start = std::chrono::high_resolution_clock::now();
 
     // Disable the default controller so custom controller can run
@@ -479,9 +478,9 @@ template<typename T>
 void CoordinatorBase<T>::disable_default_ctl_callback(const ros::TimerEvent&) {
   /**
    * @brief Switch default controller off, repeatedly.
-   * @param base_reswarm_status.default_control is monitored for activation
+   * @param base_rattle_status.default_control is monitored for activation
    */
-  if (base_reswarm_status_.default_control == false){
+  if (base_rattle_status_.default_control == false){
     auto serv_start = std::chrono::high_resolution_clock::now();
 
     // Disable the default controller so custom controller can run
@@ -505,9 +504,9 @@ template<typename T>
 void CoordinatorBase<T>::disable_default_ctl() {
   /**
    * @brief Switch default controller off.
-   * @param base_reswarm_status.default_control is monitored for activation
+   * @param base_rattle_status.default_control is monitored for activation
    */
-  base_reswarm_status_.default_control = false;
+  base_rattle_status_.default_control = false;
 
   // Disable the default controller so custom controller can run
   std_srvs::SetBool srv;
@@ -526,7 +525,7 @@ void CoordinatorBase<T>::enable_default_ctl() {
   ROS_DEBUG_STREAM("[COORDINATOR]: Enabling default controller...");
 
   // Disable the default controller so tube-MPC can run
-  base_reswarm_status_.default_control = true;
+  base_rattle_status_.default_control = true;
 
   std_srvs::SetBool srv;
   srv.request.data = true;

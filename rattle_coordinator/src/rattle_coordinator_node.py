@@ -5,10 +5,10 @@ import rospy
 # msgs
 from ff_msgs.msg import EkfState
 from ff_msgs.msg import FamCommand
-from reswarm_msgs.msg import RattleTestInstruct
-from reswarm_msgs.msg import RattleInfoPlanInstruct  # formerly NMPCInstruct
+from rattle_msgs.msg import RattleTestInstruct
+from rattle_msgs.msg import RattleInfoPlanInstruct  # formerly NMPCInstruct
 from rattle_rrt.msg import ellipsoid, ellipsoidArray, RRTParams, TwistArray, WrenchArray
-from reswarm_msgs.msg import ReswarmRattleStatus
+from rattle_msgs.msg import RattleStatus
 from param_est.msg import Params
 
 # std msgs
@@ -38,12 +38,12 @@ class RattleCoordinatorNode(RattleCoordinator):
         rospy.set_param("/rattle/EST_STATUS", self.EST_STATUS_)
 
         # tracking points
-        self.POINT_A_GRANITE = rospy.get_param("/reswarm/primary/point_a_granite")
-        self.POINT_A_ISS = rospy.get_param("/reswarm/primary/point_a_iss")
-        self.POINT_B_GRANITE = rospy.get_param("/reswarm/primary/point_b_granite")
-        self.POINT_B_ISS = rospy.get_param("/reswarm/primary/point_b_iss")
-        self.POINT_C_GRANITE = rospy.get_param("/reswarm/primary/point_c_granite")
-        self.POINT_C_ISS = rospy.get_param("/reswarm/primary/point_c_iss")
+        self.POINT_A_GRANITE = rospy.get_param("/rattle/primary/point_a_granite")
+        self.POINT_A_ISS = rospy.get_param("/rattle/primary/point_a_iss")
+        self.POINT_B_GRANITE = rospy.get_param("/rattle/primary/point_b_granite")
+        self.POINT_B_ISS = rospy.get_param("/rattle/primary/point_b_iss")
+        self.POINT_C_GRANITE = rospy.get_param("/rattle/primary/point_c_granite")
+        self.POINT_C_ISS = rospy.get_param("/rattle/primary/point_c_iss")
 
         # ***Subs***
         # main test logic
@@ -89,10 +89,10 @@ class RattleCoordinatorNode(RattleCoordinator):
         self.path_ctl_twist_pub_ = rospy.Publisher("rattle/local/path_ctl/twistarray", TwistArray, queue_size=3)
         self.path_ctl_wrench_pub_ = rospy.Publisher("rattle/local/path_ctl/wrencharray", WrenchArray, queue_size=3)
 
-        # reswarm
-        self.rattle_status_pub_ = rospy.Publisher("reswarm/rattle/status", ReswarmRattleStatus, queue_size=1)
-        self.path_ctl_x_des_traj_pub_ = rospy.Publisher("reswarm/tube_mpc/traj", Float64MultiArray, queue_size=3)  # for casadi_nmpc
-        self.control_mode_pub_ = rospy.Publisher("reswarm/primary/control_mode", String, queue_size=3)  # for casadi_nmpc
+        # rattle
+        self.rattle_status_pub_ = rospy.Publisher("rattle/rattle/status", RattleStatus, queue_size=1)
+        self.path_ctl_x_des_traj_pub_ = rospy.Publisher("rattle/tube_mpc/traj", Float64MultiArray, queue_size=3)  # for casadi_nmpc
+        self.control_mode_pub_ = rospy.Publisher("rattle/primary/control_mode", String, queue_size=3)  # for casadi_nmpc
 
         self.sanity_check_timing()
 

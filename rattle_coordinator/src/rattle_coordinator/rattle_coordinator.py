@@ -66,7 +66,7 @@ class RattleCoordinator(_rattle_coordinator_utils.Mixin, _rattle_coordinator_ros
                    "wrencharray": 0}   # the local plan
 
     ground_ = False  # {False, True}
-    sim_ = False  # {False, True}  TODO: get this from reswarm/status
+    sim_ = False  # {False, True}  TODO: get this from rattle/status
 
     GLOBAL_STATUS_ = 0  # {0=not ready, increments by 1 per callback. 2=ready}
     LOCAL_STATUS_ = 0  # {0=not ready, 1=ready}

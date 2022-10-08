@@ -19,7 +19,7 @@ The code generated here is used to produce `libcasdi_nmpc_export.so`.
 
 Run this nodelet by inserting into the chained Astrobee launchfiles in `llp.launch`, or run independently with `roslaunch casadi_nmpc casadi_nmpc.launch`.
 
-Activate different control_modes using `execute_asap`, like `rosrun execute_asap execute_asap.py 7`, or writing to `reswarm/tube_mpc/control_mode` directly.
+Activate different control_modes using `execute_asap`, like `rosrun execute_asap execute_asap.py 7`, or writing to `rattle/tube_mpc/control_mode` directly.
 
 ## Requirements
 

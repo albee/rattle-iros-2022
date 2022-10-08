@@ -21,8 +21,8 @@
 #include <rattle_rrt/WrenchArray.h>
 #include <geometry_msgs/PoseArray.h>
 #include <geometry_msgs/TwistStamped.h>
-#include <reswarm_msgs/RattleInfoPlanInstruct.h>
-#include <reswarm_msgs/RattleTestInstruct.h>
+#include <rattle_msgs/RattleInfoPlanInstruct.h>
+#include <rattle_msgs/RattleTestInstruct.h>
 #include <param_est/Params.h>
 #include <std_msgs/Float64MultiArray.h>
 #include <rattle_acado_planner/eigen_msg.h>
@@ -36,11 +36,11 @@ class RattlePlannerNode: RattlePlanner {
     void pub_planner_output();
 
     void ekf_state_callback(const ff_msgs::EkfState::ConstPtr& msg);
-    void info_plan_instruct_start_callback(const reswarm_msgs::RattleInfoPlanInstruct::ConstPtr& msg);
-    void info_plan_instruct_callback(const reswarm_msgs::RattleInfoPlanInstruct::ConstPtr& msg);
+    void info_plan_instruct_start_callback(const rattle_msgs::RattleInfoPlanInstruct::ConstPtr& msg);
+    void info_plan_instruct_callback(const rattle_msgs::RattleInfoPlanInstruct::ConstPtr& msg);
     void parameters_callback(const geometry_msgs::InertiaStamped::ConstPtr& msg);
     void update_parameters_callback(const param_est::Params::ConstPtr& msg);
-    void rattle_instruct_callback(const reswarm_msgs::RattleTestInstruct::ConstPtr& msg);
+    void rattle_instruct_callback(const rattle_msgs::RattleTestInstruct::ConstPtr& msg);
 
   private:
     ros::NodeHandle* nh;

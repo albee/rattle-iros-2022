@@ -28,19 +28,19 @@ void CasadiNMPCNodelet::get_all_YAML_parameters() {
     /* Get all parameters needed for MPC and tube MPC. Most are specified by YAML.
     */
     // TVR frame
-    ros::param::getCached("/reswarm/r_RI_ISS_x", r_RI_(0));
-    ros::param::getCached("/reswarm/r_RI_ISS_y", r_RI_(1));
-    ros::param::getCached("/reswarm/r_RI_ISS_z", r_RI_(2));
+    ros::param::getCached("/rattle/r_RI_ISS_x", r_RI_(0));
+    ros::param::getCached("/rattle/r_RI_ISS_y", r_RI_(1));
+    ros::param::getCached("/rattle/r_RI_ISS_z", r_RI_(2));
 
     double u_mag;
     double torque_mag;
 
-    ros::param::getCached("/reswarm/casadi_nmpc/tube_update_period", tube_update_dt_);
-    ros::param::getCached("/reswarm/casadi_nmpc/control_period", control_dt_);
-    ros::param::getCached("/reswarm/casadi_nmpc/T", T);
-    ros::param::getCached("/reswarm/casadi_nmpc/N", N);
-    ros::param::getCached("/reswarm/casadi_nmpc/u_mag", u_mag);
-    ros::param::getCached("/reswarm/casadi_nmpc/torque_mag", torque_mag);
+    ros::param::getCached("/rattle/casadi_nmpc/tube_update_period", tube_update_dt_);
+    ros::param::getCached("/rattle/casadi_nmpc/control_period", control_dt_);
+    ros::param::getCached("/rattle/casadi_nmpc/T", T);
+    ros::param::getCached("/rattle/casadi_nmpc/N", N);
+    ros::param::getCached("/rattle/casadi_nmpc/u_mag", u_mag);
+    ros::param::getCached("/rattle/casadi_nmpc/torque_mag", torque_mag);
     MPC_rate_ = (double)N/T;
     MPC_dt_ = 1.0/MPC_rate_;
     u_mag_ << u_mag, u_mag, u_mag;
@@ -49,39 +49,39 @@ void CasadiNMPCNodelet::get_all_YAML_parameters() {
     // set gains and mass
     gains gains;
     if (ground_.compare("true") == 0) {
-        ros::param::getCached("/reswarm/casadi_nmpc/Q_pos_factor_ground", gains.Q_pos_factor);
-        ros::param::getCached("/reswarm/casadi_nmpc/Q_vel_factor_ground", gains.Q_vel_factor);
-        ros::param::getCached("/reswarm/casadi_nmpc/R_factor_ground", gains.R_factor);
-        ros::param::getCached("/reswarm/casadi_nmpc/QN_pos_factor_ground", gains.QN_pos_factor);
-        ros::param::getCached("/reswarm/casadi_nmpc/QN_vel_factor_ground", gains.QN_vel_factor);
+        ros::param::getCached("/rattle/casadi_nmpc/Q_pos_factor_ground", gains.Q_pos_factor);
+        ros::param::getCached("/rattle/casadi_nmpc/Q_vel_factor_ground", gains.Q_vel_factor);
+        ros::param::getCached("/rattle/casadi_nmpc/R_factor_ground", gains.R_factor);
+        ros::param::getCached("/rattle/casadi_nmpc/QN_pos_factor_ground", gains.QN_pos_factor);
+        ros::param::getCached("/rattle/casadi_nmpc/QN_vel_factor_ground", gains.QN_vel_factor);
 
-        ros::param::getCached("/reswarm/casadi_nmpc/Q_pos_tube_factor_ground", gains.Q_pos_tube_factor);
-        ros::param::getCached("/reswarm/casadi_nmpc/Q_vel_tube_factor_ground", gains.Q_vel_tube_factor);
-        ros::param::getCached("/reswarm/casadi_nmpc/R_tube_factor_ground", gains.R_tube_factor);
-        ros::param::getCached("/reswarm/casadi_nmpc/QN_pos_tube_factor_ground", gains.QN_pos_tube_factor);
-        ros::param::getCached("/reswarm/casadi_nmpc/QN_vel_tube_factor_ground", gains.QN_vel_tube_factor);
+        ros::param::getCached("/rattle/casadi_nmpc/Q_pos_tube_factor_ground", gains.Q_pos_tube_factor);
+        ros::param::getCached("/rattle/casadi_nmpc/Q_vel_tube_factor_ground", gains.Q_vel_tube_factor);
+        ros::param::getCached("/rattle/casadi_nmpc/R_tube_factor_ground", gains.R_tube_factor);
+        ros::param::getCached("/rattle/casadi_nmpc/QN_pos_tube_factor_ground", gains.QN_pos_tube_factor);
+        ros::param::getCached("/rattle/casadi_nmpc/QN_vel_tube_factor_ground", gains.QN_vel_tube_factor);
 
-        ros::param::getCached("/reswarm/casadi_nmpc/mass_ground", params_model_.mass);
+        ros::param::getCached("/rattle/casadi_nmpc/mass_ground", params_model_.mass);
     }
     else {
-        ros::param::getCached("/reswarm/casadi_nmpc/Q_pos_factor_iss", gains.Q_pos_factor);
-        ros::param::getCached("/reswarm/casadi_nmpc/Q_vel_factor_iss", gains.Q_vel_factor);
-        ros::param::getCached("/reswarm/casadi_nmpc/R_factor_iss", gains.R_factor);
-        ros::param::getCached("/reswarm/casadi_nmpc/QN_pos_factor_iss", gains.QN_pos_factor);
-        ros::param::getCached("/reswarm/casadi_nmpc/QN_vel_factor_iss", gains.QN_vel_factor);
+        ros::param::getCached("/rattle/casadi_nmpc/Q_pos_factor_iss", gains.Q_pos_factor);
+        ros::param::getCached("/rattle/casadi_nmpc/Q_vel_factor_iss", gains.Q_vel_factor);
+        ros::param::getCached("/rattle/casadi_nmpc/R_factor_iss", gains.R_factor);
+        ros::param::getCached("/rattle/casadi_nmpc/QN_pos_factor_iss", gains.QN_pos_factor);
+        ros::param::getCached("/rattle/casadi_nmpc/QN_vel_factor_iss", gains.QN_vel_factor);
 
-        ros::param::getCached("/reswarm/casadi_nmpc/Q_pos_tube_factor_iss", gains.Q_pos_tube_factor);
-        ros::param::getCached("/reswarm/casadi_nmpc/Q_vel_tube_factor_iss", gains.Q_vel_tube_factor);
-        ros::param::getCached("/reswarm/casadi_nmpc/R_tube_factor_iss", gains.R_tube_factor);
-        ros::param::getCached("/reswarm/casadi_nmpc/QN_pos_tube_factor_iss", gains.QN_pos_tube_factor);
-        ros::param::getCached("/reswarm/casadi_nmpc/QN_vel_tube_factor_iss", gains.QN_vel_tube_factor);
+        ros::param::getCached("/rattle/casadi_nmpc/Q_pos_tube_factor_iss", gains.Q_pos_tube_factor);
+        ros::param::getCached("/rattle/casadi_nmpc/Q_vel_tube_factor_iss", gains.Q_vel_tube_factor);
+        ros::param::getCached("/rattle/casadi_nmpc/R_tube_factor_iss", gains.R_tube_factor);
+        ros::param::getCached("/rattle/casadi_nmpc/QN_pos_tube_factor_iss", gains.QN_pos_tube_factor);
+        ros::param::getCached("/rattle/casadi_nmpc/QN_vel_tube_factor_iss", gains.QN_vel_tube_factor);
 
-        ros::param::getCached("/reswarm/casadi_nmpc/mass_iss", params_model_.mass);
+        ros::param::getCached("/rattle/casadi_nmpc/mass_iss", params_model_.mass);
     }
 
-    ros::param::getCached("/reswarm/casadi_nmpc/Q_pos_anc", gains.Q_pos_anc_factor);
-    ros::param::getCached("/reswarm/casadi_nmpc/Q_vel_anc", gains.Q_vel_anc_factor);
-    ros::param::getCached("/reswarm/casadi_nmpc/R_anc", gains.R_anc_factor);
+    ros::param::getCached("/rattle/casadi_nmpc/Q_pos_anc", gains.Q_pos_anc_factor);
+    ros::param::getCached("/rattle/casadi_nmpc/Q_vel_anc", gains.Q_vel_anc_factor);
+    ros::param::getCached("/rattle/casadi_nmpc/R_anc", gains.R_anc_factor);
 
     make_gains(gains);  // create all gain values
     switch_gains(0);
@@ -115,13 +115,13 @@ void CasadiNMPCNodelet::update_regulation_setpoint(Vector3f x0, Vector4f a0) {
 void CasadiNMPCNodelet::get_initial_regulation()  {
     /* Get parameters specifying where to start the regulation (from execute_asap)
     */
-    ros::param::get("/reswarm/primary/x_start", x0_(0));
-    ros::param::get("/reswarm/primary/y_start", x0_(1));
-    ros::param::get("/reswarm/primary/z_start", x0_(2));
-    ros::param::get("/reswarm/primary/qx_start", a0_(0));
-    ros::param::get("/reswarm/primary/qy_start", a0_(1));
-    ros::param::get("/reswarm/primary/qz_start", a0_(2));
-    ros::param::get("/reswarm/primary/qw_start", a0_(3));
+    ros::param::get("/rattle/primary/x_start", x0_(0));
+    ros::param::get("/rattle/primary/y_start", x0_(1));
+    ros::param::get("/rattle/primary/z_start", x0_(2));
+    ros::param::get("/rattle/primary/qx_start", a0_(0));
+    ros::param::get("/rattle/primary/qy_start", a0_(1));
+    ros::param::get("/rattle/primary/qz_start", a0_(2));
+    ros::param::get("/rattle/primary/qw_start", a0_(3));
 
     update_regulation_setpoint(x0_, a0_);
 }

@@ -6,6 +6,12 @@
 #include <nodelet/nodelet.h>
 #include <ros/package.h>
 
+// fsw
+#include <ff_util/ff_nodelet.h>
+#include <ff_util/ff_names.h>
+#include <ff_util/ff_flight.h>
+#include <pluginlib/class_list_macros.h>
+
 // Msgs
 #include <ff_msgs/ControlState.h>
 #include <ff_msgs/FlightMode.h>
@@ -16,16 +22,13 @@
 #include <std_msgs/Bool.h>
 #include <std_msgs/MultiArrayDimension.h>
 #include <msg_conversions/msg_conversions.h>
-#include <pluginlib/class_list_macros.h>
-#include <ff_util/ff_nodelet.h>
-#include <ff_util/ff_names.h>
-#include <ff_util/ff_flight.h>
-#include <reswarm_msgs/ReswarmMsgMRPI.h>
-#include <reswarm_msgs/ReswarmSrvMRPI.h>
-#include <reswarm_msgs/ReswarmStatusPrimary.h>
-#include <reswarm_msgs/ReswarmCasadiDebug.h>
-#include <reswarm_msgs/ReswarmCasadiStatus.h>
-#include <reswarm_msgs/RattleTestInstruct.h>
+
+#include <rattle_msgs/RattleMsgMRPI.h>
+#include <rattle_msgs/RattleSrvMRPI.h>
+#include <rattle_msgs/RattleStatusPrimary.h>
+#include <rattle_msgs/RattleCasadiDebug.h>
+#include <rattle_msgs/RattleCasadiStatus.h>
+#include <rattle_msgs/RattleTestInstruct.h>
 #include <param_est/Params.h>
 #include <casadi_nmpc/params.h>
 
@@ -73,16 +76,16 @@ struct gains {
 static std::string CASADI_MPC_LIB = "libcasadi_mpc.so";
 static std::string CASADI_ROBUST_TUBE_MPC_LIB = "libcasadi_robust_tube_mpc.so";
 
-static std::string UC_BOUND_TOPIC = "/reswarm/uc_bound/uc_bound";  // always global
-static std::string TOPIC_RESWARM_TUBE_MPC_MRPI = "/reswarm/tube_mpc/mrpi";  // always global
+static std::string UC_BOUND_TOPIC = "/rattle/uc_bound/uc_bound";  // always global
+static std::string TOPIC_RESWARM_TUBE_MPC_MRPI = "/rattle/tube_mpc/mrpi";  // always global
 
 static std::string TOPIC_PARAM_EST = "mob/inertia_est";
 
-static std::string TOPIC_RESWARM_STATUS = "reswarm/status";
-static std::string TOPIC_RESWARM_TUBE_MPC_TRAJ = "reswarm/tube_mpc/traj";
-static std::string TOPIC_RESWARM_TUBE_MPC_DEBUG = "reswarm/tube_mpc/debug";
-static std::string TOPIC_RESWARM_CASADI_STATUS = "reswarm/casadi_nmpc/status";
-static std::string TOPIC_RESWARM_TUBE_MPC_REG_SETPOINT = "reswarm/tube_mpc/reg_setpoint";
+static std::string TOPIC_RESWARM_STATUS = "rattle/status";
+static std::string TOPIC_RESWARM_TUBE_MPC_TRAJ = "rattle/tube_mpc/traj";
+static std::string TOPIC_RESWARM_TUBE_MPC_DEBUG = "rattle/tube_mpc/debug";
+static std::string TOPIC_RESWARM_CASADI_STATUS = "rattle/casadi_nmpc/status";
+static std::string TOPIC_RESWARM_TUBE_MPC_REG_SETPOINT = "rattle/tube_mpc/reg_setpoint";
 static std::string TOPIC_RATTLE_TEST_INSTRUCT = "/rattle/test_instruct";  // always global
 
 class CasadiNMPCNodelet : public ff_util::FreeFlyerNodelet {
@@ -300,7 +303,7 @@ class CasadiNMPCNodelet : public ff_util::FreeFlyerNodelet {
   void prepare_mrpi(Eigen::MatrixXd w, Eigen::MatrixXd u_max, double dt, double mass, double Q_pos_anc, double Q_vel_anc, double R_anc);
 
   // ROS pubs and subs
-  void status_callback(const reswarm_msgs::ReswarmStatusPrimary::ConstPtr& msg);
+  void status_callback(const rattle_msgs::RattleStatusPrimary::ConstPtr& msg);
   void ekf_callback(const ff_msgs::EkfState::ConstPtr msg);
   void w_bound_callback(const std_msgs::Float64MultiArray::ConstPtr uc_bound);
   void x_des_traj_callback(const std_msgs::Float64MultiArray::ConstPtr msg);
@@ -311,7 +314,7 @@ class CasadiNMPCNodelet : public ff_util::FreeFlyerNodelet {
   void publish_debug(Matrix<double, 6, 1> u_t_idx, Vector3d u0_mpc, Vector3d u0_dr, Matrix<double, 6, 1> x_nom);
   void publish_ctl(tf2::Vector3 F_xyz_B, tf2::Vector3 T_xyz_B);
   void update_parameters_callback(const param_est::Params::ConstPtr& msg);
-  void rattle_instruct_callback(const reswarm_msgs::RattleTestInstruct::ConstPtr& msg);
+  void rattle_instruct_callback(const rattle_msgs::RattleTestInstruct::ConstPtr& msg);
 
   // utils
   void get_initial_regulation();

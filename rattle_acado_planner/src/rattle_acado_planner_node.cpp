@@ -20,7 +20,7 @@ RattlePlannerNode::RattlePlannerNode(ros::NodeHandle* nh) {
   // sub_current_inertial_params_ = nh->subscribe("mob/inertia", 1, &RattlePlannerNode::parameters_callback, this);
   sub_des_ = nh->subscribe("rattle/local/info_plan_instruct", 5, &RattlePlannerNode::info_plan_instruct_callback, this);  // request a plan
   sub_des_init = nh->subscribe("rattle/local/info_plan_instruct_start", 5, &RattlePlannerNode::info_plan_instruct_start_callback, this);  // desired goal waypoint--important!
-  sub_rattle_instruct_= nh->subscribe<reswarm_msgs::RattleTestInstruct>("/rattle/test_instruct", 5, boost::bind(&RattlePlannerNode::rattle_instruct_callback, this, _1));
+  sub_rattle_instruct_= nh->subscribe<rattle_msgs::RattleTestInstruct>("/rattle/test_instruct", 5, boost::bind(&RattlePlannerNode::rattle_instruct_callback, this, _1));
 
   // Publisher to send out latest plan
   pub_local_path_posearray_ = nh->advertise<geometry_msgs::PoseArray>("rattle/local/path/posearray", 5, true);  // outgoing FAM commands: /honey/gnc/ctl/command
@@ -30,7 +30,7 @@ RattlePlannerNode::RattlePlannerNode(ros::NodeHandle* nh) {
   pub_psi_ = nh->advertise<std_msgs::Float64MultiArray>("rattle/local/psi", 5, true);  // psi values
 
   ros::Duration(1.0).sleep();  // need to wait for parameter to be sent
-  nh->param<std::string>("/reswarm/ground", ground_, "false");
+  nh->param<std::string>("/rattle/ground", ground_, "false");
   nh->getParam("/rattle/planner/max_RTI_iter_", max_RTI_iter_);
   nh->getParam("/rattle/planner/Wx", Wx_);
   nh->getParam("/rattle/planner/Wu", Wu_);
@@ -234,7 +234,7 @@ void RattlePlannerNode::update_parameters_callback(const param_est::Params::Cons
 }
 
 
-void RattlePlannerNode::info_plan_instruct_start_callback(const reswarm_msgs::RattleInfoPlanInstruct::ConstPtr& msg) {
+void RattlePlannerNode::info_plan_instruct_start_callback(const rattle_msgs::RattleInfoPlanInstruct::ConstPtr& msg) {
   /* Set the start state x0
   */
  if (use_params_) {
@@ -261,7 +261,7 @@ void RattlePlannerNode::info_plan_instruct_start_callback(const reswarm_msgs::Ra
 
 
 /* ************************************************************************** */
-void RattlePlannerNode::rattle_instruct_callback(const reswarm_msgs::RattleTestInstruct::ConstPtr& msg)  {
+void RattlePlannerNode::rattle_instruct_callback(const rattle_msgs::RattleTestInstruct::ConstPtr& msg)  {
     /* Configuration options for RATTLE.
     @msg USE_PARAMS: use paramter updates {0, 1}
     @msg INITIAL_MODEL_MODE: mode to use for calc, see enum
@@ -273,7 +273,7 @@ void RattlePlannerNode::rattle_instruct_callback(const reswarm_msgs::RattleTestI
 }
 
 
-void RattlePlannerNode::info_plan_instruct_callback(const reswarm_msgs::RattleInfoPlanInstruct::ConstPtr& msg) {
+void RattlePlannerNode::info_plan_instruct_callback(const rattle_msgs::RattleInfoPlanInstruct::ConstPtr& msg) {
   /* Get the desired position/orientation for ACADO to track, along with weighting info
   */
   ROS_INFO("...latest goal and info weights updated.");

@@ -22,7 +22,7 @@ DATA_PATH = rospack.get_path("data")
 BAG_PATH_SIM = DATA_PATH + "/output/rosbags/"  # must end in /, dir must exist!
 
 # rosbag name
-ROSBAG_NAME = "reswarm_standard_rosbag"  # this gets overwritten to use Ames' standard naming convention!
+ROSBAG_NAME = "rattle_standard_rosbag"  # this gets overwritten to use Ames' standard naming convention!
 
 
 # -------------------------------------------------------------------------------------------------------------
@@ -48,11 +48,11 @@ NODE_LIST_HARDWARE_SECONDARY = ["secondary_dmpc_iface", "secondary_dmpc_ctl_node
 
 # DMPC topics
 DMPC_PRIMARY = ["gnc/ekf", "bumble/gnc/ekf", "loc/pose", "loc/twist", "gnc/ctl/command",
-                "gs/data", "bumble/gs/data", "mob/flight_mode", "reswarm/acado_status",
-                "reswarm/dmpc_status"]
+                "gs/data", "bumble/gs/data", "mob/flight_mode", "rattle/acado_status",
+                "rattle/dmpc_status"]
 DMPC_SECONDARY = ["gnc/ekf", "queen/gnc/ekf", "loc/pose", "loc/twist", "gnc/ctl/command",
-                  "gs/data", "queen/gs/data", "mob/flight_mode", "reswarm/acado_status",
-                  "reswarm/dmpc_status"]
+                  "gs/data", "queen/gs/data", "mob/flight_mode", "rattle/acado_status",
+                  "rattle/dmpc_status"]
 DMPC_HW_PRIMARY_TOPICS = create_namespaced_topics(DMPC_PRIMARY, sim=False)
 DMPC_HW_SECONDARY_TOPICS = create_namespaced_topics(DMPC_SECONDARY, sim=False)
 DMPC_SIM_PRIMARY_TOPICS = create_namespaced_topics(DMPC_PRIMARY, sim=True, bee_name="queen")
@@ -78,14 +78,14 @@ FSW_HW_TOPICS = create_namespaced_topics(FSW_TOPICS, sim=False)
 FSW_SIM_TOPICS = create_namespaced_topics(FSW_TOPICS, sim=True, bee_name="queen")
 
 # Tube MPC topics
-TUBE_MPC = ["reswarm/uc_bound/uc_bound", "reswarm/tube_mpc/traj", "reswarm/tube_mpc/debug", "reswarm/tube_mpc/mrpi"]
+TUBE_MPC = ["rattle/uc_bound/uc_bound", "rattle/tube_mpc/traj", "rattle/tube_mpc/debug", "rattle/tube_mpc/mrpi"]
 TUBE_MPC_HW_TOPICS = create_namespaced_topics(TUBE_MPC, sim=False)
 TUBE_MPC_SIM_TOPICS = create_namespaced_topics(TUBE_MPC, sim=True, bee_name="queen")
 
-# Misc ReSWARM topics
-RESWARM_MISC = ["reswarm/lqrrrt/traj", "reswarm/planner_lqrrrt/status", "inv_fam/appliedFandT", "mob/inertia_est", "reswarm/status"]
-RESWARM_MISC_HW_TOPICS = create_namespaced_topics(RESWARM_MISC, sim=False)
-RESWARM_MISC_SIM_TOPICS = create_namespaced_topics(RESWARM_MISC, sim=True, bee_name="queen")
+# Misc rattle topics
+rattle_MISC = ["rattle/lqrrrt/traj", "rattle/planner_lqrrrt/status", "inv_fam/appliedFandT", "mob/inertia_est", "rattle/status"]
+rattle_MISC_HW_TOPICS = create_namespaced_topics(RATTLE_MISC, sim=False)
+RATTLE_MISC_SIM_TOPICS = create_namespaced_topics(RATTLE_MISC, sim=True, bee_name="queen")
 
 # Sim only topics (ground truth)
 SIM_ONLY = ["loc/truth/pose", "loc/truth/twist"]
@@ -94,21 +94,21 @@ SIM_ONLY_TOPICS = create_namespaced_topics(SIM_ONLY, sim=True, bee_name="queen")
 # -------------------------------------------------------------------------------------------------------------
 # Topics for recording: TOPICS_$SIM_$ROBOT_ROLE
 # Note: oddball topics that NEVER use namespacing must be explicitly listed in sim
-TOPICS_HARDWARE_PRIMARY = FSW_HW_TOPICS + LOC_HW_TOPICS + DMPC_HW_PRIMARY_TOPICS + RATTLE_HW_PRIMARY_TOPICS + TUBE_MPC_HW_TOPICS + RESWARM_MISC_HW_TOPICS
+TOPICS_HARDWARE_PRIMARY = FSW_HW_TOPICS + LOC_HW_TOPICS + DMPC_HW_PRIMARY_TOPICS + RATTLE_HW_PRIMARY_TOPICS + TUBE_MPC_HW_TOPICS + RATTLE_MISC_HW_TOPICS
 
-TOPICS_SIM_PRIMARY = " /reswarm/tube_mpc/mrpi /reswarm/planner_lqrrrt/status /rattle/test_instruct" \
-                     + SIM_ONLY_TOPICS + FSW_SIM_TOPICS + DMPC_SIM_PRIMARY_TOPICS + RATTLE_SIM_PRIMARY_TOPICS + TUBE_MPC_SIM_TOPICS + RESWARM_MISC_SIM_TOPICS
+TOPICS_SIM_PRIMARY = " /rattle/tube_mpc/mrpi /rattle/planner_lqrrrt/status /rattle/test_instruct" \
+                     + SIM_ONLY_TOPICS + FSW_SIM_TOPICS + DMPC_SIM_PRIMARY_TOPICS + RATTLE_SIM_PRIMARY_TOPICS + TUBE_MPC_SIM_TOPICS + RATTLE_MISC_SIM_TOPICS
 
-TOPICS_HARDWARE_SECONDARY = FSW_HW_TOPICS + LOC_HW_TOPICS + DMPC_HW_SECONDARY_TOPICS + RESWARM_MISC_HW_TOPICS
+TOPICS_HARDWARE_SECONDARY = FSW_HW_TOPICS + LOC_HW_TOPICS + DMPC_HW_SECONDARY_TOPICS + RATTLE_MISC_HW_TOPICS
 
-TOPICS_SIM_SECONDARY = SIM_ONLY_TOPICS + FSW_SIM_TOPICS + DMPC_SIM_SECONDARY_TOPICS + RESWARM_MISC_SIM_TOPICS
+TOPICS_SIM_SECONDARY = SIM_ONLY_TOPICS + FSW_SIM_TOPICS + DMPC_SIM_SECONDARY_TOPICS + RATTLE_MISC_SIM_TOPICS
 
 # print(TOPICS_HARDWARE_PRIMARY)
 # print(TOPICS_SIM_PRIMARY)
 # print(TOPICS_HARDWARE_SECONDARY)
 # print(TOPICS_SIM_SECONDARY)
 
-# unused for reswarm
+# unused for rattle
 TOPICS_HARDWARE_PRIMARY_EXTRA = ""
 TOPICS_SIM_PRIMARY_EXTRA = ""
 

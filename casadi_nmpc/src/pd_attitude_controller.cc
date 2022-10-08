@@ -45,15 +45,15 @@ namespace pd {
 
     std::string ground = "false";
 
-    ros::param::getCached("/reswarm/ground", ground);
+    ros::param::getCached("/rattle/ground", ground);
 
     if (ground.compare("true") == 0) {
-      ros::param::getCached("/reswarm/casadi_nmpc/k_p_orient_ground", BackupController::k_p_orient);
-      ros::param::getCached("/reswarm/casadi_nmpc/k_d_orient_ground", BackupController::k_d_orient);
+      ros::param::getCached("/rattle/casadi_nmpc/k_p_orient_ground", BackupController::k_p_orient);
+      ros::param::getCached("/rattle/casadi_nmpc/k_d_orient_ground", BackupController::k_d_orient);
     }
     else {
-      ros::param::getCached("/reswarm/casadi_nmpc/k_p_orient_iss", BackupController::k_p_orient);
-      ros::param::getCached("/reswarm/casadi_nmpc/k_d_orient_iss", BackupController::k_d_orient);
+      ros::param::getCached("/rattle/casadi_nmpc/k_p_orient_iss", BackupController::k_p_orient);
+      ros::param::getCached("/rattle/casadi_nmpc/k_d_orient_iss", BackupController::k_d_orient);
     }
   }
 

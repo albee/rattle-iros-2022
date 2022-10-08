@@ -4,7 +4,6 @@ A set of tools that handle high-level coordination of Astrobee science experimen
 
 execute_asap.py : high-level coordinating script (mainly startup and shutdown)
 asap_primary.py : primary Astrobee Python command script
-asap_secondary.py : secondary Astrobee Python command script
 
 The `execute_asap` nodelet listens to incoming GDS ROS parameters that define a test. The parameters are
 1) whether the test is being run in simulation are on hardware (--sim)
@@ -80,9 +79,9 @@ rosbags are automatically started for a new test. See `asap_config.py` for bag a
 
 Start up the Astrobee sim with '/bumble' and '/honey' for the ISS:
 
-`roslaunch astrobee sim_reswarm.launch rviz:=true`
+`roslaunch astrobee sim_rattle.launch rviz:=true`
 
-You can set additional parameters on what to launch in `sim_reswarm.launch`.
+You can set additional parameters on what to launch in `sim_rattle.launch`.
 
 ## Adding Tests
 

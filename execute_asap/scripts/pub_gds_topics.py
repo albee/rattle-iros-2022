@@ -14,7 +14,7 @@ import time
 
 # ROS
 import rospy
-from reswarm_msgs.msg import ReswarmTestNumber
+from rattle_msgs.msg import RattleTestNumber
 
 if (__name__ == "__main__"):
     """ Publish on the topics GDS will use to activate nodes.
@@ -44,8 +44,8 @@ if (__name__ == "__main__"):
     print('GDS params publishing. Press Ctrl+C to stop publishing.')
 
     rospy.init_node('pub_gds_topics')
-    test_number_topic_name = "/reswarm/test_number"
-    pub_test_number = rospy.Publisher(test_number_topic_name, ReswarmTestNumber, queue_size=10)
+    test_number_topic_name = "/rattle/test_number"
+    pub_test_number = rospy.Publisher(test_number_topic_name, RattleTestNumber, queue_size=10)
 
     rospy.set_param("/asap/gds_test_num", TEST_NUMBER)
     rospy.set_param("/asap/gds_ground", GROUND)
@@ -55,7 +55,7 @@ if (__name__ == "__main__"):
     time.sleep(1.0)
 
     if args.test is True:
-        msg = ReswarmTestNumber()
+        msg = RattleTestNumber()
         msg.stamp = rospy.get_rostime()
         msg.test_number = TEST_NUMBER
         msg.role = 'primary'

@@ -1,73 +1,73 @@
 # Parameters for casadi_nmpc.
 
 ### CasADi Vars
-/reswarm/casadi_nmpc/T: 5.0 # Time horizon, [s]
-/reswarm/casadi_nmpc/N: 5 # control intervals per time horizon (|x| is 1 greater)
+/rattle/casadi_nmpc/T: 5.0 # Time horizon, [s]
+/rattle/casadi_nmpc/N: 5 # control intervals per time horizon (|x| is 1 greater)
 ### CasADi Vars
 
 # tube update period in [s]
-/reswarm/casadi_nmpc/tube_update_period: 10.0
+/rattle/casadi_nmpc/tube_update_period: 10.0
 
 # control period in [s]
-/reswarm/casadi_nmpc/control_period: 0.2
+/rattle/casadi_nmpc/control_period: 0.2
 
 # max positional control input [N]
-/reswarm/casadi_nmpc/u_mag: 0.15
+/rattle/casadi_nmpc/u_mag: 0.15
 
 # max attitude control input (sanity check) [N-m]
-/reswarm/casadi_nmpc/torque_mag: 0.015
+/rattle/casadi_nmpc/torque_mag: 0.015
 
 # attitude controller proportional gain
-#/reswarm/casadi_nmpc/k_p_orient: 0.0629
-#/reswarm/casadi_nmpc/k_d_orient: 0.2832
-/reswarm/casadi_nmpc/k_p_orient_ground: 0.5
-/reswarm/casadi_nmpc/k_d_orient_ground: 0.3
+#/rattle/casadi_nmpc/k_p_orient: 0.0629
+#/rattle/casadi_nmpc/k_d_orient: 0.2832
+/rattle/casadi_nmpc/k_p_orient_ground: 0.5
+/rattle/casadi_nmpc/k_d_orient_ground: 0.3
 
 # attitude controller derivative gain
-/reswarm/casadi_nmpc/k_p_orient_iss: 0.5
-/reswarm/casadi_nmpc/k_d_orient_iss: 0.2
+/rattle/casadi_nmpc/k_p_orient_iss: 0.5
+/rattle/casadi_nmpc/k_d_orient_iss: 0.2
 
 # ancillary controller Q and R (LQR formulation)
-/reswarm/casadi_nmpc/Q_pos_anc: 5
-/reswarm/casadi_nmpc/Q_vel_anc: 10
-/reswarm/casadi_nmpc/R_anc: 2
+/rattle/casadi_nmpc/Q_pos_anc: 5
+/rattle/casadi_nmpc/Q_vel_anc: 10
+/rattle/casadi_nmpc/R_anc: 2
 
 ############# Ground #############
 # astrobee mass (a little lighter is better for overshoot) [kg]
-/reswarm/casadi_nmpc/mass_ground: 16.9715
+/rattle/casadi_nmpc/mass_ground: 16.9715
 
 # MPC Q/R costs
-/reswarm/casadi_nmpc/Q_pos_factor_ground: 50
-/reswarm/casadi_nmpc/Q_vel_factor_ground: 5
-/reswarm/casadi_nmpc/R_factor_ground: 0.1
+/rattle/casadi_nmpc/Q_pos_factor_ground: 50
+/rattle/casadi_nmpc/Q_vel_factor_ground: 5
+/rattle/casadi_nmpc/R_factor_ground: 0.1
 
-/reswarm/casadi_nmpc/QN_pos_factor_ground: 100
-/reswarm/casadi_nmpc/QN_vel_factor_ground: 10
+/rattle/casadi_nmpc/QN_pos_factor_ground: 100
+/rattle/casadi_nmpc/QN_vel_factor_ground: 10
 
 # Tube MPC Q/R costs
-/reswarm/casadi_nmpc/Q_pos_tube_factor_ground: 50
-/reswarm/casadi_nmpc/Q_vel_tube_factor_ground: 5
-/reswarm/casadi_nmpc/R_tube_factor_ground: 0.1
+/rattle/casadi_nmpc/Q_pos_tube_factor_ground: 50
+/rattle/casadi_nmpc/Q_vel_tube_factor_ground: 5
+/rattle/casadi_nmpc/R_tube_factor_ground: 0.1
 
-/reswarm/casadi_nmpc/QN_pos_tube_factor_ground: 100
-/reswarm/casadi_nmpc/QN_vel_tube_factor_ground: 10
+/rattle/casadi_nmpc/QN_pos_tube_factor_ground: 100
+/rattle/casadi_nmpc/QN_vel_tube_factor_ground: 10
 
 ############# ISS #############
 # astrobee mass (a little lighter is better for overshoot) [kg]
-/reswarm/casadi_nmpc/mass_iss: 9.5
+/rattle/casadi_nmpc/mass_iss: 9.5
 
 # MPC Q/R costs
-/reswarm/casadi_nmpc/Q_pos_factor_iss: 50
-/reswarm/casadi_nmpc/Q_vel_factor_iss: 5
-/reswarm/casadi_nmpc/R_factor_iss: 0.1
+/rattle/casadi_nmpc/Q_pos_factor_iss: 50
+/rattle/casadi_nmpc/Q_vel_factor_iss: 5
+/rattle/casadi_nmpc/R_factor_iss: 0.1
 
-/reswarm/casadi_nmpc/QN_pos_factor_iss: 100
-/reswarm/casadi_nmpc/QN_vel_factor_iss: 10
+/rattle/casadi_nmpc/QN_pos_factor_iss: 100
+/rattle/casadi_nmpc/QN_vel_factor_iss: 10
 
 # Tube MPC Q/R costs
-/reswarm/casadi_nmpc/Q_pos_tube_factor_iss: 50
-/reswarm/casadi_nmpc/Q_vel_tube_factor_iss: 5
-/reswarm/casadi_nmpc/R_tube_factor_iss: 0.1
+/rattle/casadi_nmpc/Q_pos_tube_factor_iss: 50
+/rattle/casadi_nmpc/Q_vel_tube_factor_iss: 5
+/rattle/casadi_nmpc/R_tube_factor_iss: 0.1
 
-/reswarm/casadi_nmpc/QN_pos_tube_factor_iss: 100
-/reswarm/casadi_nmpc/QN_vel_tube_factor_iss: 10
+/rattle/casadi_nmpc/QN_pos_tube_factor_iss: 100
+/rattle/casadi_nmpc/QN_vel_tube_factor_iss: 10

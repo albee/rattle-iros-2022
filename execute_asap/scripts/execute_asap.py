@@ -20,8 +20,8 @@ import datetime
 # msgs
 from std_msgs.msg import String
 from std_srvs.srv import SetBool
-from reswarm_msgs.msg import ReswarmStatusPrimary, ReswarmStatusSecondary
-from reswarm_msgs.msg import ReswarmTestNumber
+from rattle_msgs.msg import RattleStatusPrimary, RattleStatusSecondary
+from rattle_msgs.msg import RattleTestNumber
 from ff_msgs.msg import SignalState
 
 # For rosbag and CTL-C
@@ -266,7 +266,7 @@ class ASAP:
         self.rosbag_stop()
 
         # Wait to make sure flight mode is off and controller is default before
-        # killing RESWARM nodelets.
+        # killing rattle nodelets.
         t0 = rospy.get_time()
         while self.default_control != "true" or self.flight_mode != "off":
             print('[EXECUTE_ASAP]: Waiting for coordinator to re-enable default control and set flight mode to off.')
@@ -277,7 +277,7 @@ class ASAP:
                 print('[EXECUTE_ASAP]: Timeout on default_control...')
                 break
 
-        # Kill RESWARM nodelets
+        # Kill rattle nodelets
         print('[EXECUTE_ASAP]: Killing nodelets.')
         self.stop_nodelets()
         print('[EXECUTE_ASAP]: Nodelets killed.')
@@ -370,7 +370,7 @@ class ASAP:
 
     def test_num_okay(self):
         """ Only allow valid test numbers.
-        TODO: verify for reswarm
+        TODO: verify for rattle
         """
         test_num = self.test_num
         str_test_num = str(test_num)
@@ -419,20 +419,20 @@ class ASAP:
     def publish_test_num(self, test_num, my_role):
         """ Publish a test number for coordinator.
         """
-        msg = ReswarmTestNumber()
+        msg = RattleTestNumber()
         msg.stamp = rospy.get_rostime()
         msg.test_number = test_num
         msg.role = my_role
         pub_test_number.publish(msg)
 
     def update_status_sub(self):
-        """ Subscriber for RESWARM status message (published by coordinators).
+        """ Subscriber for rattle status message (published by coordinators).
         Make sure it is called AFTER bee_name obtained.
         """
         if self.my_role == 'primary':
-            rospy.Subscriber(status_msg_name, ReswarmStatusPrimary, self.status_callback)
+            rospy.Subscriber(status_msg_name, RattleStatusPrimary, self.status_callback)
         elif self.my_role == 'secondary':
-            rospy.Subscriber(status_msg_name, ReswarmStatusSecondary, self.status_callback)
+            rospy.Subscriber(status_msg_name, RattleStatusSecondary, self.status_callback)
         else:
             raise ValueError("Unknown Role")
 
@@ -518,29 +518,29 @@ if __name__ == "__main__":
         arg_robot_name = myargv[1]  # robot_prefix, SIMULATION ONLY!
         if arg_robot_name == "honey":
             ASAP_main.my_role = 'primary'
-            test_number_msg_name = "/honey/reswarm/test_number"
-            status_msg_name = "/honey/reswarm/status"
+            test_number_msg_name = "/honey/rattle/test_number"
+            status_msg_name = "/honey/rattle/status"
             signal_msg_name = "/honey/signals"
         elif arg_robot_name == "bumble":
             ASAP_main.my_role = 'secondary'
-            test_number_msg_name = "/bumble/reswarm/test_number"
-            status_msg_name = "/bumble/reswarm/status"
+            test_number_msg_name = "/bumble/rattle/test_number"
+            status_msg_name = "/bumble/rattle/status"
             signal_msg_name = "/bumble/signals"
         elif arg_robot_name == "queen":
             ASAP_main.my_role = 'primary'
-            test_number_msg_name = "/queen/reswarm/test_number"
-            status_msg_name = "/queen/reswarm/status"
+            test_number_msg_name = "/queen/rattle/test_number"
+            status_msg_name = "/queen/rattle/status"
             signal_msg_name = "/queen/signals"
         elif arg_robot_name == "/":
             ASAP_main.my_role = 'primary'
-            test_number_msg_name = "/reswarm/test_number"
-            status_msg_name = "/reswarm/status"
+            test_number_msg_name = "/rattle/test_number"
+            status_msg_name = "/rattle/status"
             signal_msg_name = "/signals"
         print("[EXECUTE_ASAP]: Using namespace -- " + arg_robot_name)
     except Exception:  # hardware
         ASAP_main.my_role = 'primary'
-        test_number_msg_name = "/reswarm/test_number"
-        status_msg_name = "/reswarm/status"
+        test_number_msg_name = "/rattle/test_number"
+        status_msg_name = "/rattle/status"
         signal_msg_name = "/signals"
         print("[EXECUTE_ASAP]: Using hardware namespace -- /.")
 
@@ -556,7 +556,7 @@ if __name__ == "__main__":
     rospy.Subscriber("/robot_name", String, ASAP_main.bee_name_callback)
 
     # publisher for test_number
-    pub_test_number = rospy.Publisher(test_number_msg_name, ReswarmTestNumber, queue_size=10)
+    pub_test_number = rospy.Publisher(test_number_msg_name, RattleTestNumber, queue_size=10)
     # signal lights
     pub_signal = rospy.Publisher(signal_msg_name, SignalState, queue_size=1, latch=True)
 

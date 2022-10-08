@@ -32,8 +32,8 @@
     <arg name="llp" default="local" />              <!-- LLP IP address              -->
     <arg name="mlp" default="local" />              <!-- MLP IP address              -->
 
-    <param name="/reswarm/sim" type="String" value="true"/>
-    <param name="/reswarm/ground" type="String" value="false"/>
+    <param name="/rattle/sim" type="String" value="true"/>
+    <param name="/rattle/ground" type="String" value="false"/>
 
     <node
         pkg="execute_asap" type="execute_asap.py" name="execute_asap"

@@ -2,7 +2,7 @@
 
 import rospy
 import numpy as np
-from reswarm_msgs.srv import ReswarmSrvMRPI
+from rattle_msgs.srv import RattleSrvMRPI
 from std_msgs.msg import Float64MultiArray
 from std_msgs.msg import MultiArrayDimension
 

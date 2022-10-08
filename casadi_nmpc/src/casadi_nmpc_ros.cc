@@ -10,8 +10,8 @@ MIT Space Systems Lab, 06.23.21
 
 namespace casadi_nmpc{
 /* ************************************************************************** */
-void CasadiNMPCNodelet::status_callback(const reswarm_msgs::ReswarmStatusPrimary::ConstPtr& msg) {
-  /* Get /reswarm/status and decide and accpet it IF we have no forced regulation
+void CasadiNMPCNodelet::status_callback(const rattle_msgs::RattleStatusPrimary::ConstPtr& msg) {
+  /* Get /rattle/status and decide and accpet it IF we have no forced regulation
   */
   // std::cout << regulate_lockout_ << " " << control_mode_ << std::endl;
   if (regulate_lockout_ != true){  // if we have not internally set control_mode_ to regulate
@@ -23,7 +23,7 @@ void CasadiNMPCNodelet::status_callback(const reswarm_msgs::ReswarmStatusPrimary
 
 
 /* ************************************************************************** */
-void CasadiNMPCNodelet::rattle_instruct_callback(const reswarm_msgs::RattleTestInstruct::ConstPtr& msg)  {
+void CasadiNMPCNodelet::rattle_instruct_callback(const rattle_msgs::RattleTestInstruct::ConstPtr& msg)  {
     /* Configuration options for RATTLE.
     @msg USE_PARAMS: use paramter updates {0, 1}
     @msg INITIAL_MODEL_MODE: mode to use for calc, see enum
@@ -124,7 +124,7 @@ void CasadiNMPCNodelet::w_bound_callback(const std_msgs::Float64MultiArray::Cons
 
 /* ************************************************************************** */
 void CasadiNMPCNodelet::x_des_traj_callback(const std_msgs::Float64MultiArray::ConstPtr msg) {
-  /* The `reswarm/tube_mpc/traj` subscriber callback
+  /* The `rattle/tube_mpc/traj` subscriber callback
   Called by coordinator_nodelet (or otherwise). This is the full reference trajectory.
 
   New: if called multiple times, the trajectory will be *appended* to the current ref traj!
@@ -217,7 +217,7 @@ void CasadiNMPCNodelet::x_des_traj_callback(const std_msgs::Float64MultiArray::C
 
 /* ************************************************************************** */
 void CasadiNMPCNodelet::publish_casadi_status( ) {
-  reswarm_msgs::ReswarmCasadiStatus msg;
+  rattle_msgs::RattleCasadiStatus msg;
   msg.stamp = ros::Time::now();
   msg.coord_ok = coord_ok_;
   msg.mrpi_finished = mrpi_finished_;
@@ -229,7 +229,7 @@ void CasadiNMPCNodelet::publish_casadi_status( ) {
 
 /* ************************************************************************** */
 void CasadiNMPCNodelet::publish_mrpi( ) {
-  reswarm_msgs::ReswarmMsgMRPI mrpi_msg;
+  rattle_msgs::RattleMsgMRPI mrpi_msg;
 
   std_msgs::Float64MultiArray K_msg;
   tf::matrixEigenToMsg(K_dr_, K_msg);  // Eigen --> msg
@@ -267,7 +267,7 @@ void CasadiNMPCNodelet::publish_mrpi( ) {
 /* ************************************************************************** */
 void CasadiNMPCNodelet::publish_debug(Matrix<double, 6, 1> u_t_idx, Vector3d u0_mpc, Vector3d u0_dr,
   Matrix<double, 6, 1> x_nom) {
-  reswarm_msgs::ReswarmCasadiDebug msg;
+  rattle_msgs::RattleCasadiDebug msg;
   msg.header.stamp = ros::Time::now();
 
   // Translation control (body frame)

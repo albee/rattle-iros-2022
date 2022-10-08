@@ -24,7 +24,7 @@ void RRTNodelet::Initialize(ros::NodeHandle* nh) {
   sub_rrt_params_ = nh->subscribe<rattle_rrt::RRTParams>("rattle/rrt/params", 5, boost::bind(&RRTNodelet::rrt_params_callback, this, _1));  // incoming RRT parameters
   sub_est_params_ = nh->subscribe<param_est::Params>("mob/inertia_est", 5, boost::bind(&RRTNodelet::update_parameters_callback, this, _1));
   // sub_obs_ = nh->subscribe<rattle_rrt::ellipsoidArray>("rattle/obstacles", 5, boost::bind(&RRTNodelet::rrt_obs_callback, this, _1));  // incoming obstacle definitions
-  sub_rattle_instruct_= nh->subscribe<reswarm_msgs::RattleTestInstruct>("/rattle/test_instruct", 5, boost::bind(&RRTNodelet::rattle_instruct_callback, this, _1));
+  sub_rattle_instruct_= nh->subscribe<rattle_msgs::RattleTestInstruct>("/rattle/test_instruct", 5, boost::bind(&RRTNodelet::rattle_instruct_callback, this, _1));
   
   pub_rrt_path_posearray_ = nh->advertise<geometry_msgs::PoseArray>("rattle/rrt/path/posearray", 5, true);  // outgoing pose history
   pub_rrt_path_twistarray_ = nh->advertise<rattle_rrt::TwistArray>("rattle/rrt/path/twistarray", 5, true);  // outgoing twist history
@@ -309,7 +309,7 @@ void RRTNodelet::update_parameters_callback(const param_est::Params::ConstPtr& m
 
 
 /* ************************************************************************** */
-void RRTNodelet::rattle_instruct_callback(const reswarm_msgs::RattleTestInstruct::ConstPtr& msg)  {
+void RRTNodelet::rattle_instruct_callback(const rattle_msgs::RattleTestInstruct::ConstPtr& msg)  {
     /* Configuration options for RATTLE.
     @msg USE_PARAMS: use paramter updates {0, 1}
     @msg INITIAL_MODEL_MODE: mode to use for calc, see enum

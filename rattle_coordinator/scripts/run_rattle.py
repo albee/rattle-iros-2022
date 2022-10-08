@@ -7,7 +7,7 @@ from time import sleep
 from numpy import deg2rad
 from std_msgs.msg import String
 from tf.transformations import quaternion_from_euler
-from reswarm_msgs.msg import RattleTestInstruct
+from rattle_msgs.msg import RattleTestInstruct
 
 # For rosbag and CTL-C
 import rospkg

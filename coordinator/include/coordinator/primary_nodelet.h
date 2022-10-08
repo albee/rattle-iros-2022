@@ -3,7 +3,7 @@
 #include "traj_utils/traj_utils.h"
 
 // status struct for primary Astrobee
-struct primary_reswarm_status_struct {
+struct primary_rattle_status_struct {
   // LQRRRT
   bool lqrrrt_activated = false;
   bool lqrrrt_finished = false;
@@ -14,7 +14,7 @@ struct primary_reswarm_status_struct {
   bool info_traj_sent = false;
 
   // casadi_nmpc params
-  int reswarm_gain_mode = 0;
+  int rattle_gain_mode = 0;
   std::string control_mode = "inactive";
 
   bool uc_bound_finished = false;
@@ -38,7 +38,7 @@ struct primary_reswarm_status_struct {
 };
 
 
-class PrimaryNodelet : public CoordinatorBase<reswarm_msgs::ReswarmStatusPrimary>, public ff_util::FreeFlyerNodelet {
+class PrimaryNodelet : public CoordinatorBase<rattle_msgs::RattleStatusPrimary>, public ff_util::FreeFlyerNodelet {
  public:
   PrimaryNodelet(): ff_util::FreeFlyerNodelet(true) {}  // don't do anything ROS-related in the constructor! (call the Nodelet constructor)
   ~PrimaryNodelet() {};
@@ -53,13 +53,13 @@ class PrimaryNodelet : public CoordinatorBase<reswarm_msgs::ReswarmStatusPrimary
   enum WeightMode{no_weight, step_weight, exp_weight, pure_izz_weight, pure_mass_weight};
   enum InitialModelMode{ground_truth_iss, ground_truth_ground, incorrect_low, incorrect_high};  // initial system model to use
 
-  primary_reswarm_status_struct primary_reswarm_status_;
+  primary_rattle_status_struct primary_rattle_status_;
 
-  std::string UC_BOUND_TOPIC = "/reswarm/uc_bound/uc_bound";
+  std::string UC_BOUND_TOPIC = "/rattle/uc_bound/uc_bound";
   std::string RATTLE_TEST_INSTRUCT_TOPIC = "/rattle/test_instruct";
-  std::string TOPIC_RESWARM_TUBE_MPC_TRAJ = "reswarm/tube_mpc/traj";
-  std::string CONTROL_MODE_TOPIC = "reswarm/primary/control_mode";
-  std::string TOPIC_RESWARM_TUBE_MPC_REG_SETPOINT = "reswarm/tube_mpc/reg_setpoint";
+  std::string TOPIC_RATTLE_TUBE_MPC_TRAJ = "rattle/tube_mpc/traj";
+  std::string CONTROL_MODE_TOPIC = "rattle/primary/control_mode";
+  std::string TOPIC_RATTLE_TUBE_MPC_REG_SETPOINT = "rattle/tube_mpc/reg_setpoint";
 
   ros::NodeHandle *nh_;
   ros::Publisher pub_x_des_traj_;
@@ -71,9 +71,8 @@ class PrimaryNodelet : public CoordinatorBase<reswarm_msgs::ReswarmStatusPrimary
   ros::Subscriber sub_casadi_status_;
   ros::Subscriber sub_planner_status_;
   ros::Subscriber sub_info_status_;
-  ros::Subscriber sub_reswarm_status_;
   ros::Subscriber sub_rattle_status_;
-  ros::Subscriber sub_dmpc_status_;
+  ros::Subscriber sub_rattle_status_;
   ros::Subscriber sub_control_mode_;
 
   ros::Rate sleep_rate{10.0};
@@ -111,7 +110,7 @@ class PrimaryNodelet : public CoordinatorBase<reswarm_msgs::ReswarmStatusPrimary
   float att_reg_thresh_;
   float omega_reg_thresh_;
 
-  void get_reswarm_status_msg(reswarm_msgs::ReswarmStatusPrimary& msg) override;
+  void get_rattle_status_msg(rattle_msgs::RattleStatusPrimary& msg) override;
 
   void Initialize(ros::NodeHandle* nh);
   void load_params();
@@ -125,17 +124,11 @@ class PrimaryNodelet : public CoordinatorBase<reswarm_msgs::ReswarmStatusPrimary
   void RunTest2(ros::NodeHandle *nh) override;
   void RunTest3(ros::NodeHandle *nh) override;
 
-  // OOA and RATTLE cool functions
-  void RunTest4(ros::NodeHandle *nh) override;  // LQR-RRT*/Traj Smoother checkout
-  void RunTest5(ros::NodeHandle *nh) override;  // LQR-RRT*/Traj Smoother with PID control w/o coded obstacle
-  void RunTest6(ros::NodeHandle *nh) override;  // LQR-RRT*/Traj Smoother with PID control w/ coded obstacle
-  void RunTest7(ros::NodeHandle *nh) override;  // LQR-RRT*/Traj Smoother with standard MPC w/ coded obstacle
-  void RunTest8(ros::NodeHandle *nh) override;  // LQR-RRT*/Traj Smoother with robust tube MPC w/ coded obstacle
+  // RATTLE cool functions
   void RunTest9(ros::NodeHandle *nh) override;  // Non-info trajectory, B to C
   void RunTest10(ros::NodeHandle *nh) override;  // Mass info-gain, B to C
   void RunTest11(ros::NodeHandle *nh) override;  // Inertia info-gain, B to C
   void RunTest12(ros::NodeHandle *nh) override;  // Info gain for all 4 parameters (mass and inertias)
-  void RunTest13(ros::NodeHandle *nh) override;  // Run Safe On-Orbit Assembly in conjunction with RATTLE
   void RunTest14(ros::NodeHandle *nh) override;  // tube MPC checkout test
   void RunTest15(ros::NodeHandle *nh) override;  // standard MPC checkout test
   void RunTest16(ros::NodeHandle *nh) override;  // RATTLE test: generic obstacle, run full pipeline (no est updates used)
@@ -147,9 +140,7 @@ class PrimaryNodelet : public CoordinatorBase<reswarm_msgs::ReswarmStatusPrimary
   void RunTest22(ros::NodeHandle *nh) override;  // RATTLE test: izz excitation
   void RunTest77(ros::NodeHandle *nh) override;  // RATTLE full test (A to B)
   void RunTest78(ros::NodeHandle *nh) override;  // RATTLE replan test
- 
-  void RunDebug(ros::NodeHandle *nh) override;  // debug (test77)
-  
+   
   void check_regulate();
   void publish_dummy_uc_bound();
 
@@ -157,11 +148,11 @@ class PrimaryNodelet : public CoordinatorBase<reswarm_msgs::ReswarmStatusPrimary
   void process_rattle_test_number(int test_number);
 
   // status callbacks
-  void uc_bound_status_callback(const reswarm_msgs::ReswarmUCBoundStatus::ConstPtr msg);
-  void rattle_status_callback(const reswarm_msgs::ReswarmRattleStatus::ConstPtr msg);
-  void casadi_status_callback(const reswarm_msgs::ReswarmCasadiStatus::ConstPtr msg);
-  void planner_status_callback(const reswarm_msgs::ReswarmPlannerStatus::ConstPtr msg);
-  void info_status_callback(const reswarm_msgs::ReswarmInfoStatus::ConstPtr msg);
+  void uc_bound_status_callback(const rattle_msgs::RattleUCBoundStatus::ConstPtr msg);
+  void rattle_status_callback(const rattle_msgs::RattleRattleStatus::ConstPtr msg);
+  void casadi_status_callback(const rattle_msgs::RattleCasadiStatus::ConstPtr msg);
+  void planner_status_callback(const rattle_msgs::RattlePlannerStatus::ConstPtr msg);
+  void info_status_callback(const rattle_msgs::RattleInfoStatus::ConstPtr msg);
   void control_mode_callback(const std_msgs::String::ConstPtr msg);  // externally update the control mode
   
   void pub_reg_setpoint(Eigen::MatrixXd reg_setpoint_);
@@ -170,12 +161,6 @@ class PrimaryNodelet : public CoordinatorBase<reswarm_msgs::ReswarmStatusPrimary
   std::tuple<Eigen::MatrixXd, int> read_traj(std::string traj_filename);
   Eigen::Matrix3f q2dcm(const Eigen::Vector4f &q);
   // ff_msgs::ControlState PrimaryNodelet::create_ControlState_from_x_des(int t_idx);
-
-  // DMPC Helper Methods
-  void RunDMPC(ros::NodeHandle *nh);
-  void LaunchDMPC();
-  void KillDMPC();  // Callback
-  void dmpc_status_cb(const reswarm_dmpc::DMPCTestStatusStamped::ConstPtr msg);
 };
 
 PLUGINLIB_EXPORT_CLASS(PrimaryNodelet, nodelet::Nodelet); // this is a nodelet!

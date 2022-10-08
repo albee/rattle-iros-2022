@@ -16,5 +16,5 @@ add_subdirectory(casadi_nmpc)
 add_subdirectory(z_poly_calc)
 
 # RATTLE online parameter estimation
-add_subdirectory(param_est)
-add_subdirectory(inv_fam)
+#add_subdirectory(param_est)
+#add_subdirectory(inv_fam)

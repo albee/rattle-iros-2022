@@ -26,7 +26,7 @@ function [K_dr, Autight, butight, AZ, bZ] = calc_mRPI_ROS(u_mag, mass, DT, noise
   R_anc = gains_dr.R1;
   
   % create srv "message"...even though it's a srv it still uses msg format
-  req = rosmessage('reswarm_msgs/ReswarmSrvMRPI');
+  req = rosmessage('rattle_msgs/RattleSrvMRPI');
   req.W = w;
   req.UMax = u_max;
   req.Dt = DT;
