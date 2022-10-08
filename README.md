@@ -7,15 +7,18 @@ RATTLE is a set of modules that perform parametric information-aware motion plan
 RATTLE is implemented here for a 6DOF free-flying robot, though its interfaces and methods are more general to robotic systems with parameteric unknowns in their system dynamics. Specifically, RATTLE has been tested on the International Space Station using the [Astrobee robots](https://github.com/nasa/astrobee).
 
 ## Requirements
-TODO
+- For coordinated use of all packages with the Astrobee sim: Ubuntu 16.04 (possibly 18.04 or 20.04 depending on Astrobee sim support) with ROS
 - CasADi
 - ACADO
+- Pytope (bundled)
+- Bullet (bundled)
+- Astrobee custom msgs (bundled)
 
 ## ROS Packages
 RATTLE's functions are implemented here as separate ROS packages:
 
 - Global planning
-    - `rattle_rrt`: A "long-horizon" sampling-based planner that also acconts for, in this case, translational dynamics.
+    - `rattle_rrt`: A "long-horizon" sampling-based planner that also accounts for, in this case, translational dynamics.
 
 - Local information-aware planning
     - `rattle_acado_planner`: A mid-level "local" planner that also considers information content of planned trajectories. Implemented using ACADO.
@@ -36,4 +39,30 @@ RATTLE's functions are implemented here as separate ROS packages:
 
 ## Installation
 
+### (optional) Astrobee simulation environment
+Please consult The [Astrobee](https://github.com/nasa/astrobee) repository and follow their detailed installation instructions to set up the Astrobee simulation.
+The simulation will essentially live in a ROS workspace devoted to it.
+
+### RATTLE packages
+Within a desired ROS workspace (such as the Astrobee simulation):
+
+```
+git clone https://github.com/albee/rattle-iros-2022
+mv -rf rattle-iros-2022 src
+catkin build
+```
+
+This will build the RATTLE packages, which can be used standalone, or coordinate as a whole with the aid of a simulation environment (see below).
+
+Note: strange catkin build errors for `ff_msgs` involving empy can be resolved using:
+`catkin build -DPYTHON_EXECUTABLE=/usr/bin/python3 -DPYTHON_INCLUDE_DIR=/usr/include/python3.7m`
+
+### Dependencies
+TODO
+
 ## Usage
+RATTLE's packages can be used standalone, or as a coordinated whole as in the examples in the [paper](https://ieeexplore.ieee.org/document/9851849).
+To run as a whole, RATTLE requires a simulation environment to respond to and provide message inputs/outputs. This repository is configured to interact with
+the [Astrobee simulation environment](https://github.com/nasa/astrobee), on which RATTLE's modules should be placed.
+
+Most packages separate ROS wrappers over core algorithms for standalone use; please consult individual READMEs in each package.

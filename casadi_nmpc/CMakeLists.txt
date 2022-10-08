@@ -14,8 +14,9 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-
+cmake_minimum_required(VERSION 3.0.0)
 project(casadi_nmpc)
+find_package(catkin REQUIRED)
 
 find_package(PkgConfig)
 pkg_search_module(casadi casadi) # required for cross-compile, can't use find_package
@@ -73,7 +74,7 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
   DESTINATION include
   FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp" PATTERN "*.tpp")
 
-install_launch_files()
+# install_launch_files()
 
 # Enable gtest unit tests
 enable_testing()
