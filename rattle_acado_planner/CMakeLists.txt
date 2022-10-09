@@ -9,12 +9,20 @@ option(USE_ISS_VERSION "Use ISS 6DOF Version" ON)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
+find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(catkin REQUIRED COMPONENTS
-   roslaunch
    roscpp
-   std_msgs tf
+   std_msgs
+   tf
    message_generation
    message_runtime
+   ff_msgs
+   ff_hw_msgs
+   msg_conversions
+   rattle_msgs
+   param_est
+   ff_util
+   rattle_rrt
  )
 
 add_message_files(
@@ -37,6 +45,17 @@ catkin_package(
   INCLUDE_DIRS
   LIBRARIES 
   DEPENDS 
+    roscpp
+    std_msgs tf
+    message_generation
+    message_runtime
+    ff_msgs
+    ff_hw_msgs
+    msg_conversions
+    rattle_msgs
+    param_est
+    ff_util
+    rattle_rrt
 )
 
 
@@ -79,8 +98,8 @@ if(NOT USE_ISS_VERSION)
 
   # ACADO wrapper (3 DOF)
   add_library(rattle_acado_planner src/rattle_acado_planner.cpp)
-  target_link_libraries(rattle_acado_planner rattle_acado_planner_export ff_common msg_conversions ff_flight)
-  target_include_directories(rattle_acado_planner PUBLIC acado-export/RHP_export include)
+  target_link_libraries(rattle_acado_planner rattle_acado_planner_export ${catkin_LIBRARIES})
+  target_include_directories(rattle_acado_planner PUBLIC acado-export/RHP_export include ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS})
 else()
   message(" -- [acado] Using ISS Acado!")
   # ACADO shared library export (from MATLAB, 6 DOF)
@@ -121,23 +140,23 @@ else()
 
   # ACADO wrapper (6 DOF)
   add_library(rattle_acado_planner src/rattle_acado_planner.cpp)
-  target_link_libraries(rattle_acado_planner rattle_acado_planner_export ff_common msg_conversions ff_flight)
-  target_include_directories(rattle_acado_planner PUBLIC acado-export/RHP_6DOF_export include)
+  target_link_libraries(rattle_acado_planner rattle_acado_planner_export ${catkin_LIBRARIES})
+  target_include_directories(rattle_acado_planner PUBLIC acado-export/RHP_6DOF_export include ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS})
 endif(NOT USE_ISS_VERSION)
 unset(USE_ISS_VERSION CACHE)
 
 
 # ACADO tester
 add_executable(test-acado src/test_acado.cpp)
-target_link_libraries(test-acado rattle_acado_planner_export rattle_acado_planner ff_common msg_conversions ff_flight)
-target_include_directories(test-acado PUBLIC include)
+target_link_libraries(test-acado rattle_acado_planner_export rattle_acado_planner ${catkin_LIBRARIES})
+target_include_directories(test-acado PUBLIC include ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS})
 
 
 # Node wrapper
 add_executable(rattle_acado_planner_node src/rattle_acado_planner_node.cpp)
-target_link_libraries(rattle_acado_planner_node rattle_acado_planner_export rattle_acado_planner ff_common msg_conversions ff_flight)
-target_include_directories(rattle_acado_planner_node PUBLIC include)
-add_dependencies(rattle_acado_planner_node ff_msgs ff_hw_msgs rattle_msgs)
+target_link_libraries(rattle_acado_planner_node rattle_acado_planner_export rattle_acado_planner ${catkin_LIBRARIES})
+target_include_directories(rattle_acado_planner_node PUBLIC include ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS})
+add_dependencies(rattle_acado_planner_node ${catkin_EXPORTED_TARGETS})
 
 
 install(TARGETS rattle_acado_planner_export

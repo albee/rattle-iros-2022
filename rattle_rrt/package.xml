@@ -26,8 +26,10 @@
   <depend>ff_msgs</depend>
   <depend>ff_util</depend>
   <depend>message_generation</depend>
-
-  <exec_depend>message_runtime</exec_depend>
+  <depend>message_runtime</depend>
+  <depend>param_est</depend>
+  <depend>rattle_msgs</depend>
+  <depend>geometry_msgs</depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

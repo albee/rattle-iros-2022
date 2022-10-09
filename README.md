@@ -18,6 +18,12 @@ cmake ..
 make -j2
 make install  # might need sudo
 ```
+
+- [flann](https://github.com/flann-lib/flann)
+```
+apt install libflann-dev
+```
+
 - [ACADO](https://acado.github.io/) (bundled)
 
 - Pytope (bundled)

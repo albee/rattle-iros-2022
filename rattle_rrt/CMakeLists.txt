@@ -1,27 +1,31 @@
-# Copyright (c) 2017, United States Government, as represented by the
-# Administrator of the National Aeronautics and Space Administration.
-#
-# All rights reserved.
-#
-# The Astrobee platform is licensed under the Apache License, Version 2.0
-# (the "License"); you may not use this file except in compliance with the
-# License. You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-# License for the specific language governing permissions and limitations
-# under the License.
-
-message("-- RRTNodelet and rrt_high_level added...")
-
+cmake_minimum_required(VERSION 3.0.0)
 project(rattle_rrt)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-deprecated-declarations  -Werror=return-type")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-deprecated-declarations  -Werror=return-type -llz4")
 # set(DCMAKE_BUILD_TYPE=Debug)
 
 add_subdirectory(bullet3)
+message("-- [BULLET]: added.")
+
+find_package (Eigen3 3.3 REQUIRED NO_MODULE)
+find_package(PkgConfig REQUIRED)
+find_library(LZ4_LIBRARIES NAMES liblz4.so HINTS "lz4/lib")  # strange 20.04 bug with libflann
+link_libraries(${LZ4_LIBRARIES})
+pkg_search_module(flann REQUIRED flann)
+
+find_package(catkin REQUIRED COMPONENTS
+  message_runtime
+  message_generation
+  eigen_conversions
+  roscpp
+  nodelet
+  pluginlib
+  tf
+  ff_msgs
+  ff_util
+  param_est
+  rattle_msgs
+  geometry_msgs
+ )
 
 ################################
 # ROS/Catkin
@@ -40,7 +44,8 @@ add_message_files(
 # Actually generate the language-specific message/service files
 generate_messages(
   DEPENDENCIES
-  std_msgs geometry_msgs
+  std_msgs
+  geometry_msgs
 )
 
 # Astrobee CMake command to build messages: we are NOT using this method! Results in rrt_high_level target getting used
@@ -54,16 +59,19 @@ catkin_package(
     message_runtime
     message_generation
     eigen_conversions
-    eigen3
     roscpp
     nodelet
     pluginlib
     actionlib
     tf
     ff_msgs
+    ff_util
+    param_est
+    rattle_msgs
+    geometry_msgs
 )
 
-install_launch_files()
+#install_launch_files()
 
 #################################
 # Normal CMake C++ (using Astrobee CMake Commands)
@@ -86,23 +94,21 @@ install_launch_files()
 #   DEPS ff_msgs ff_hw_msgs
 # )
 
-message("-- [BULLET]: added.")
-
 add_library(rattle_rrt src/quaternion.cpp src/rigidBodyDynamics.cpp src/state_space_4d.cpp 
   src/state_space_6d_iss.cpp src/bullet_collision_checker.cpp)
-target_link_libraries(rattle_rrt ${catkin_LIBRARIES} ${EIGEN_LIBRARIES} ${Boost_LIBRARIES} ff_common ff_nodelet msg_conversions ff_flight BulletCollision BulletDynamics LinearMath)
-target_include_directories(rattle_rrt PUBLIC ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} include bullet3/src)
+target_link_libraries(rattle_rrt ${catkin_LIBRARIES} ${EIGEN_LIBRARIES} ${Boost_LIBRARIES} ${FLANN_LIBRARIES} BulletCollision BulletDynamics LinearMath)
+target_include_directories(rattle_rrt PUBLIC ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${FLANN_INCLUDE_DIR} include bullet3/src)
 
 add_library(rattle_rrt_nodelet src/rattle_rrt_nodelet.cpp)
-target_link_libraries(rattle_rrt_nodelet rattle_rrt)
-target_include_directories(rattle_rrt_nodelet PUBLIC ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} include bullet3/src)
-add_dependencies(rattle_rrt_nodelet ff_msgs ff_hw_msgs)
+target_link_libraries(rattle_rrt_nodelet rattle_rrt ${FLANN_LIBRARIES} ${catkin_LIBRARIES})
+target_include_directories(rattle_rrt_nodelet PUBLIC ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${FLANN_INCLUDE_DIR} include bullet3/src)
+add_dependencies(rattle_rrt_nodelet ${catkin_EXPORTED_TARGETS})
 
 add_executable(test-rrt test/test_rrt.cpp)
-target_link_libraries(test-rrt rattle_rrt)
+target_link_libraries(test-rrt rattle_rrt ${catkin_LIBRARIES})
 
 add_executable(test-bullet test/test_bullet.cpp)
-target_link_libraries(test-bullet rattle_rrt)
+target_link_libraries(test-bullet rattle_rrt ${catkin_LIBRARIES})
 
 install(TARGETS rattle_rrt rattle_rrt_nodelet DESTINATION lib)
 install(TARGETS test-rrt DESTINATION bin)

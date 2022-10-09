@@ -42,7 +42,7 @@ RattlePlannerNode::RattlePlannerNode(ros::NodeHandle* nh) {
 
 void RattlePlannerNode::pub_planner_output() {
   // Get the forces and torques
-  std::vector<geometry_msgs::Wrench> wrencharray;
+  rattle_rrt::WrenchArray wrencharray;
   for (int i = 0; i < N; ++i) {
     geometry_msgs::Wrench wrench;
 
@@ -59,12 +59,12 @@ void RattlePlannerNode::pub_planner_output() {
         wrench.torque.x= acadoVariables.u[3 + i*NU];
         wrench.torque.y = acadoVariables.u[4 + i*NU];
     }
-    wrencharray.push_back(wrench);
+    wrencharray.WrenchArray.push_back(wrench);
   }
 
   // Get the poses and twists (and psi)
   geometry_msgs::PoseArray posearray;
-  std::vector<geometry_msgs::TwistStamped> twistarray;
+  rattle_rrt::TwistArray twistarray;
   Eigen::MatrixXd psi_eig = Eigen::MatrixXd::Zero(N, NX);
   Eigen::MatrixXd weights_eig = Eigen::MatrixXd::Zero(1, NY);
 
@@ -113,7 +113,7 @@ void RattlePlannerNode::pub_planner_output() {
 
     posearray.poses.push_back(pose);
     posearray.header.frame_id = "world";  // needed for rviz to display, might also be "map"
-    twistarray.push_back(twist_stmp);
+    twistarray.TwistArray.push_back(twist_stmp);
   }
 
   // compute FIM after-the-fact

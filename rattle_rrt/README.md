@@ -1,31 +1,27 @@
 # rrt_high_level
-
 This nodelet is a high-level RRT, implemented in C++. Currently, it includes a kinodynamic planning component too, but this
 can be dropped for time efficiency (we'll assume the RRT trajectory is feasible and let the mid-level planner handle traj opt...).
 
-## TODO
-
-[ ] get rid of kinodynamic element! as fast as possible
-[ ] specify hard final constraint for nodes, adjustable node size?
+Acknowledgment to the Georgia Tech Robojackets team for the original template upon which the RRT has evolved.
 
 ## ROS Usage
-
 Write to the topic RRT_PARAMS_TOPIC, `rattle/rrt/params` ONCE using the `RRTParamsMsg`, defined in `msg/`. For now, params are just `start_state` and `goal_state`.
 (See `rrt_path_request()` in `rrt_nodelet.cc`.)
 
 Monitor `rattle/rrt/path` for the `RRTPathMsg`, defined in `msg/`. A full state path will be provided.
 
-## Usage
 
+## Usage
 `main.cpp` contains usage examples. 
 
 After compilation, an additional executable `test-rrt` is avaiable. Calling `test-rrt` will run some predefined RRT operations.
 
 Executable:
+
 `rosrun rrt_high_level test-rrt`
 
-## Behavior
 
+## Behavior
 - Most actual computation is defined in the template `tree.h`. 
 - State spaces are implemented by inheriting the abstract `state_space.h`.
 
@@ -54,8 +50,8 @@ path = rrt->get_path_nodes();
 
 The RRT is also wrapped by a cpp ROS nodelet, `rattle_rrt_nodelet.cpp`.
 
-## Visualize
 
+## Visualize
 Visualize:
 `rosrun rrt_high_level rrt_plotter.py`
 

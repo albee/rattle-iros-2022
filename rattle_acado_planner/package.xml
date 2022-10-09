@@ -69,6 +69,13 @@
  <exec_depend>tf</exec_depend>
  <exec_depend>message_generation</exec_depend>
  <exec_depend>message_runtime</exec_depend>
+ <depend>ff_msgs</depend>
+ <depend>ff_hw_msgs</depend>
+ <depend>msg_conversions</depend>
+ <depend>rattle_msgs</depend>
+ <depend>param_est</depend>
+ <depend>ff_util</depend>
+ <depend>rattle_rrt</depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

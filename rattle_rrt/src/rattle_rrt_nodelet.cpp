@@ -391,7 +391,7 @@ void RRTNodelet::rrt_path_publish(const T &path, double start_pos[7]) {
 
   */
   geometry_msgs::PoseArray posearray;
-  std::vector<geometry_msgs::TwistStamped> twistarray;
+  rattle_rrt::TwistArray twistarray;
 
   int len_rrt = path.size();
 
@@ -438,7 +438,7 @@ void RRTNodelet::rrt_path_publish(const T &path, double start_pos[7]) {
 
     posearray.poses.push_back(pose);
     posearray.header.frame_id = "world";  // needed for rviz to display, might also be "map"
-    twistarray.push_back(twist_stmp);
+    twistarray.TwistArray.push_back(twist_stmp);
   }
 
   pub_rrt_path_posearray_.publish(posearray);
