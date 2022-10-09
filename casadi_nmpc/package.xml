@@ -27,6 +27,7 @@
   <depend>ff_common</depend>
   <depend>msg_conversions</depend>
   <depend>rattle_msgs</depend>
+  <depend>param_est</depend>
   <export>
     <nodelet plugin="${prefix}/nodelet_plugins.xml" />
   </export>

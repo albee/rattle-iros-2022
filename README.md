@@ -7,16 +7,28 @@ RATTLE is a set of modules that perform parametric information-aware motion plan
 RATTLE is implemented here for a 6DOF free-flying robot, though its interfaces and methods are more general to robotic systems with parameteric unknowns in their system dynamics. Specifically, RATTLE has been tested on the International Space Station using the [Astrobee robots](https://github.com/nasa/astrobee).
 
 ## Requirements
-- For coordinated use of all packages with the Astrobee sim: Ubuntu 16.04 (possibly 18.04 or 20.04 depending on Astrobee sim support) with ROS
-- CasADi
-- ACADO
+For coordinated use of all packages with the Astrobee sim Ubuntu 16.04 is required (possibly 18.04 or 20.04 depending on Astrobee sim support) with a standard
+[ROS](http://wiki.ros.org/ROS/Installation) installation. 
+
+- [CasADi 3.5.5](https://github.com/casadi/casadi/releases/tag/3.5.5)
+```
+git clone https://github.com/casadi/casadi --branch 3.5.5
+cd casadi && mkdir build && cd build
+cmake ..
+make -j2
+make install
+```
+- [ACADO](https://acado.github.io/) (bundled)
+
 - Pytope (bundled)
+
 - Bullet (bundled)
+
 - Astrobee custom msgs (bundled)
-- Luajit 
 
-Note that Luajit is only required as an Astrobee-related dependecy, from which some packages inherit their classes.
+- Luajit (likley already on your system)
 
+Note: Some of RATTLE's packages have baked-in dependencies on some Astrobee flight software classes, namely, ff_nodelet. A few extra dependencies are required 
 ## ROS Packages
 RATTLE's functions are implemented here as separate ROS packages:
 

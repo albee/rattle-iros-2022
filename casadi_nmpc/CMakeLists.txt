@@ -30,6 +30,7 @@ find_package(catkin REQUIRED COMPONENTS
   msg_conversions
   ff_util
   rattle_msgs
+  param_est
 )
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(PkgConfig)
@@ -58,6 +59,7 @@ catkin_package(
     ff_common
     msg_conversions
     rattle_msgs
+    param_est
 )
 
 #---casadi_nmpc---
