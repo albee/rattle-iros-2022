@@ -16,17 +16,31 @@
 # under the License.
 cmake_minimum_required(VERSION 3.0.0)
 project(casadi_nmpc)
-find_package(catkin REQUIRED)
 
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  nodelet
+  pluginlib
+  actionlib
+  tf
+  ff_msgs
+  ff_hw_msgs
+  geometry_msgs
+  ff_common
+  msg_conversions
+  ff_util
+  rattle_msgs
+)
+find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(PkgConfig)
 pkg_search_module(casadi casadi) # required for cross-compile, can't use find_package
 
 # codegen is not required when using the serial interface
 #add_subdirectory(casadi-export)
 
-message("--  CASADI_LIBRARY_DIRS: ${CASADI_LIBRARY_DIRS}")
-message("--  CASADI_LIBRARIES: ${CASADI_LIBRARIES}")
-message("--  CASADI_INCLUDEDIR: ${CASADI_INCLUDEDIR}")
+# message("--  CASADI_LIBRARY_DIRS: ${CASADI_LIBRARY_DIRS}")
+# message("--  CASADI_LIBRARIES: ${CASADI_LIBRARIES}")
+# message("--  CASADI_INCLUDEDIR: ${CASADI_INCLUDEDIR}")
 
 catkin_package(
   LIBRARIES
@@ -38,7 +52,12 @@ catkin_package(
     actionlib
     tf
     ff_msgs
+    ff_hw_msgs
     geometry_msgs
+    ff_util
+    ff_common
+    msg_conversions
+    rattle_msgs
 )
 
 #---casadi_nmpc---
@@ -65,9 +84,10 @@ catkin_package(
 add_library(casadi_nmpc src/casadi_nmpc_nodelet.cc src/casadi_nmpc_utils.cc src/pd_attitude_controller.cc src/casadi_nmpc_ros.cc src/casadi_nmpc_core.cc)
 # target_link_libraries(casadi_nmpc ${catkin_LIBRARIES} ${EIGEN_LIBRARIES} casadi ${CASADI_LIBRARY_DIRS} ff_common ff_nodelet msg_conversions ff_flight)
 # target_include_directories(casadi_nmpc PUBLIC casadi ${CASADI_INCLUDEDIR} ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} include)
-target_link_libraries(casadi_nmpc ${catkin_LIBRARIES} ${EIGEN_LIBRARIES} casadi ff_common ff_nodelet msg_conversions ff_flight)
+
+add_dependencies(casadi_nmpc ${catkin_EXPORTED_TARGETS})
+target_link_libraries(casadi_nmpc ${catkin_LIBRARIES} ${EIGEN_LIBRARIES} casadi)
 target_include_directories(casadi_nmpc PUBLIC casadi ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} include)
-add_dependencies(casadi_nmpc ff_msgs ff_hw_msgs)
 
 install(TARGETS casadi_nmpc DESTINATION lib)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/

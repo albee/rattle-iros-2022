@@ -1,4 +1,10 @@
+cmake_minimum_required(VERSION 3.0.0)
 project(execute_asap)
+
+find_package(catkin REQUIRED COMPONENTS
+  rospy
+  std_msgs
+)
 
 catkin_package(
  LIBRARIES

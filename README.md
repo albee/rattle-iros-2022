@@ -13,6 +13,9 @@ RATTLE is implemented here for a 6DOF free-flying robot, though its interfaces a
 - Pytope (bundled)
 - Bullet (bundled)
 - Astrobee custom msgs (bundled)
+- Luajit 
+
+Note that Luajit is only required as an Astrobee-related dependecy, from which some packages inherit their classes.
 
 ## ROS Packages
 RATTLE's functions are implemented here as separate ROS packages:
@@ -39,6 +42,11 @@ RATTLE's functions are implemented here as separate ROS packages:
 
 ## Installation
 
+### Dependencies
+```
+apt update && apt install libluajit-5.1-dev
+```
+
 ### (optional) Astrobee simulation environment
 Please consult The [Astrobee](https://github.com/nasa/astrobee) repository and follow their detailed installation instructions to set up the Astrobee simulation.
 The simulation will essentially live in a ROS workspace devoted to it.
@@ -49,6 +57,8 @@ Within a desired ROS workspace (such as the Astrobee simulation):
 ```
 git clone https://github.com/albee/rattle-iros-2022
 mv -rf rattle-iros-2022 src
+catkin init
+source ./devel/setup.bash
 catkin build
 ```
 
@@ -57,8 +67,7 @@ This will build the RATTLE packages, which can be used standalone, or coordinate
 Note: strange catkin build errors for `ff_msgs` involving empy can be resolved using:
 `catkin build -DPYTHON_EXECUTABLE=/usr/bin/python3 -DPYTHON_INCLUDE_DIR=/usr/include/python3.7m`
 
-### Dependencies
-TODO
+
 
 ## Usage
 RATTLE's packages can be used standalone, or as a coordinated whole as in the examples in the [paper](https://ieeexplore.ieee.org/document/9851849).

@@ -1,4 +1,4 @@
-# cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.0.0)
 project(rattle_acado_planner)
 
 option(USE_ISS_VERSION "Use ISS 6DOF Version" ON)
@@ -9,7 +9,7 @@ option(USE_ISS_VERSION "Use ISS 6DOF Version" ON)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
- find_package(catkin REQUIRED COMPONENTS
+find_package(catkin REQUIRED COMPONENTS
    roslaunch
    roscpp
    std_msgs tf

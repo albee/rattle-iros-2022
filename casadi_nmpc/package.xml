@@ -22,7 +22,11 @@
   <depend>tf</depend>
   <depend>ff_msgs</depend>
   <depend>ff_util</depend>
+  <depend>ff_hw_msgs</depend>
   <depend>geometry_msgs</depend>
+  <depend>ff_common</depend>
+  <depend>msg_conversions</depend>
+  <depend>rattle_msgs</depend>
   <export>
     <nodelet plugin="${prefix}/nodelet_plugins.xml" />
   </export>
