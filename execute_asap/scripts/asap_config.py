@@ -83,8 +83,8 @@ TUBE_MPC_HW_TOPICS = create_namespaced_topics(TUBE_MPC, sim=False)
 TUBE_MPC_SIM_TOPICS = create_namespaced_topics(TUBE_MPC, sim=True, bee_name="queen")
 
 # Misc rattle topics
-rattle_MISC = ["rattle/lqrrrt/traj", "rattle/planner_lqrrrt/status", "inv_fam/appliedFandT", "mob/inertia_est", "rattle/status"]
-rattle_MISC_HW_TOPICS = create_namespaced_topics(RATTLE_MISC, sim=False)
+RATTLE_MISC = ["rattle/lqrrrt/traj", "rattle/planner_lqrrrt/status", "inv_fam/appliedFandT", "mob/inertia_est", "rattle/status"]
+RATTLE_MISC_HW_TOPICS = create_namespaced_topics(RATTLE_MISC, sim=False)
 RATTLE_MISC_SIM_TOPICS = create_namespaced_topics(RATTLE_MISC, sim=True, bee_name="queen")
 
 # Sim only topics (ground truth)

@@ -4,14 +4,24 @@ project(execute_asap)
 find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
+  ff_msgs
+  ff_hw_msgs
+  rattle_msgs
+  data
 )
 
 catkin_package(
  LIBRARIES
- DEPENDS rospy std_msgs
+ DEPENDS
+  rospy
+  std_msgs
+  ff_msgs
+  ff_hw_msgs
+  rattle_msgs
+  data
 )
 
-install_launch_files()
+#install_launch_files()
 
 install(DIRECTORY config/ DESTINATION share/${PROJECT_NAME}/config)
 

@@ -16,7 +16,7 @@ git clone https://github.com/casadi/casadi --branch 3.5.5
 cd casadi && mkdir build && cd build
 cmake ..
 make -j2
-make install
+make install  # might need sudo
 ```
 - [ACADO](https://acado.github.io/) (bundled)
 

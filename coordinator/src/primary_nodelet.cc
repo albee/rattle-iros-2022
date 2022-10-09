@@ -20,18 +20,18 @@ void PrimaryNodelet::Initialize(ros::NodeHandle* nh) {
 
   // publishers
   pub_flight_mode_ = nh->advertise<ff_msgs::FlightMode>(TOPIC_MOBILITY_FLIGHT_MODE, 1, true);  // FlightMode
-  pub_status_ = nh->advertise<rattle_msgs::RattleStatusPrimary>(TOPIC_RESWARM_STATUS, 5, true);
-  pub_x_des_traj_ = nh->advertise<std_msgs::Float64MultiArray>(TOPIC_RESWARM_TUBE_MPC_TRAJ, 5, true);  // always global, full traj to send to tube MPC
+  pub_status_ = nh->advertise<rattle_msgs::RattleStatusPrimary>(TOPIC_RATTLE_STATUS, 5, true);
+  pub_x_des_traj_ = nh->advertise<std_msgs::Float64MultiArray>(TOPIC_RATTLE_TUBE_MPC_TRAJ, 5, true);  // always global, full traj to send to tube MPC
   pub_uc_bound_ = nh->advertise<std_msgs::Float64MultiArray>(UC_BOUND_TOPIC, 5, true);  // always global
   pub_rattle_test_instruct_ = nh->advertise<rattle_msgs::RattleTestInstruct>(RATTLE_TEST_INSTRUCT_TOPIC, 5, true);
-  pub_reg_setpoint_ = nh->advertise<geometry_msgs::Pose>(TOPIC_RESWARM_TUBE_MPC_REG_SETPOINT, 5, true);
+  pub_reg_setpoint_ = nh->advertise<geometry_msgs::Pose>(TOPIC_RATTLE_TUBE_MPC_REG_SETPOINT, 5, true);
   
   // subscribers
   sub_flight_mode_= nh->subscribe<ff_msgs::FlightMode>(TOPIC_MOBILITY_FLIGHT_MODE, 5,
     boost::bind(&PrimaryNodelet::flight_mode_callback, this, _1));  // flight mode getter
   sub_ekf_ = nh->subscribe<ff_msgs::EkfState>("gnc/ekf", 5,
     boost::bind(&PrimaryNodelet::ekf_callback, this, _1));;
-  sub_rattle_test_number_ = nh->subscribe<rattle_msgs::RattleTestNumber>(TOPIC_RESWARM_TEST_NUMBER, 5,
+  sub_rattle_test_number_ = nh->subscribe<rattle_msgs::RattleTestNumber>(TOPIC_RATTLE_TEST_NUMBER, 5,
     boost::bind(&PrimaryNodelet::test_num_callback, this, _1));
   sub_flight_mode_= nh->subscribe<ff_msgs::FlightMode>(TOPIC_MOBILITY_FLIGHT_MODE, 5,
     boost::bind(&PrimaryNodelet::flight_mode_callback, this, _1));  // flight mode setter
@@ -44,10 +44,8 @@ void PrimaryNodelet::Initialize(ros::NodeHandle* nh) {
   sub_planner_status_ = nh->subscribe<rattle_msgs::RattlePlannerStatus>("/rattle/planner_lqrrrt/status", 5,
     boost::bind(&PrimaryNodelet::planner_status_callback, this, _1));
   sub_control_mode_ = nh->subscribe<std_msgs::String>(CONTROL_MODE_TOPIC, 5,
-    boost::bind(&PrimaryNodelet::control_mode_callback, this, _1)); 
-  sub_dmpc_status_ = nh->subscribe<rattle_dmpc::DMPCTestStatusStamped>("rattle/dmpc_status", 5,
-    boost::bind(&PrimaryNodelet::dmpc_status_cb, this, _1));   
-  sub_rattle_status_ = nh->subscribe<rattle_msgs::RattleRattleStatus>("rattle/rattle/status", 5,
+    boost::bind(&PrimaryNodelet::control_mode_callback, this, _1));  
+  sub_rattle_status_ = nh->subscribe<rattle_msgs::RattleStatus>("rattle/rattle/status", 5,
     boost::bind(&PrimaryNodelet::rattle_status_callback, this, _1));     
 
   // services

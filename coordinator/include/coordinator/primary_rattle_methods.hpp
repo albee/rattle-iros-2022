@@ -711,7 +711,7 @@ void PrimaryNodelet::uc_bound_status_callback(const rattle_msgs::RattleUCBoundSt
 
 
 /* ************************************************************************** */
-void PrimaryNodelet::rattle_status_callback(const rattle_msgs::RattleRattleStatus::ConstPtr msg) {
+void PrimaryNodelet::rattle_status_callback(const rattle_msgs::RattleStatus::ConstPtr msg) {
     primary_rattle_status_.traj_finished = msg->traj_finished;
 }
 

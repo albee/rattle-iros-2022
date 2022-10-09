@@ -71,7 +71,7 @@ class PrimaryNodelet : public CoordinatorBase<rattle_msgs::RattleStatusPrimary>,
   ros::Subscriber sub_casadi_status_;
   ros::Subscriber sub_planner_status_;
   ros::Subscriber sub_info_status_;
-  ros::Subscriber sub_rattle_status_;
+  ros::Subscriber sub_status_;
   ros::Subscriber sub_rattle_status_;
   ros::Subscriber sub_control_mode_;
 
@@ -149,7 +149,7 @@ class PrimaryNodelet : public CoordinatorBase<rattle_msgs::RattleStatusPrimary>,
 
   // status callbacks
   void uc_bound_status_callback(const rattle_msgs::RattleUCBoundStatus::ConstPtr msg);
-  void rattle_status_callback(const rattle_msgs::RattleRattleStatus::ConstPtr msg);
+  void rattle_status_callback(const rattle_msgs::RattleStatus::ConstPtr msg);
   void casadi_status_callback(const rattle_msgs::RattleCasadiStatus::ConstPtr msg);
   void planner_status_callback(const rattle_msgs::RattlePlannerStatus::ConstPtr msg);
   void info_status_callback(const rattle_msgs::RattleInfoStatus::ConstPtr msg);

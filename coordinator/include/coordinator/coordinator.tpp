@@ -123,7 +123,6 @@ class CoordinatorBase {
   
   void publish_rattle_status(const ros::TimerEvent&);  // templated for Primary or Secondary status
   virtual void get_rattle_status_msg(rattle_msgs::RattleStatusPrimary& msg) {};
-  virtual void get_rattle_status_msg(rattle_msgs::RattleStatusSecondary& msg) {};
 
   void test_num_callback(const rattle_msgs::RattleTestNumber::ConstPtr msg);
   void flight_mode_callback(const ff_msgs::FlightMode::ConstPtr msg);

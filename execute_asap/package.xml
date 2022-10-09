@@ -16,5 +16,9 @@
   </maintainer>
   <buildtool_depend>catkin</buildtool_depend>
   <depend>rospy</depend>
+  <depend>data</depend>
   <depend>std_msgs</depend>
+  <depend>ff_msgs</depend>
+  <depend>ff_hw_msgs</depend>
+  <depend>rattle_msgs</depend>
 </package>

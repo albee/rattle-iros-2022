@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 This is the main entrypoint to running test scripts. Fill out the ASAP class and begin calling
