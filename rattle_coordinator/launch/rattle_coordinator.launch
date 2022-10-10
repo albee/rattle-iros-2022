@@ -24,7 +24,7 @@
   <arg name="output" default="screen"/>          <!-- Where nodes should log    -->
 
   <!-- Load params for queen -->
-  <rosparam command="load" file="$(find execute_asap)/config/uc_bound_params.yaml"/>
+  <rosparam command="load" file="$(find execute_asap)/config/casadi_nmpc_params.yaml"/>
   <rosparam command="load" file="$(find execute_asap)/config/primary_coord_params.yaml"/>
   <rosparam command="load" file="$(find execute_asap)/config/rattle_coordinator_params.yaml"/>
 

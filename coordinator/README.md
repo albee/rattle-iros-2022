@@ -5,12 +5,12 @@ using `execute_asap`, and the test run is operated from coordinator.
 
 `coordinator` nodelet : Handles operations between the planner, estimator, controller, etc. Versions exist for the primary and secondary Astrobees.
 
-## Usage
 
+## Usage
 See `execute_asap` README for usage instructions.
 
-## Details
 
+## Details
 * A base class is defined in `coordinator_base.tpp`. `primary.h` extends `CoordinatorBase` and implements virtual
 test functions. 
 
@@ -26,7 +26,6 @@ The coordinator::CoordinatorNodelet class had to be created, extending FreeFlyer
 
 
 ## Adding Publishers, Subscribers, and Services to Coordinator
-
 New publishers, subscribers, and services monitored/advertised by `primary_coordinator` are created in `primary_nodelet.cc`,
 
 ```C++
@@ -38,7 +37,6 @@ with declarations in `primary.h`. Callback definitions may be defined in any des
 
 
 ## Adding a New Test
-
 1. Create a `primary_*_methods.hpp` file (or use an existing one). This will be the header-only definition of specific methods for your test number. Add
 this new .hpp to `primary_nodelet.cc`,
 
@@ -88,7 +86,7 @@ void CoordinatorBase<T>::Run(ros::NodeHandle *nh) {
 4. (Optional) You may need to enable test number filtering for your test number from `execute_asap.py`. Verify the `test_num_okay()` function.
 
 
-## Astrobee setpoint state vector convention for ReSWARM (with time)
+## Astrobee setpoint state vector convention (with time)
 [t x y z xd yd zd qx qy qz qw wx wy wz xdd ydd zdd wxd wyd wzd
 ...
 ]

@@ -33,8 +33,13 @@ apt install libflann-dev
 - Astrobee custom msgs (bundled)
 
 - Luajit (likley already on your system)
+```
+apt install libluajit-5.1-dev
+```
 
 Note: Some of RATTLE's packages have baked-in dependencies on some Astrobee flight software classes, namely, ff_nodelet. A few extra dependencies are required 
+
+
 ## ROS Packages
 RATTLE's functions are implemented here as separate ROS packages:
 
@@ -61,9 +66,7 @@ RATTLE's functions are implemented here as separate ROS packages:
 ## Installation
 
 ### Dependencies
-```
-apt update && apt install libluajit-5.1-dev
-```
+See above.
 
 ### (optional) Astrobee simulation environment
 Please consult The [Astrobee](https://github.com/nasa/astrobee) repository and follow their detailed installation instructions to set up the Astrobee simulation.
@@ -80,11 +83,10 @@ source ./devel/setup.bash
 catkin build
 ```
 
-This will build the RATTLE packages, which can be used standalone, or coordinate as a whole with the aid of a simulation environment (see below).
+This will build the RATTLE packages, which can be used standalone, or coordinated as a whole with the aid of a simulation environment (see below).
 
 Note: strange catkin build errors for `ff_msgs` involving empy can be resolved using:
 `catkin build -DPYTHON_EXECUTABLE=/usr/bin/python3 -DPYTHON_INCLUDE_DIR=/usr/include/python3.7m`
-
 
 
 ## Usage
@@ -93,3 +95,5 @@ To run as a whole, RATTLE requires a simulation environment to respond to and pr
 the [Astrobee simulation environment](https://github.com/nasa/astrobee), on which RATTLE's modules should be placed.
 
 Most packages separate ROS wrappers over core algorithms for standalone use; please consult individual READMEs in each package.
+
+Coordinated use is covered in `execute_asap/README.md`, which uses an implementation of the Astrobee [ASAP](https://github.com/albee/ASAP) testing interface.

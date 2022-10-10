@@ -23,12 +23,12 @@ import csv
 import numpy as np
 
 # class components (Mixins)
-import _rattle_coordinator_core
-import _rattle_coordinator_utils
-import _rattle_coordinator_ros
+from . import _rattle_coordinator_core
+from . import _rattle_coordinator_utils
+from . import _rattle_coordinator_ros
 
 # configuration options
-import _rattle_config
+from . import _rattle_config
 
 
 # N.B.: we are using multiple inheritance to divide up the monolithic coordinator class.

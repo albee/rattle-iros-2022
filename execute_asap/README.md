@@ -20,7 +20,6 @@ Some additional GDS options are checked for real-time test changes,
 `/asap/gds_roam_bagger` (int).
 
 ## Usage
-
 To run a test in the simulator, use your desired TEST_NUMBER as an argument with the `pub_gds_topics.py` script. This script sets the parameters that GDS eventually will set. `execute_asap.py` listens to these parameters, launches nodelets, and hands it off to individual *roles*, in this case
 primary and secondary. `asap_primary.py` and `asap_secondary.py` set some initial conditions and test-specific parameters; real-time logic throughout a test is handled by *coordinator nodelets*, `coordinator_nodelet.cc` which is the main C++ test commanding coordinator.
 
@@ -33,7 +32,6 @@ Run using: rosrun execute_asap pub_gds_topics.py [--ground] [--sim] test_number,
 `[-s, --sim]` : Run a simulation test. Defaults to hardware.
 
 ## Adding a Node/Nodelet
-
 New nodes/nodelets can be created just like any normal ROS node. Usually, each node will go in its own package.
 Nodes are intended to run persistently, executing a main ROS loop while waiting for publishers or srv requests.
 
@@ -54,13 +52,11 @@ NODE_LIST_SIM_PRIMARY = ["primary_coordinator", "casadi_nmpc", ...
 Note: replace `primary` with `secondary` above to use the secondary Astrobee.
 
 ## Config Files
-
 Located in `config/`, these parameters pulled in at startup by `asap_*.launch`.
 
 `asap_config.py` contains configuration parameters for `execute_asap`.
 
 ## Canceling a Test
-
 To end a test and kill nodelets, run the script with a -1:
 
 `rosrun execute_asap pub_gds_topics.py --ground --sim -1` : to cancel tests on the ground for sim.
@@ -68,15 +64,12 @@ To end a test and kill nodelets, run the script with a -1:
 This will stop all ROS bag recording and will also kill the TumbleDock nodelets. The `execute_asap` nodelet will still run, offering the opportunity to run another test and launch nodelets again.
 
 ## Robot Namespacing
-
 For the simulator, each robot defines its role in `execute_asap.py` via a robot name argument that is passed in the `execute_asap` node launch process. For hardware, `execute_asap` subscribes to the topic `/robot_name` to define its role. Individual nodes might need logic to handle topics on a different namespace.
 
 ## Topic Recording
-
 rosbags are automatically started for a new test. See `asap_config.py` for bag and many other configuration options.
 
 ## Simulator Startup
-
 Start up the Astrobee sim with '/bumble' and '/honey' for the ISS:
 
 `roslaunch astrobee sim_rattle.launch rviz:=true`
@@ -84,9 +77,7 @@ Start up the Astrobee sim with '/bumble' and '/honey' for the ISS:
 You can set additional parameters on what to launch in `sim_rattle.launch`.
 
 ## Adding Tests
-
 You can add tests in the `coordinator`, consult the README.
 
 ## Logging
-
 logging levels are set in astrobee/resources/logging/config

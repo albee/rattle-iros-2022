@@ -15,12 +15,14 @@
     Astrobee Flight Software
   </maintainer>
   <buildtool_depend>catkin</buildtool_depend>
-  <depend>std_msgs</depend>
-  <depend>rospy</depend>
   <depend>pluginlib</depend>
   <depend>actionlib</depend>
   <depend>tf</depend>
-  <depend>ff_msgs</depend>
   <depend>ff_util</depend>
   <depend>geometry_msgs</depend>
+  <depend>rospy</depend>
+  <depend>std_msgs</depend>
+  <depend>ff_msgs</depend>
+  <depend>rattle_msgs</depend>
+  <depend>rattle_acado_planner</depend>
 </package>
