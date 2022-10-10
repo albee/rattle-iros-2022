@@ -18,7 +18,11 @@ After compilation, an additional executable `test-rrt` is avaiable. Calling `tes
 
 Executable:
 
-`rosrun rrt_high_level test-rrt`
+`rosrun rattle_rrt test-rrt`
+
+Standalone nodelet:
+
+`roslaunch rattle_rrt rrt.launch`
 
 
 ## Behavior

@@ -17,7 +17,7 @@
   <arg name="bot_aft" default="empty" />        <!-- Payload bays            -->
   <arg name="bot_front" default="empty" />      <!-- Payload bays            -->
 
-  <!-- Junk for Astrobee nodelets -->
+  <!-- Info for Astrobee nodelets -->
   <?comment launch-prefix="x-terminal-emulator -e gdb -ex run --args" ?>
   <env name="ASTROBEE_ROBOT" value="$(arg robot)" />
   <env name="ASTROBEE_WORLD" value="$(arg world)" />

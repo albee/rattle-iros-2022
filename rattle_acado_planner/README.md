@@ -17,6 +17,7 @@ A node wrapper is written in `rattle_acado_planner_node.cpp`, with core planner 
 
 ## Usage
 Launch individually using  `roslaunch rattle_acado_planner rattle_acado_planner.launch`.
+
 Consult README in `acado-matlab` for additional information.
 
 Note that a 6DOF or 3DOF version can be toggled using the CMake command `USE_ISS_VERSION`.

@@ -482,7 +482,7 @@ class ASAP:
                 self.update_gds_telemetry(global_gds_param_count)
 
             # Start test if not -1. Otherwise, wait.
-            if (self.test_num is not -1 and self.test_started is False):
+            if (self.test_num != -1 and self.test_started is False):
                 if self.test_num_okay():  # sanity check the test num before sending
                     self.run_test()
             if (self.test_num == -1 and self.test_started is True):

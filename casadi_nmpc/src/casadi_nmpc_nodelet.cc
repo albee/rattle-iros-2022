@@ -54,7 +54,7 @@ namespace casadi_nmpc {
     // prepare_mrpi(w_bound_, u_mag_, MPC_dt_, params_model_.mass, Q_pos_anc_factor_, Q_vel_anc_factor_, R_anc_factor_);
 
     // Non-parameter initializations
-    x_des_traj_N_(N+1, 6);
+    x_des_traj_N_.resize(N+1, 6);
     u_opt_.setZero(6, 1);
     w_bound_ << 0.0, 0.0, 0.0, 0.0, 0.0, 0.0;
     x_real_ << 10.9, -9.65, 4.9, 0.0, 0.0, 0.0;  // dummy data until estimator publishes

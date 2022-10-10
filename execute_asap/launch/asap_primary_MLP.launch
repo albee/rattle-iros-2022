@@ -24,11 +24,10 @@ MIT Space Systems Laboratory
     <?comment launch-prefix="valgrind --leak-check=full" ?>
 
     <!-- Load params for queen -->
-    <rosparam command="load" file="$(find execute_asap)/config/uc_bound_params.yaml"/>
     <rosparam command="load" file="$(find execute_asap)/config/primary_coord_params.yaml"/>
     <rosparam command="load" file="$(find execute_asap)/config/rattle_coordinator_params.yaml"/>
 
-    <node pkg="nodelet" type="nodelet" name="primary_coordinator"
+    <node pkg="nodelet" type="nodelet" name="coordinator"
         required="false" respawn="false"
         args="standalone PrimaryNodelet"
         output="$(arg output)"/>
@@ -58,19 +57,9 @@ MIT Space Systems Laboratory
         required="false" respawn="false"
         output="$(arg output)"/>
 
-    <node pkg="info_rich_traj" type="info_rich_traj_gen.py" name="info_rich_traj"
+    <!-- <node pkg="inv_fam" type="inverse_FAM_implementation.py" name="inv_fam"
         required="false" respawn="false"
-        output="$(arg output)"/>
-
-    <!-- calls up traj_smoother.py-->
-    <include file="$(find planner_lqrrrt)/launch/planner_lqrrrt.launch">
-        <arg name="nspace" value="$(arg ns)" />      <!-- Namespace -->
-        <arg name="ground" value="$(arg ground)" />  <!-- Is it ground?  -->
-    </include>
-
-    <node pkg="inv_fam" type="inverse_FAM_implementation.py" name="inv_fam"
-        required="false" respawn="false"
-        output="$(arg output)"/>
+        output="$(arg output)"/> -->
     
     <node pkg="param_est" type="param_estimate.py" name="param_est" 
         required="false" respawn="false"

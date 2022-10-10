@@ -6,6 +6,7 @@ RATTLE is a set of modules that perform parametric information-aware motion plan
 
 RATTLE is implemented here for a 6DOF free-flying robot, though its interfaces and methods are more general to robotic systems with parameteric unknowns in their system dynamics. Specifically, RATTLE has been tested on the International Space Station using the [Astrobee robots](https://github.com/nasa/astrobee).
 
+
 ## Requirements
 For coordinated use of all packages with the Astrobee sim Ubuntu 16.04 is required (possibly 18.04 or 20.04 depending on Astrobee sim support) with a standard
 [ROS](http://wiki.ros.org/ROS/Installation) installation. 
@@ -13,15 +14,28 @@ For coordinated use of all packages with the Astrobee sim Ubuntu 16.04 is requir
 - [CasADi 3.5.5](https://github.com/casadi/casadi/releases/tag/3.5.5)
 ```
 git clone https://github.com/casadi/casadi --branch 3.5.5
-cd casadi && mkdir build && cd build
+cd casadi && mkdir build && cd build  # this is the top-level directory
+# GOTO line 614, and `set(WITH_LAPACK ON)`
+# GOTO line 626, and `set(WITH_QPOASES ON)`
+# (if you can find a cleaner way of specifying this please let us know!)
 cmake ..
 make -j2
-make install  # might need sudo
+make install  # You might need sudo
 ```
 
 - [flann](https://github.com/flann-lib/flann)
 ```
 apt install libflann-dev
+```
+
+- Misc. Python Dependencies
+```
+pip3 install matplotlib scipy numpy pycddlib
+```
+
+- gmp-dev
+```
+apt install libgmp-dev
 ```
 
 - [ACADO](https://acado.github.io/) (bundled)
@@ -30,14 +44,24 @@ apt install libflann-dev
 
 - Bullet (bundled)
 
-- Astrobee custom msgs (bundled)
+- Astrobee custom msgs and classes (bundled)
 
 - Luajit (likley already on your system)
 ```
 apt install libluajit-5.1-dev
 ```
 
-Note: Some of RATTLE's packages have baked-in dependencies on some Astrobee flight software classes, namely, ff_nodelet. A few extra dependencies are required 
+- Autograd
+```
+pip3 install autograd
+```
+
+- pycddlib
+```
+pip3 install pycddlib
+```
+
+Note: Some of RATTLE's packages have baked-in dependencies on some Astrobee flight software classes, namely, ff_nodelet. A few extra dependencies are required, via the `astrobee` packages added here.
 
 
 ## ROS Packages
@@ -54,8 +78,8 @@ RATTLE's functions are implemented here as separate ROS packages:
     - `z_poly_calc`: An mRPI (minimum robust postiviely invariant set) calculator, using Rakovic's method.
 
 - Online parameter estimation
-    - `inv_fam`: TODO get Monica's permission!
-    - `param_est`: TODO get Monica's permission!
+    - `inv_fam`: TODO
+    - `param_est`: TODO
 
 - ROS
     - `rattle_msgs`: Custom msg types used by these packages.
@@ -68,26 +92,36 @@ RATTLE's functions are implemented here as separate ROS packages:
 ### Dependencies
 See above.
 
-### (optional) Astrobee simulation environment
-Please consult The [Astrobee](https://github.com/nasa/astrobee) repository and follow their detailed installation instructions to set up the Astrobee simulation.
-The simulation will essentially live in a ROS workspace devoted to it.
-
 ### RATTLE packages
-Within a desired ROS workspace (such as the Astrobee simulation):
+Create a ROS workspace and set up the packages within it:
 
 ```
+mkdir rattle-ws
+cd rattle-ws
 git clone https://github.com/albee/rattle-iros-2022
-mv -rf rattle-iros-2022 src
+mv rattle-iros-2022 src
 catkin init
-source ./devel/setup.bash
 catkin build
+source ./devel/setup.bash
 ```
 
 This will build the RATTLE packages, which can be used standalone, or coordinated as a whole with the aid of a simulation environment (see below).
+Individual RATTLE use is best demonstrated using the `rattle_coordinator` package (consult the README).
 
 Note: strange catkin build errors for `ff_msgs` involving empy can be resolved using:
 `catkin build -DPYTHON_EXECUTABLE=/usr/bin/python3 -DPYTHON_INCLUDE_DIR=/usr/include/python3.7m`
 
+
+### (optional) Astrobee simulation environment
+Please consult The [Astrobee](https://github.com/nasa/astrobee) repository and follow their detailed installation instructions to set up the Astrobee simulation.
+The simulation essentially lives in a ROS workspace devoted to it and Astrobee's core FSW packages. After setting up the sim, you should copy `rattle-ws`'s packages to the src subdirectory,
+
+```
+# in rattle-ws:
+mv rattle-ws/src $ASTROBEE-WS/src
+```
+
+This will overwrite the default `astrobee` subdirectory: this is okay, since this will allow you to have access to the special `sim_rattle.launch` launchfile sequence.
 
 ## Usage
 RATTLE's packages can be used standalone, or as a coordinated whole as in the examples in the [paper](https://ieeexplore.ieee.org/document/9851849).
@@ -96,4 +130,8 @@ the [Astrobee simulation environment](https://github.com/nasa/astrobee), on whic
 
 Most packages separate ROS wrappers over core algorithms for standalone use; please consult individual READMEs in each package.
 
-Coordinated use is covered in `execute_asap/README.md`, which uses an implementation of the Astrobee [ASAP](https://github.com/albee/ASAP) testing interface.
+Coordinated use is covered in `execute_asap/README.md`, which uses an implementation of the Astrobee [ASAP](https://github.com/albee/ASAP) testing interface. Launching the sim with RATTLE's default configuration is performed using:
+
+```
+roslaunch astrobee sim_rattle.launch rviz:=true dds:=false world:=iss
+```

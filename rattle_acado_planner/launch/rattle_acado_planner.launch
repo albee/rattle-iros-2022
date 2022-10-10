@@ -1,7 +1,7 @@
 <!-- Launch a limited set of nodes for debugging -->
 
 <launch>
-  <!-- Junk for Astrobee nodelets -->
+  <!-- Info for Astrobee nodelets -->
   <?comment launch-prefix="x-terminal-emulator -e gdb -ex run --args" ?>
 
   <arg name="robot" default="$(optenv ASTROBEE_ROBOT sim)" />

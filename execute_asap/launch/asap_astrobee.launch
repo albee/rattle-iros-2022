@@ -8,7 +8,6 @@ MIT Space Systems Laboratory
 -->
 
 <launch>
-
   <arg name="output" default="screen" />             <!-- Output to screen or log, change to log for ISS!    -->
   <arg name="llp" default="local" />              <!-- LLP IP address              -->
   <arg name="mlp" default="local" />              <!-- MLP IP address              -->

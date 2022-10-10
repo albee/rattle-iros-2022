@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 asap_config.py
@@ -33,14 +33,14 @@ ASAP_SECONDARY_LAUNCH_PATH = rospack.get_path("execute_asap") + "/launch/asap_se
 
 # -------------------------------------------------------------------------------------------------------------
 # Node list for shutdown for ASAP nodes
-NODE_LIST_SIM_PRIMARY = ["primary_coordinator", "casadi_nmpc", "traj_smoother", "uc_bound", "z_poly_calc",
-                         "inv_fam", "info_rich_traj", "param_est", "primary_dmpc_iface", "primary_dmpc_ctl_node", "rattle_coordinator",
-                         "rattle_rrt", "rattle_acado_planner", "primary_repeater"]
-NODE_LIST_HARDWARE_PRIMARY = ["primary_coordinator", "casadi_nmpc", "traj_smoother", "uc_bound", "z_poly_calc",
-                              "inv_fam", "info_rich_traj", "param_est", "primary_dmpc_iface", "primary_dmpc_ctl_node", "rattle_coordinator",
-                              "rattle_rrt", "rattle_acado_planner", "primary_repeater"]
-NODE_LIST_SIM_SECONDARY = ["secondary_dmpc_iface", "secondary_dmpc_ctl_node", "secondary_coordinator", "secondary_repeater"]
-NODE_LIST_HARDWARE_SECONDARY = ["secondary_dmpc_iface", "secondary_dmpc_ctl_node", "secondary_coordinator", "secondary_repeater"]
+NODE_LIST_SIM_PRIMARY = ["primary_coordinator", "casadi_nmpc", "z_poly_calc",
+                         "inv_fam", "info_rich_traj", "param_est", "rattle_coordinator",
+                         "rattle_rrt", "rattle_acado_planner"]
+NODE_LIST_HARDWARE_PRIMARY = ["primary_coordinator", "casadi_nmpc", "z_poly_calc",
+                              "inv_fam", "info_rich_traj", "param_est", "rattle_coordinator",
+                              "rattle_rrt", "rattle_acado_planner"]
+NODE_LIST_SIM_SECONDARY = []
+NODE_LIST_HARDWARE_SECONDARY = []
 
 
 # -------------------------------------------------------------------------------------------------------------

@@ -18,5 +18,3 @@ Upon a -1 test command, all nodes are killed. They are restarted upon receiving 
 * `asap_astrobee.launch`: Runs `execute_asap` command node. Persistently runs, handles startup, shutdown, recording, etc.
 
 * `asap_primary.launch`: Called to start up MLP and LLP nodes (including `coordinator`) by `execute_asap`, primary.
-
-* `asap_secondary.launch`: Called to start up MLP and LLP nodes (including `coordinator`) by `execute_asap`, secondary.

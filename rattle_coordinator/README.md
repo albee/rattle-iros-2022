@@ -9,8 +9,10 @@ This package contains high-level scripts for coordinating RATTLE's components:
 * run_rattle.py : (in development) runs specific instances of RATTLE tests
 * rattle_coordinator_node.py : the main node monitoring RATTLE progress
 
-## Usage
+There are a number of predefined test numbers available to trigger RATTLE's capabilities: see `run_rattle.py`.
 
+
+## Usage
 * Standalone:
 1. `roslaunch rattle_coordinator rattle_coordinator.launch`
 2. `rosrun rattle_coordinator run_rattle.py [test number]`

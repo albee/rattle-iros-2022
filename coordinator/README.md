@@ -1,13 +1,16 @@
 # coordinator
-
 High-level test logic for controlling the ReSWARM experiments. Test calls are made
 using `execute_asap`, and the test run is operated from coordinator.
 
-`coordinator` nodelet : Handles operations between the planner, estimator, controller, etc. Versions exist for the primary and secondary Astrobees.
+`coordinator` handles high-level operations between the planner, estimator, controller, etc. 
 
 
 ## Usage
 See `execute_asap` README for usage instructions.
+
+Standalone:
+
+`roslaunch coordinator primary_coordinator.launch`
 
 
 ## Details
@@ -18,9 +21,8 @@ test functions.
 `/rattle/status` msgs which command other nodes. 
 
 * A number of methods are defined in `primary_*.hpp` files for specific tests. 
-  e.g., see `primary_ooa_methods.hpp` for test commanding methods specific to on-orbit assembly tests.
+  e.g., see `primary_rattle_methods.hpp` for test commanding methods specific to on-orbit assembly tests.
 
-Replace `primary` with `secondary` above for a second Astrobee.
 The nodelet_plugins.xml file had to be defined for this nodelet.
 The coordinator::CoordinatorNodelet class had to be created, extending FreeFlyerNodelet.
 

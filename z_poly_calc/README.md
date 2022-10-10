@@ -26,10 +26,10 @@ pip3 install matplotlib scipy numpy pycddlib
 apt-get install libgmp-dev
 ```
 
-## Testing
+## Usage
 ```
-rosrun casadi_nmpc z_poly_calc.py
-rosrun casadi_nmpc service_call_tester.py
+rosrun z_poly_calc z_poly_calc.py
+rosrun z_poly_calc service_call_tester.py
 ```
 
 should trigger a service call to `z_poly_calc`.

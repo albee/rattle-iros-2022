@@ -41,7 +41,7 @@ def test():
     R_anc = 0.1
 
     try:
-        z_poly_calc_srv = rospy.ServiceProxy('mrpi', ReswarmSrvMRPI)
+        z_poly_calc_srv = rospy.ServiceProxy('mrpi', RattleSrvMRPI)
         res = z_poly_calc_srv(w, u_max, dt, mass, Q_pos_anc, Q_vel_anc, R_anc)  # uses srv inputs one-by-one
 
         K = np.asarray(res.K.data).reshape(res.K.layout.dim[0].size,res.K.layout.dim[1].size)

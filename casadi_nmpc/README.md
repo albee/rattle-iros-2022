@@ -22,20 +22,14 @@ Activate different control_modes using `execute_asap`, like `rosrun execute_asap
 * You must install the CasADi shared library. It can be compiled from source in your favorite directory as follows:
 
 ```
-git clone https://github.com/casadi/casadi
-cd casadi/external_packages/osqp/osqp
-git submodule update --remote --merge --init .
-cd lin_sys/direct/qdldl/qdldl_sources
-```
-
-If building from CasADi-exported C code you also need OSQP:
-```
-git clone https://github.com/jgillis/osqp
-cd osqp
-mkdir build
-cd build
-cmake -G "Unix Makefiles" ..
-cmake --build . --target install
+git clone https://github.com/casadi/casadi --branch 3.5.5
+cd casadi && mkdir build && cd build  # this is the top-level directory
+# GOTO line 614, and `set(WITH_LAPACK ON)`
+# GOTO line 626, and `set(WITH_QPOASES ON)`
+# (if you can find a cleaner way of specifying this please let us know!)
+cmake ..
+make -j2
+make install  # might need sudo
 ```
 
 *libcasadi_nmpc may not find your libcasadi!* In this case, you must update your $LD_LIBRARY_PATH to include `/usr/local/lib` (or wherever `make install` put your casadi.so). You can also edit `/etc/ld.so.conf` and add your library path (e.g., `/usr/local/lib`), the run `sudo ldconfig`.

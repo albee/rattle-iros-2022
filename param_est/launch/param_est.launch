@@ -16,6 +16,8 @@
 <!-- permissions and limitations under the License.                          -->
 
 <launch>
+  <!-- Info for Astrobee nodelets -->
+  <?comment launch-prefix="x-terminal-emulator -e gdb -ex run --args" ?>
 
   <arg name="robot" default="$(optenv ASTROBEE_ROBOT sim)" />
   <arg name="world" default="$(optenv ASTROBEE_WORLD iss)" />

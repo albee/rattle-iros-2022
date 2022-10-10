@@ -118,12 +118,7 @@ class PrimaryNodelet : public CoordinatorBase<rattle_msgs::RattleStatusPrimary>,
 
   // quick checkout
   void RunTest0(ros::NodeHandle *nh) override;  // quick checkout
-
-  // Test list (overrides coordinator empty tests)
-  void RunTest1(ros::NodeHandle *nh) override;
-  void RunTest2(ros::NodeHandle *nh) override;
-  void RunTest3(ros::NodeHandle *nh) override;
-
+  
   // RATTLE cool functions
   void RunTest9(ros::NodeHandle *nh) override;  // Non-info trajectory, B to C
   void RunTest10(ros::NodeHandle *nh) override;  // Mass info-gain, B to C

@@ -1,13 +1,6 @@
-<!-- To create a standalone launchfile for your nodelet:
-1) Enter the nodelet names as below for the manager nodelet and the actual nodelet.
-2) Set desired logging levels for your nodelet in astrobee/resources/logging.config
-3) Roslaunch this launchfile, and any individual nodelets that you need.
--->
-
 <launch>
+  <!-- Info for Astrobee nodelets -->
   <?comment launch-prefix="x-terminal-emulator -e gdb -ex run --args" ?>
-  <?comment launch-prefix="gdb -ex run --args" ?>
-  <?comment launch-prefix="valgrind --leak-check=full" ?>
 
   <arg name="robot" default="$(optenv ASTROBEE_ROBOT sim)" />
   <arg name="world" default="$(optenv ASTROBEE_WORLD iss)" />
@@ -32,7 +25,6 @@
   <env name="ROSCONSOLE_FORMAT" value="[${severity}] [${node}] -- ${message}"/>
 
   <rosparam command="load" file="$(find execute_asap)/config/casadi_nmpc_params.yaml"/>
-  <rosparam command="load" file="$(find execute_asap)/config/uc_bound_params.yaml"/>
 
   <!-- casadi_nmpc (robust mpc) -->
   <node pkg="nodelet" type="nodelet" name="casadi_nmpc"

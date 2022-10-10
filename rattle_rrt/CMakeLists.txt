@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(rattle_rrt)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-deprecated-declarations  -Werror=return-type -llz4")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-deprecated-declarations  -Werror=return-type -llz4 -fPIC")
 # set(DCMAKE_BUILD_TYPE=Debug)
 
 add_subdirectory(bullet3)
@@ -99,7 +99,7 @@ add_library(rattle_rrt src/quaternion.cpp src/rigidBodyDynamics.cpp src/state_sp
 target_link_libraries(rattle_rrt ${catkin_LIBRARIES} ${EIGEN_LIBRARIES} ${Boost_LIBRARIES} ${FLANN_LIBRARIES} BulletCollision BulletDynamics LinearMath)
 target_include_directories(rattle_rrt PUBLIC ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${FLANN_INCLUDE_DIR} include bullet3/src)
 
-add_library(rattle_rrt_nodelet src/rattle_rrt_nodelet.cpp)
+add_library(rattle_rrt_nodelet SHARED src/rattle_rrt_nodelet.cpp)
 target_link_libraries(rattle_rrt_nodelet rattle_rrt ${FLANN_LIBRARIES} ${catkin_LIBRARIES})
 target_include_directories(rattle_rrt_nodelet PUBLIC ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${FLANN_INCLUDE_DIR} include bullet3/src)
 add_dependencies(rattle_rrt_nodelet ${catkin_EXPORTED_TARGETS})
