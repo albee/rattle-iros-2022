@@ -12,7 +12,9 @@ RATTLE is implemented here for a 6DOF free-flying robot, though its interfaces a
 
 <p align="center">
   <img src="/img/astrobee_rattle_sim.gif" />
+
   <img src="/img/astrobee_rattle_iss.gif" />
+  
   <em>RATTLE running and replanning in a simulation environment (top), and demonstrating a trajectory with weighted information content on the ISS (bottom).</em>
 </p>
 
