@@ -8,7 +8,7 @@ Parametric information-aware motion planning using the [RATTLE method](https://i
 ## What is this?
 RATTLE is a set of modules that perform parametric information-aware motion planning; in other words, RATTLE creates motion plans for robots to follow that try to be both *useful for learning about system unknowns* while also *attempting to reach a goal/minimize fuel use*. Uniquely, RATTLE includes capabilities to *use learned system information on-the-fly*, allowing the robot to better understand its own system model, while reasoning at a control level about how cautious it should be. Please see [the paper](https://ieeexplore.ieee.org/document/9851849) for more detail.
 
-RATTLE is implemented here for a 6DOF free-flying robot, though its interfaces and methods are more general to robotic systems with parameteric unknowns in their system dynamics. Specifically, RATTLE has been tested on the International Space Station using the [Astrobee robots](https://github.com/nasa/astrobee).
+RATTLE is implemented here for a 6DOF free-flying robot, though its interfaces and methods are more general to robotic systems with parameteric unknowns in their system dynamics. Specifically, RATTLE has been tested on the International Space Station using the [Astrobee robots](https://github.com/nasa/astrobee). A detailed account of code deployment and results of the flight experiments is given in [this recently submitted paper](https://arxiv.org/pdf/2301.01319.pdf).
 
 <p align="center">
   <img src="/img/astrobee_rattle_sim.gif" />
@@ -89,8 +89,8 @@ RATTLE's functions are implemented here as separate ROS packages:
     - `z_poly_calc`: An mRPI (minimum robust postiviely invariant set) calculator, using Rakovic's method.
 
 - Online parameter estimation
-    - `inv_fam`: TODO
-    - `param_est`: TODO
+    - `inv_fam`: A package to estimate the post-saturation forces and torques, for use by the inertial parameter estimator
+    - `param_est`: A sequential inertial parameter estimator - this implementation considers rigid body dynamics and estimates the mass and principal moments of inertia.
 
 - ROS
     - `rattle_msgs`: Custom msg types used by these packages.
