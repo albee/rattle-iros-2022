@@ -22,19 +22,13 @@ from rospy.numpy_msg import numpy_msg
 from inv_fam.msg import ForwardFAM
 from inv_fam.msg import InverseFAM
 from geometry_msgs.msg import InertiaStamped
-from reswarm_msgs.msg import ReswarmStatusPrimary
 
-# The diagnostics mode computes the forward mixer, i.e, it recreates Astrobee FAM (F&T to nozzle positions)
+# The diagnostics mode computes the forward mixer, i.e, it recreates Astrobee FAM functions (F&T to nozzle positions) for debugging
 DIAGNOSTICS = 0
 class Mixer:
 
     def __init__(self, prefix):
-        if (prefix == "true"):
-            # in case of multiple Astrobees, add the namespace prefix before every topic
-            self.topic_prefix = "/queen/"
-        else:
-            self.topic_prefix = "/"
-        self.test_num = -1 # default test num
+        self.topic_prefix = prefix
 
     def update_mixer(self):
         # initialization of mixer parameters
@@ -45,7 +39,6 @@ class Mixer:
         self.inv_matrix_mixer = np.hstack([thrust2force_B, thrust2torque_B]).T
 
     def get_FandT_from_nozzle_angles(self, angles):
-        
         # commanded nozzle opening
         S_i = FAM_constants.nozzle_height - np.cos(angles) * FAM_constants.nozzle_flap_length
         # commanded area per nozzle
@@ -79,24 +72,23 @@ def calc_FandT():
 
     rospy.init_node('inv_fam')
 
-    # read parameter, ground or ISS?
-    # comment out if not using with ReSwarm code.
-    prefix = rospy.get_param('/reswarm/sim')
-    mixer_obj = Mixer(prefix)
+    # specify topic prefix according to the Astrobee(s) in use
+    topic_prefix = "/queen/"
+    mixer_obj = Mixer(topic_prefix)
 
-    # get the center of mass offset to calculate the matrix mixer
+    # get the center of mass offset for FAM
     inertia_sub = rospy.Subscriber(mixer_obj.topic_prefix + "mob/inertia", numpy_msg(InertiaStamped), inertiaCallback,
                                    mixer_obj)
-    # a delay for allowing the matrix mixer to be updated using CoM from /mob/inertia
+    # a delay for allowing the COM to be updated from /mob/inertia
     rospy.sleep(5.)
 
-    # get test number
-    reswarm_status_sub = rospy.Subscriber(mixer_obj.topic_prefix + "reswarm/status", ReswarmStatusPrimary, status_callback,
-                                          mixer_obj)
-    # republish nozzles for plotting debug
-    pmc_pub = rospy.Publisher(mixer_obj.topic_prefix + "inv_fam/appliedFandT", InverseFAM, queue_size=1)
+    
+    # subscribe to receive the commanded nozzle angles
     pmc_sub = rospy.Subscriber(mixer_obj.topic_prefix + "hw/pmc/command", numpy_msg(PmcCommand), Pmccallback,
-                               [pmc_pub, mixer_obj])  # publish nozzles from /hw/pmc/cpmmand
+                               [pmc_pub, mixer_obj])
+    # publish the estimated post-saturation wrenches 
+    pmc_pub = rospy.Publisher(mixer_obj.topic_prefix + "inv_fam/appliedFandT", InverseFAM, queue_size=1)
+
     if DIAGNOSTICS:
     # The diagnostics mode computes the forward mixer, i.e, it recreates Astrobee FAM (F&T to nozzle positions)
     # as a sanity check for the FAM calculation, and thus the FAM constants.py
@@ -109,10 +101,6 @@ def calc_FandT():
     while not rospy.is_shutdown():
         rate.sleep()
 
-def status_callback(data, arg):
-    mixer_obj = arg
-    mixer_obj.test_num = data.test_number
-    mixer_obj.activate_rattle = data.activate_rattle # should ideally use traj_finished.
 
 def inertiaCallback(data, arg):
     mixer_obj = arg
@@ -131,13 +119,9 @@ def Pmccallback(data, arg):
         nozzle_positions_all[i+6] = ord(Nozzle_pos_2[i])
     angles = nozzle_positions_all*FAM_constants.step_in_rad
     angles += FAM_constants.nozzle_min_angle
-    if (mixer_obj.test_num >=9 and mixer_obj.test_num <=12 or mixer_obj.test_num>=16): #test numbers to change
-        FandT = mixer_obj.get_FandT_from_nozzle_angles(angles)
-        pub_applied_FandT(pmc_pub, data.header.stamp, nozzle_positions_all, FandT)
-    if mixer_obj.test_num == 13:
-        if (mixer_obj.activate_rattle): # for test 13, run only from point B to C.
-            FandT = mixer_obj.get_FandT_from_nozzle_angles(angles)
-            pub_applied_FandT(pmc_pub, data.header.stamp, nozzle_positions_all, FandT)
+    # perform the computation to get F&T from the nozzle commands
+    FandT = mixer_obj.get_FandT_from_nozzle_angles(angles)
+    pub_applied_FandT(pmc_pub, data.header.stamp, nozzle_positions_all, FandT)
 
 
 def pub_applied_FandT(pmc_pub, stamp, nozzle_positions_all, FandT):
@@ -152,14 +136,14 @@ def pub_applied_FandT(pmc_pub, stamp, nozzle_positions_all, FandT):
     msg.torque.x = FandT[3]
     msg.torque.y = FandT[4]
     msg.torque.z = FandT[5]
-    # nozzle positions, same as /hw/pmc/command
+    # nozzle positions, for debugging, same as /hw/pmc/command
     msg.nozzle_openings = nozzle_positions_all
     pmc_pub.publish(msg)
 
 
 
 """
-Diagnostic/forward fam related subs and pubs
+Diagnostic/forward fam related subs and pubs, only active if DIAGNOSTICS = 1
 """
 def FandTcallback(data, arg):
     # calculates FandT from /gnc/ctl/command and the supposed nozzle openings (forward fam)

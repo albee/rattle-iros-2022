@@ -1,7 +1,7 @@
 """
 # FAM_constants.py
 
-Supporting constants for FAM calculations. Derived from the Astrobee Simulink model.
+Supporting constants for FAM calculations. Derived from the Astrobee Simulink model from release 0.15.1 
 
 """
 import numpy as np
@@ -15,7 +15,7 @@ nozzle_widths = np.hstack([nozzle_widths_i, nozzle_widths_i])
 # opening limits
 nozzle_min_angle = 0.2736676
 nozzle_max_angle = 1.394692659
-# The nozzle angles are mapped from 0 to 255, how many radians is each step?
+# The nozzle angles are mapped from 0 to 255, compute the number of radians in each step
 step_in_rad = (nozzle_max_angle - nozzle_min_angle) / 255
 # nozzle orientations
 nozzle_orientations =  np.array([[1,      0,     0],
@@ -55,11 +55,7 @@ Cd_PM1 = np.array([0.9150, 0.7558, 0.9408, 0.7921, 0.9240, 0.9303])
 Cd_PM2 = np.array([0.9471, 0.7645, 1, 0.9048, 0.9366, 0.8938])
 Cd = np.hstack([Cd_PM1, Cd_PM2])
 
-# # It looks like FAM always uses Center of mass offset as zero?
-# CoM = np.array([ 0, 0, 0]).reshape(1,3)
-# CoM = CoM.repeat(12, axis=0)
-
-# Lookup table converting from thrust to Cdp
+# Lookup table converting from thrust to Cdp. 
 thrust_breakpoints = np.array([3.8366e-08, 1.2244e-07, 2.0623e-07, 2.8974e-07, 3.7294e-07, 4.5584e-07, 5.3841e-07,
                                6.2065e-07, 7.0253e-07, 7.8406e-07, 8.6521e-07, 9.4597e-07, 1.0263e-06, 1.1063e-06,
                                1.1858e-06, 1.2648e-06, 1.3434e-06, 1.4216e-06, 1.4992e-06, 1.5764e-06, 1.6530e-06,
