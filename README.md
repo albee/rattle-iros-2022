@@ -89,7 +89,7 @@ RATTLE's functions are implemented here as separate ROS packages:
     - `z_poly_calc`: An mRPI (minimum robust postiviely invariant set) calculator, using Rakovic's method.
 
 - Online parameter estimation
-    - `inv_fam`: A package to estimate the post-saturation forces and torques, for use by the inertial parameter estimator
+    - `inv_fam`: Astrobee's Force Allocation Module (or FAM) computes the nozzle opening angles required to apply commanded wrenches. The inv_fam package estimates the true (post-saturation) forces and torques from nozzle openings, for use by the inertial parameter estimator
     - `param_est`: A sequential inertial parameter estimator - this implementation considers rigid body dynamics and estimates the mass and principal moments of inertia.
 
 - ROS

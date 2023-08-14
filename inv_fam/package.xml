@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>inv_fam</name>
+  <version>0.0.0</version>
+  <description>inverting the Force Allocation Module to get post-saturation wrenches from nozzle positions
+  </description>
+  <license>
+    Apache License, Version 2.0
+  </license>
+  <author email="astrobee-fsw@nx.arc.nasa.gov">
+    Astrobee Flight Software
+  </author>
+  <maintainer email="astrobee-fsw@nx.arc.nasa.gov">
+    Astrobee Flight Software
+  </maintainer>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>rospy</depend>
+  <depend>std_msgs</depend>
+  <depend>rattle_msgs</depend>
+  <depend>ff_msgs</depend>
+  <depend>ff_hw_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
+</package>
