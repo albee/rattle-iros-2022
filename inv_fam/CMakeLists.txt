@@ -11,27 +11,27 @@ find_package(catkin REQUIRED COMPONENTS
 
 add_message_files(
    FILES
-   ForwardFAM.msg
-   InverseFAM.msg
+     ForwardFAM.msg
+     InverseFAM.msg
  )
 
 
  generate_messages(
   DEPENDENCIES
-  std_msgs
-  geometry_msgs
+    std_msgs
+    geometry_msgs
 )
 
 catkin_package(
   INCLUDE_DIRS
   CATKIN_DEPENDS 
-  rospy 
-  std_msgs 
-  geometry_msgs 
-  message_runtime
-  ff_msgs
-  ff_hw_msgs
-  rattle_msgs
+    rospy 
+    std_msgs 
+    geometry_msgs 
+    message_runtime
+    ff_msgs
+    ff_hw_msgs
+    rattle_msgs
 )
  
 

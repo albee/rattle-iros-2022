@@ -1,20 +1,23 @@
+<?xml version="1.0"?>
 <package format="2">
   <name>param_est</name>
   <version>1.0.0</version>
-  <description>Sequential inertia estimator using EKF</description>
-
-  <maintainer email="dell@todo.todo">maintainer</maintainer>
-  <license>TODO</license>
-
- <buildtool_depend>catkin</buildtool_depend>
+  <description>Sequential inertia estimator using an EKF</description>
+  </description>
+  <license>
+    Apache License, Version 2.0
+  </license>
+  <author email="astrobee-fsw@nx.arc.nasa.gov">
+    Astrobee Flight Software
+  </author>
+  <maintainer email="astrobee-fsw@nx.arc.nasa.gov">
+    Astrobee Flight Software
+  </maintainer>
+  <buildtool_depend>catkin</buildtool_depend>
   <depend>rospy</depend>
   <depend>std_msgs</depend>
+  <depend>ff_msgs</depend>
+  <depend>ff_hw_msgs</depend>
   <depend>message_runtime</depend>
   <depend>message_generation</depend>
-
-  <!-- The export tag contains other, unspecified, tags -->
-  <export>
-    <!-- Other tools can request additional information be placed here -->
-
-  </export>
 </package>

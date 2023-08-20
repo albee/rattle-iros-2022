@@ -11,13 +11,13 @@ find_package(catkin REQUIRED COMPONENTS
 
 add_message_files(
    FILES
-   Params.msg
+    Params.msg
  )
 
  generate_messages(
   DEPENDENCIES
-  std_msgs
-  geometry_msgs
+    std_msgs
+    geometry_msgs
 )
 
 catkin_package(

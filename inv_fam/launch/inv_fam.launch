@@ -1,5 +1,4 @@
 
-
 <launch>
   <!-- Info for Astrobee nodelets -->
   <?comment launch-prefix="x-terminal-emulator -e gdb -ex run --args" ?>
@@ -25,8 +24,6 @@
 
   <arg name="llp" default="local" />              <!-- LLP IP address              -->
   <arg name="mlp" default="local" />              <!-- MLP IP address              -->
-
-  <param name="/rattle/sim" type="String" value="true"/>
 
   <!-- Nodelet manager -->
   <node

@@ -5,12 +5,25 @@ from autograd import jacobian
 import rospy
 
 
-class Propagation():
 
+class Propagation():
+"""
+The member functions of this class perform forward state propagation using rigid body dynamics. The following simplifications of the dynamics are available:
+1. 3DoF dynamics considerint two inertial parameters (mass, and inertia about the Z axis, izz. The center of mass offsets cx and cy are considered to be zero)
+2. 3DoF dynamics considering all four parameters, i.e, mass, cx, cy, izz
+3. 6DoF dynamics neglecting center of mass offsets, i.e, mass and the principal moments of inertia - mass, ixx, iyy and izz
+4. 6DoF dynamic considering all ten inertial parameters, i.e, mass, cx, cy, cz, ixx, iyy, izz, ixy, izy, ixz
+
+
+Either of RK4 or Euler discretization can be used.
+"""
     def __init__(self, DoF, simplified):
+
         self.DoF = DoF
-        self.accel = 1 #edited to always return acceleration propagation
-        self.simplified = simplified
+        self.accel = 1 # Set to one if the states also include accelerations
+        self.simplified = simplified # set to one if CoM offsets are to be ignored
+
+
         if self.DoF == 3:
             self.func_name = self.forward_dyn_3DoF
             if self.simplified:
@@ -43,9 +56,11 @@ class Propagation():
         rospy.loginfo('[param est] Parameters to be estimated: ' + str(self.params_string))
 
 
+    # integrators
     def RK4_forward_state_propagation(self, params, x, u, dt):
+        
         """
-        An RK4 integrator implementation where the time step is a variable,
+        An RK4 integrator implementation
 
         :x: states at time k
         :dt: integration time step
@@ -60,23 +75,29 @@ class Propagation():
         self. x_kplus1 = (x + (1 / 6*(f1 + 2*f2 + 2*f3 + f4)))
         if self.accel:
             self.x_kplus1 = np.hstack([self.x_kplus1, self.func_name(params, x, u)[0:self.DoF_accel-self.DoF]])
-            #print(self.x_kplus1.shape)
         return self.x_kplus1
 
-
-
-
     def euler_forward_state_propagation(self, params, x, u, dt):
-        #print(x.shape)
+
+        """
+        A Euler integrator implementation
+
+        :x: states at time k
+        :dt: integration time step
+        :u: control inputs (forces and torques)
+        :params: inertial parameters
+        :return: integrated result
+        """
         f1 = self.func_name(params, x, u)
         self.x_kplus1 = x + dt*f1 # velocities
         if self.accel:
             self.x_kplus1 = np.hstack([self.x_kplus1, f1[0:self.DoF_accel-self.DoF]])
-            #print(self.x_kplus1.shape)
         return self.x_kplus1
 
-    # types of dynamics: 3DoF, simplified 3DoF, simplified 6DoF,
-    def forward_dyn_3DoF(self, params, x, u):  # Planar Astrobee dynamics
+
+    # dynamics implementation
+    def forward_dyn_3DoF(self, params, x, u):  
+    # Planar Astrobee dynamics
         # inertial params
         if self.simplified:
             mass = params[0]
@@ -104,6 +125,8 @@ class Propagation():
 
 
     def forward_dyn_6DoF(self, params, x, u):
+    # 6DoF dynamics
+        # inertial params
         if self.simplified:
             mass = params[0]
             cx = 0.0
@@ -128,9 +151,12 @@ class Propagation():
             iyz = params[9]
 
         omega = np.array(x[3:6])
+
+
         I_cm = np.array([[ixx, ixy, ixz],[ixy, iyy, iyz],[ixz, iyz, izz]])
         c = np.array([cx, cy, cz])
 
+        # spatial inertia matrix
         M = np.vstack([np.hstack([np.identity(3)*mass, -mass*self.skew(c)]),
              np.hstack([mass*self.skew(c), I_cm - mass*np.matmul(self.skew(c), self.skew(c))])])
         I_intermediate = I_cm - np.dot(mass, np.matmul(self.skew(c), self.skew(c)))
@@ -151,6 +177,7 @@ class Propagation():
 
 
 
+# TODO: delete after final checks
 # some pre-requisite, sanity check values.
 # # # some hypothetical values
 dt = 0.1
