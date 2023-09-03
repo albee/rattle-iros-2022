@@ -29,7 +29,7 @@ MIT Space Systems Lab
 
 // FSW includes
 #include <ff_util/ff_nodelet.h>
-#include <ff_util/ff_names.h>
+#include <ff_common/ff_names.h>
 
 // Msgs
 #include <geometry_msgs/InertiaStamped.h>

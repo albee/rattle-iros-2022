@@ -20,7 +20,7 @@ Every test has a test#() function available in case it is needed by asap.py
 
 // FSW includes
 #include <ff_util/ff_nodelet.h>
-#include <ff_util/ff_names.h>
+#include <ff_common/ff_names.h>
 #include <ff_util/ff_flight.h>
 #include <ff_util/ff_action.h>
 

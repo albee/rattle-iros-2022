@@ -8,7 +8,7 @@
 #include <ff_msgs/DockAction.h>
 
 // FSW includes
-#include <ff_util/ff_names.h>
+#include <ff_common/ff_names.h>
 #include <ff_util/ff_flight.h>
 
 // Messages
