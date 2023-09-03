@@ -3,7 +3,6 @@
   <name>param_est</name>
   <version>1.0.0</version>
   <description>Sequential inertia estimator using an EKF</description>
-  </description>
   <license>
     Apache License, Version 2.0
   </license>
