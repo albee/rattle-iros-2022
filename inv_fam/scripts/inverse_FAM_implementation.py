@@ -14,7 +14,6 @@ import pdb
 import rospy
 import numpy as np
 import FAM_constants
-import FAM_functions
 import message_filters
 from ff_msgs.msg import FamCommand
 from ff_hw_msgs.msg import PmcCommand
@@ -82,12 +81,14 @@ def calc_FandT():
     # a delay for allowing the COM to be updated from /mob/inertia
     rospy.sleep(5.)
 
+
+     # publish the estimated post-saturation wrenches 
+    pmc_pub = rospy.Publisher(mixer_obj.topic_prefix + "inv_fam/appliedFandT", InverseFAM, queue_size=1)
     
     # subscribe to receive the commanded nozzle angles
     pmc_sub = rospy.Subscriber(mixer_obj.topic_prefix + "hw/pmc/command", numpy_msg(PmcCommand), Pmccallback,
                                [pmc_pub, mixer_obj])
-    # publish the estimated post-saturation wrenches 
-    pmc_pub = rospy.Publisher(mixer_obj.topic_prefix + "inv_fam/appliedFandT", InverseFAM, queue_size=1)
+   
 
     if DIAGNOSTICS:
     # The diagnostics mode computes the forward mixer, i.e, it recreates Astrobee FAM (F&T to nozzle positions)
@@ -115,8 +116,8 @@ def Pmccallback(data, arg):
     Nozzle_pos_2 = data.goals[1].nozzle_positions
     nozzle_positions_all = np.empty(12)
     for i in range (6):
-        nozzle_positions_all[i] = ord(Nozzle_pos_1[i])
-        nozzle_positions_all[i+6] = ord(Nozzle_pos_2[i])
+        nozzle_positions_all[i] = Nozzle_pos_1[i]
+        nozzle_positions_all[i+6] = Nozzle_pos_2[i]
     angles = nozzle_positions_all*FAM_constants.step_in_rad
     angles += FAM_constants.nozzle_min_angle
     # perform the computation to get F&T from the nozzle commands

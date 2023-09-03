@@ -1,8 +1,8 @@
 """
 # FAM_constants.py
 
-Supporting constants for FAM calculations. Derived from the Astrobee Simulink model from release 0.15.1 
-
+Supporting constants for FAM calculations, derived from the Astrobee fam and pmc modules. 
+See "Notes on inverting the FAM.pdf" for a detailed derivation. The parameters used for the derivation can be found in pmc/src/fam.cc and pmc/include/pmc/shared.h
 """
 import numpy as np
 
@@ -13,8 +13,9 @@ nozzle_widths_i = np.array([0.1270, 0.1270, 0.0711, 0.0711, 0.0711, 0.0711])
 nozzle_widths = np.hstack([nozzle_widths_i, nozzle_widths_i])
 
 # opening limits
-nozzle_min_angle = 0.2736676
-nozzle_max_angle = 1.394692659
+PI = 3.14159265358979323846
+nozzle_min_angle =15.68 * PI / 180.0;
+nozzle_max_angle = 79.91 * PI / 180.0
 # The nozzle angles are mapped from 0 to 255, compute the number of radians in each step
 step_in_rad = (nozzle_max_angle - nozzle_min_angle) / 255
 # nozzle orientations
@@ -48,14 +49,15 @@ air_density = 1.200
 
 # Impeller properties
 impeller_diameter = 0.1397
-impeller_speed = 261.7994       #impeller speed based on flight mode, Consider flight mode was 2 (nominal), N = 261.7994
+impeller_speed = 261.7994       #NB: The impeller speed based on flight mode, flight mode 2 (nominal), N = 261.7994 is considered in these calculations. 
+# The other speeds are  {2000 * 2 * PI / 60, 2500 * 2 * PI / 60, 2800 * 2 * PI / 60};
 
 # Discharge coefficients
 Cd_PM1 = np.array([0.9150, 0.7558, 0.9408, 0.7921, 0.9240, 0.9303])
 Cd_PM2 = np.array([0.9471, 0.7645, 1, 0.9048, 0.9366, 0.8938])
 Cd = np.hstack([Cd_PM1, Cd_PM2])
 
-# Lookup table converting from thrust to Cdp. 
+# Lookup table converting from thrust to Cdp - only consider positive thrust values
 thrust_breakpoints = np.array([3.8366e-08, 1.2244e-07, 2.0623e-07, 2.8974e-07, 3.7294e-07, 4.5584e-07, 5.3841e-07,
                                6.2065e-07, 7.0253e-07, 7.8406e-07, 8.6521e-07, 9.4597e-07, 1.0263e-06, 1.1063e-06,
                                1.1858e-06, 1.2648e-06, 1.3434e-06, 1.4216e-06, 1.4992e-06, 1.5764e-06, 1.6530e-06,
