@@ -146,3 +146,4 @@ Coordinated use is covered in `execute_asap/README.md`, which uses an implementa
 ```
 roslaunch astrobee sim_rattle.launch rviz:=true dds:=false world:=iss
 ```
+Including the option ```seconday:=false``` in the above command spawns just one Astrobee, Queen, in the the environment.
