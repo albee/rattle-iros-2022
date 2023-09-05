@@ -18,10 +18,9 @@ class Estimation():
     The propagation step simply propagates the inertial parameters as they are,
     with consideration of some noise in Q, the process noise matrix.
     """
-    def __init__(self, prop, use_vels, sim):
+    def __init__(self, prop, use_vels):
 
         self.DoF = prop.DoF
-        self.sim = sim
         if self.DoF == 3:
             self.n_omega = 1
         else:

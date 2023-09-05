@@ -13,9 +13,10 @@ from param_est.msg import Params
 
 class Callbacks():
 
-"""
-Process the states from the ekf and actuation from the inv_fam module using the callback functions
-"""
+    """
+    Process the states from the ekf and actuation from the inv_fam module using the callback functions
+    """
+
     def __init__(self, rosparams):
         self.process = 0 # TODO: check if still used/needed?
         # have all states been initialized?
@@ -59,13 +60,12 @@ Process the states from the ekf and actuation from the inv_fam module using the 
 
         # Is the environment ground or ISS (this decides the DoF of the model used)
         ground = rosparams[0]
+        self.reg_delay = rosparams[1]
         if (ground == "true"):
             self.DoF = 3
         else:
             self.DoF = 6
 
-        # initial regulation delay for the experiment to start.
-        self.reg_delay = rosparams[2]
         est = paramest_estimation_utils
 
 
@@ -141,48 +141,46 @@ Process the states from the ekf and actuation from the inv_fam module using the 
             data_batch = np.array(self.ip_and_meas_list[0])
             self.ip_and_meas_list = self.ip_and_meas_list[1:]
 
-                for n in range(0, self.batch_dim*2, 10):
-                    row = data_batch[n, :]
-                    self.ts_curr = row[0]
-                    dt = self.ts_curr - self.ts_prev
-                    if self.states_init == True:
-                        if all(row[7:]==0): # if the data corresponds to fam
+            for n in range(0, self.batch_dim*2, 10):
+                row = data_batch[n, :]
+                self.ts_curr = row[0]
+                dt = self.ts_curr - self.ts_prev
+                if self.states_init == True:
+                    if all(row[7:]==0): # if the data corresponds to fam
 
-                            # propagate using the previous control input over this time step
-                            if dt>0:
-                                est.state_propagation(dt, self.ctl_prev)
-                            self.ctl_prev = np.array((row[1:7])).reshape((6,))
+                        # propagate using the previous control input over this time step
+                        if dt>0:
+                            est.state_propagation(dt, self.ctl_prev)
+                        self.ctl_prev = np.array((row[1:7])).reshape((6,))
 
-                        else: # the data corresponds to the localization ekf
-                            # propagate using the previous control input over this time step
-                            if dt>0:
-                                est.state_propagation(dt, self.ctl_prev)
-                            # then perform the update when comparing to the measured states
-                            states_meas = np.array((row[1:])).reshape((16,))
-                            est.update_step(dt, states_meas)
+                    else: # the data corresponds to the localization ekf
+                        # propagate using the previous control input over this time step
+                        if dt>0:
+                            est.state_propagation(dt, self.ctl_prev)
+                        # then perform the update when comparing to the measured states
+                        states_meas = np.array((row[1:])).reshape((16,))
+                        est.update_step(dt, states_meas)
 
-                    else:
-                        # If the states are not initialized, use the first measurement to initialize them - typically the
-                        # very first time step
-                        if any(row[7:] != 0):
-                            states_meas = np.array((row[1:])).reshape((16,))
-                            # use the measured states to initialize the linear and angular velocity
-                            est.states_prop = est.get_z_tilde(states_meas)
-                            self.states_init = True
-                    self.ts_prev = self.ts_curr
+                else:
+                    # If the states are not initialized, use the first measurement to initialize them - typically the
+                    # very first time step
+                    if any(row[7:] != 0):
+                        states_meas = np.array((row[1:])).reshape((16,))
+                        # use the measured states to initialize the linear and angular velocity
+                        est.states_prop = est.get_z_tilde(states_meas)
+                        self.states_init = True
+                self.ts_prev = self.ts_curr
 
 
 def process_data():
     # initialize node
     rospy.init_node('param_estimate')
 
-    # parameter, ground or ISS
-    ground = rospy.get_param('/reswarm/ground')
+    # is the ground or ISS environment used?
+    ground = "false"
 
-    # for some simulation rosbag testing.
-    # sim = "false"
-    # ground = "true"
-
+    # Should a regulation delay be accounted for before the estimation should start?
+    reg_delay = 0
 
     # arbitrary value to ensure that the data are processed as soon as a batch is complete.
     loop_rate = rospy.Rate(50)
@@ -193,13 +191,15 @@ def process_data():
     # initialize the propagation object.
     # simplified dynamics - without com offsets for 3 DoF
     # and without CoM offsets and products of inertia for 6 DoF
+    simplified_dynamics = 1
 
     # are we using velocity measurements, or only pose
     use_vels_meas = 1
 
+
     prop = paramest_propagation_utils.Propagation(call.DoF, simplified_dynamics)
 
-    est = paramest_estimation_utils.Estimation(prop, use_vels_meas, sim)
+    est = paramest_estimation_utils.Estimation(prop, use_vels_meas)
 
     # pubs and subs
     # estimate publisher

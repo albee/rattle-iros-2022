@@ -7,16 +7,16 @@ import rospy
 
 
 class Propagation():
-"""
-The member functions of this class perform forward state propagation using rigid body dynamics. The following simplifications of the dynamics are available:
-1. 3DoF dynamics considerint two inertial parameters (mass, and inertia about the Z axis, izz. The center of mass offsets cx and cy are considered to be zero)
-2. 3DoF dynamics considering all four parameters, i.e, mass, cx, cy, izz
-3. 6DoF dynamics neglecting center of mass offsets, i.e, mass and the principal moments of inertia - mass, ixx, iyy and izz
-4. 6DoF dynamic considering all ten inertial parameters, i.e, mass, cx, cy, cz, ixx, iyy, izz, ixy, izy, ixz
+    """
+    The member functions of this class perform forward state propagation using rigid body dynamics. The following simplifications of the dynamics are available:
+    1. 3DoF dynamics considerint two inertial parameters (mass, and inertia about the Z axis, izz. The center of mass offsets cx and cy are considered to be zero)
+    2. 3DoF dynamics considering all four parameters, i.e, mass, cx, cy, izz
+    3. 6DoF dynamics neglecting center of mass offsets, i.e, mass and the principal moments of inertia - mass, ixx, iyy and izz
+    4. 6DoF dynamic considering all ten inertial parameters, i.e, mass, cx, cy, cz, ixx, iyy, izz, ixy, izy, ixz
 
 
-Either of RK4 or Euler discretization can be used.
-"""
+    Either of RK4 or Euler discretization can be used.
+    """
     def __init__(self, DoF, simplified):
 
         self.DoF = DoF
