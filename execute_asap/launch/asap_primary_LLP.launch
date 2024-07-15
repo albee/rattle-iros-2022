@@ -25,8 +25,10 @@ MIT Space Systems Laboratory
 
   <rosparam command="load" file="$(find execute_asap)/config/casadi_nmpc_params.yaml"/>
 
-  <node pkg="nodelet" type="nodelet" name="casadi_nmpc"
-        required="false" respawn="false"
-        args="standalone casadi_nmpc/CasadiNMPCNodelet"
-        output="$(arg output)"/>
+  <group ns="$(arg ns)">
+    <node pkg="nodelet" type="nodelet" name="casadi_nmpc"
+          required="false" respawn="false"
+          args="standalone casadi_nmpc/CasadiNMPCNodelet"
+          output="$(arg output)"/>
+  </group>
 </launch>

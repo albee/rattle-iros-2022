@@ -1,8 +1,0 @@
-{
-    "rename_types": [
-    ],
-    "fix_message_definition_topic_patterns": [
-        "/gs/*",
-        "/hw/cam_sci/compressed"
-    ]
-}

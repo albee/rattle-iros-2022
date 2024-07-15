@@ -72,10 +72,8 @@ pip3 install autograd
 pip3 install pycddlib
 ```
 
-Note: Some of RATTLE's packages have baked-in dependencies on some Astrobee flight software classes, namely, ff_nodelet. A few extra dependencies are required, via the `astrobee` packages added here.
-
-
 ## ROS Packages
+
 RATTLE's functions are implemented here as separate ROS packages:
 
 - Global planning
@@ -101,7 +99,7 @@ RATTLE's functions are implemented here as separate ROS packages:
 ## Installation
 
 ### Dependencies
-See above.
+See [above](###requirements).
 
 ### RATTLE packages
 Create a ROS workspace and set up the packages within it:
@@ -109,41 +107,89 @@ Create a ROS workspace and set up the packages within it:
 ```
 mkdir rattle-ws
 cd rattle-ws
-git clone https://github.com/albee/rattle-iros-2022
-mv rattle-iros-2022 src
 catkin init
-catkin build
-source ./devel/setup.bash
+git clone https://github.com/albee/rattle-iros-2022
+mv rattle-iros-2022 src/rattle
 ```
 
-This will build the RATTLE packages, which can be used standalone, or coordinated as a whole with the aid of a simulation environment (see below).
+### Astrobee Simulation Setup
+
+This implementation of RATTLE features tight integration with the Astrobee simulation environment. Get a compatible version:
+
+```
+export ASTROBEE_WS=${HOME}/rattle-ws/
+git clone https://github.com/nasa/astrobee.git $ASTROBEE_WS/src/astrobee
+pushd $ASTROBEE_WS/src/astrobee
+git checkout v0.16.1
+git submodule update --init --depth 1 description/media
+popd
+```
+
+Now, build Astrobee's dependencies:
+
+```bash
+sudo apt update
+sudo apt upgrade
+
+pushd $ASTROBEE_WS
+cd src/astrobee/scripts/setup
+./add_ros_repository.sh
+sudo apt-get update
+cd debians
+./build_install_debians.sh
+cd ../
+./install_desktop_packages.sh
+sudo rosdep init
+rosdep update
+popd
+```
+
+Finally, configure and run catkin to build both the Astrobee sim and TRACE:
+
+```bash
+pushd $ASTROBEE_WS
+./src/astrobee/scripts/configure.sh -l -F -D
+
+# This step is very important! If your paths are wrong, you will not be able to build Astrobee packages.
+export CMAKE_PREFIX_PATH="${CMAKE_PREFIX_PATH:+"$CMAKE_PREFIX_PATH:"}${ASTROBEE_WS}/src/astrobee/cmake"
+catkin build -j2
+```
+
+Don't forget to source your workspace!
+
+```bash
+source $ASTROBEE_WS/devel/setup.bash
+```
+
+This will build the RATTLE packages, which can be used standalone, or coordinated as a whole with the aid of the Astrobee simulation environment (see below).
 Individual RATTLE use is best demonstrated using the `rattle_coordinator` package (consult the README).
 
-Note: strange catkin build errors for `ff_msgs` involving empy can be resolved using:
-`catkin build -DPYTHON_EXECUTABLE=/usr/bin/python3 -DPYTHON_INCLUDE_DIR=/usr/include/python3.7m`
-
-
-### (optional) Astrobee simulation environment
-Please consult The [Astrobee](https://github.com/nasa/astrobee) repository and follow their detailed installation instructions to set up the Astrobee simulation.
-The simulation essentially lives in a ROS workspace devoted to it and Astrobee's core FSW packages. After setting up the sim, you should copy `rattle-ws`'s packages to the src subdirectory,
-
-```
-# in rattle-ws:
-mv rattle-ws/src $ASTROBEE-WS/src
-```
-
-This will overwrite the default `astrobee` subdirectory: this is okay, since this will allow you to have access to the special `sim_rattle.launch` launchfile sequence.
 
 ## Usage
 RATTLE's packages can be used standalone, or as a coordinated whole as in the examples in the [paper](https://ieeexplore.ieee.org/document/9851849).
-To run as a whole, RATTLE requires a simulation environment to respond to and provide message inputs/outputs. This repository is configured to interact with
-the [Astrobee simulation environment](https://github.com/nasa/astrobee), on which RATTLE's modules should be placed.
+To run as a whole, RATTLE requires a simulation environment to respond to and provide message inputs/outputs, which you should have installed [above](###astrobee-simulation-setup).
 
-Most packages separate ROS wrappers over core algorithms for standalone use; please consult individual READMEs in each package.
-
-Coordinated use is covered in `execute_asap/README.md`, which uses an implementation of the Astrobee [ASAP](https://github.com/albee/ASAP) testing interface. Launching the sim with RATTLE's default configuration is performed using:
+### ISS-Like Commanding Environment
+Consult `execute_asap/README.md`, which uses an implementation of the Astrobee [ASAP](https://github.com/albee/ASAP) testing interface. Launching the sim with RATTLE's default configuration is performed using:
 
 ```
 roslaunch astrobee sim_rattle.launch rviz:=true dds:=false world:=iss
 ```
-Including the option ```seconday:=false``` in the above command spawns just one Astrobee, Queen, in the the environment.
+
+### RATTLE Commanding Environment
+
+Consult `rattle_coordinator/README.md`, which uses a separate RATTLE commanding interface for a different set of tests.
+
+- When first starting or switching between sim environments be sure to reset accelerometer bias for both Astrobees:
+
+```bash
+rosrun executive teleop_tool -ns "bumble/" -reset_bias
+rosrun executive teleop_tool -ns "queen/" -reset_bias
+```
+
+### Standalone Usage
+
+Most packages separate ROS wrappers from core algorithms for standalone use; please consult individual READMEs in each package to adapt for use with
+other simulation frameworks.
+
+
