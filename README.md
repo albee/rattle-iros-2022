@@ -179,12 +179,12 @@ You can launch RATTLE in the Astrobee simulation environment using `rattle_astro
 `[-s, --sim]` : Run a simulation test. Defaults to hardware.
 ```
 
-Tests19 and 78 are good demonstration tests to try out next--see the full list below!
+Tests19 and 78 are good demonstration tests to try out next---see the full list below!
 
-See `execute_asap/README.md` for high-level usage instructions to understand how nodes are started/stopped
+* See `execute_asap/README.md` for high-level usage instructions to understand how nodes are started/stopped
 and the execution flow of test commands.
 
-* Note that tests start from desired initial conditions! You might need to rerun a test to allow Astrobee to reach the proper start state. *
+* *Note that tests start from desired initial conditions! You might need to rerun a test to allow Astrobee to reach the proper start state.*
 
 
 
