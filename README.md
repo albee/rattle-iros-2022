@@ -21,7 +21,7 @@ RATTLE is implemented here for a 6DOF free-flying robot, though its interfaces a
 </p>
 
 ## Requirements
-For coordinated use of all packages with the Astrobee sim Ubuntu 16.04 is required (possibly 18.04 or 20.04 depending on Astrobee sim support) with a standard
+For coordinated use of all packages with the Astrobee sim Ubuntu 16.04 or 20.04 is required (possibly 22.04 depending on Astrobee simulation support) with a standard
 [ROS](http://wiki.ros.org/ROS/Installation) installation. 
 
 - [CasADi 3.5.5](https://github.com/casadi/casadi/releases/tag/3.5.5)
