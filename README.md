@@ -5,6 +5,8 @@ Parametric information-aware motion planning using the [RATTLE method](https://i
   <img src="/img/astrobee.png" />
 </p>
 
+
+
 ## What is this?
 RATTLE is a set of modules that perform parametric information-aware motion planning; in other words, RATTLE creates motion plans for robots to follow that try to be both *useful for learning about system unknowns* while also *attempting to reach a goal/minimize fuel use*. Uniquely, RATTLE includes capabilities to *use learned system information on-the-fly*, allowing the robot to better understand its own system model, while reasoning at a control level about how cautious it should be. Please see [the paper](https://ieeexplore.ieee.org/document/9851849) for more detail.
 
@@ -72,29 +74,6 @@ pip3 install autograd
 pip3 install pycddlib
 ```
 
-## ROS Packages
-
-RATTLE's functions are implemented here as separate ROS packages:
-
-- Global planning
-    - `rattle_rrt`: A "long-horizon" sampling-based planner that also accounts for, in this case, translational dynamics.
-
-- Local information-aware planning
-    - `rattle_acado_planner`: A mid-level "local" planner that also considers information content of planned trajectories. Implemented using ACADO.
-
-- Low-level robust control
-    - `casadi_nmpc` : A robust tube MPC control implementation, for the translational dynamics.
-    - `z_poly_calc`: An mRPI (minimum robust postiviely invariant set) calculator, using Rakovic's method.
-
-- Online parameter estimation
-    - `inv_fam`: Astrobee's Force Allocation Module (or FAM) computes the nozzle opening angles required to apply commanded wrenches. The inv_fam package estimates the true (post-saturation) forces and torques from nozzle openings, for use by the inertial parameter estimator
-    - `param_est`: A sequential inertial parameter estimator - this implementation considers rigid body dynamics and estimates the mass and principal moments of inertia.
-
-- ROS
-    - `rattle_msgs`: Custom msg types used by these packages.
-    - `rattle_coordinator`: The coordinator node that runs eveything and oversees execution. Uses a messy version of [ASAP](https://github.com/albee/ASAP), which has shiny cleaned up interfaces now.
-    - `execute_asap`: A manager node that launches all other nodes. Useful if hardware testing, especially using Astrobee.
-    - `data`: Miscellaneous I/O.
 
 ## Installation
 
@@ -102,7 +81,7 @@ RATTLE's functions are implemented here as separate ROS packages:
 See [above](###requirements).
 
 ### RATTLE packages
-Create a ROS workspace and set up the packages within it:
+Create a ROS workspace and set up the RATTLE packages within it:
 
 ```
 mkdir rattle-ws
@@ -162,7 +141,7 @@ source $ASTROBEE_WS/devel/setup.bash
 ```
 
 This will build the RATTLE packages, which can be used standalone, or coordinated as a whole with the aid of the Astrobee simulation environment (see below).
-Individual RATTLE use is best demonstrated using the `rattle_coordinator` package (consult the README).
+
 
 
 ## Usage
@@ -170,22 +149,64 @@ RATTLE's packages can be used standalone, or as a coordinated whole as in the ex
 To run as a whole, RATTLE requires a simulation environment to respond to and provide message inputs/outputs, which you should have installed [above](###astrobee-simulation-setup).
 
 ### ISS-Like Commanding Environment
-Consult `execute_asap/README.md`, which uses an implementation of the Astrobee [ASAP](https://github.com/albee/ASAP) testing interface. Launching the sim with RATTLE's default configuration is performed using:
 
-```
-roslaunch astrobee sim_rattle.launch rviz:=true dds:=false world:=iss
-```
+You can launch RATTLE in the Astrobee simulation environment using `rattle_astrobee_interface` and its `execute_asap` interface:
 
-### RATTLE Commanding Environment
+- Launch space environment (ISS):
 
-Consult `rattle_coordinator/README.md`, which uses a separate RATTLE commanding interface for a different set of tests.
+`roslaunch rattle_astrobee_interface sim_rattle.launch world:=iss rviz:=true`
 
-- When first starting or switching between sim environments be sure to reset accelerometer bias for both Astrobees:
+- Launch ground environment (ground):
+
+`roslaunch rattle_astrobee_interface sim_rattle.launch world:=granite rviz:=true`
+
+- When switching between environments be sure to reset accelerometer bias:
+
+`rosrun executive teleop_tool -ns "queen/" -reset_bias`
+
+- Run a RATTLE test (after sim launch)
 
 ```bash
-rosrun executive teleop_tool -ns "bumble/" -reset_bias
-rosrun executive teleop_tool -ns "queen/" -reset_bias
+`rosrun execute_asap pub_gds_topics.py --sim 0` : to run test 0 on the ISS for sim.
+
+`rosrun execute_asap pub_gds_topics.py --ground --sim 0` : to run test 0 on the ground for sim.
+
+`rosrun execute_asap pub_gds_topics.py --sim -1` : to stop a test. You will see lots of output as the nodes are stopped.
+
+
+`[-g, --ground]` : Run a ground test. Default to ISS.
+
+`[-s, --sim]` : Run a simulation test. Defaults to hardware.
 ```
+
+Tests19 and 78 are good demonstration tests to try out next--see the full list below!
+
+See `execute_asap/README.md` for high-level usage instructions to understand how nodes are started/stopped
+and the execution flow of test commands.
+
+* Note that tests start from desired initial conditions! You might need to rerun a test to allow Astrobee to reach the proper start state. *
+
+
+
+## Test List
+
+- -1 Stop and reset nodelets
+- 0 Quick checkout of RATTLE software
+- 9 Non-info aware trajectory, from point B to C
+- 10 Mass info-gain only, B to C
+- 11 Inertia info-gain only, B to C
+- 12 Info gain for all 4 parameters (mass and inertias)
+- 13 Tube MPC checkout test ("MIT")
+- 15 Standard MPC checkout test ("MIT")
+- 16 RATTLE test: generic obstacle, run full pipeline (no est updates used)
+- 17 RATTLE test: "hard" obstacle, run full pipeline
+- 18 RATTLE test: run acado planner only
+- 19 RATTLE test: run with high weight, then low weight
+- 20 RATTLE test: gather translation data for estimation checkout
+- 21 RATTLE test: mass excitation
+- 22 RATTLE test: I_zz (moment of inertia) excitation
+- 77 RATTLE full test (A to B)
+- 78 RATTLE replan test (avoid an "astronaut" obstacle!)
 
 ### Standalone Usage
 
@@ -193,3 +214,50 @@ Most packages separate ROS wrappers from core algorithms for standalone use; ple
 other simulation frameworks.
 
 
+
+## ROS Packages
+
+RATTLE's functions are implemented here as separate ROS packages:
+
+- Global planning
+    - `rattle_rrt`: A "long-horizon" sampling-based planner that also accounts for, in this case, translational dynamics.
+
+- Local information-aware planning
+    - `rattle_acado_planner`: A mid-level "local" planner that also considers information content of planned trajectories. Implemented using ACADO.
+
+- Low-level robust control
+    - `casadi_nmpc` : A robust tube MPC control implementation, for the translational dynamics.
+    - `z_poly_calc`: An mRPI (minimum robust postiviely invariant set) calculator, using Rakovic's method.
+
+- Online parameter estimation
+    - `inv_fam`: Astrobee's Force Allocation Module (or FAM) computes the nozzle opening angles required to apply commanded wrenches. The inv_fam package estimates the true (post-saturation) forces and torques from nozzle openings, for use by the inertial parameter estimator
+    - `param_est`: A sequential inertial parameter estimator - this implementation considers rigid body dynamics and estimates the mass and principal moments of inertia.
+
+- ROS
+    - `rattle_msgs`: Custom msg types used by these packages.
+    - `rattle_coordinator`: The coordinator node that runs eveything and oversees execution. Uses a messy version of [ASAP](https://github.com/albee/ASAP), which has shiny cleaned up interfaces now.
+    - `execute_asap`: A manager node that launches all other nodes. Useful if hardware testing, especially using Astrobee.
+    - `data`: Miscellaneous I/O.
+
+
+
+## Citation
+
+If you find RATTLE is useful in your own work, please consider citing our relevant papers:
+
+```tex
+@article{albeeRATTLEMotionPlanning2022,
+  title = {The RATTLE Motion Planning Algorithm for Robust Online Parametric Model Improvement with On-Orbit Validation},
+  author = {Albee, Keenan and Ekal, Monica and Coltin, Brian and Ventura, Rodrigo and Linares, Richard and Miller, David W.},
+  year = {2022},
+  journal = {Robotics and Automation, Letters}
+}
+
+@article{doerrReSWARMMicrogravityFlight2024,
+  title = {The ReSWARM Microgravity Flight Experiments: Planning, Control, and Model Estimation for On-orbit Close Proximity Operations},
+  shorttitle = {The ReSWARM Microgravity Flight Experiments},
+  author = {Doerr, Bryce and Albee, Keenan and Ekal, Monica and Ventura, Rodrigo and Linares, Richard},
+  year = {2024},
+  journal = {Journal of Field Robotics}
+}
+```

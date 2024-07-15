@@ -288,7 +288,7 @@ class Mixin:
               """, self.DT_G_, self.t_L_, self.DT_L_, self.N_L_, waypoint_step, len_global_plan)
 
         # dt_l_replan_adj = self.t_L_/waypoint_step  # wall clock dt for local replanning
-        waypoint_idxs = range(0, len_global_plan, waypoint_step)
+        waypoint_idxs = list(range(0, len_global_plan, waypoint_step))
         if (waypoint_idxs[-1] != len_global_plan):
             waypoint_idxs.append(len_global_plan - 1)  # add in the final point (extra replan)
         # print("idxs: ", waypoint_idxs)

@@ -9,10 +9,14 @@ This package contains high-level scripts for coordinating RATTLE's components:
 * run_rattle.py : (in development) runs specific instances of RATTLE tests
 * rattle_coordinator_node.py : the main node monitoring RATTLE progress
 
-There are a number of predefined test numbers available to trigger RATTLE's capabilities: see `run_rattle.py`.
+There are a number of predefined test names available to trigger RATTLE's capabilities: see `run_rattle.py`. 
 
 
 ## Usage
+
+This commanding interface is meant to be used alongside `execute_asap`. However, it can be used in a debug mode to run standalone
+or with the main RATTLE nodes:
+
 * Standalone:
 1. `roslaunch rattle_coordinator rattle_coordinator.launch`
 2. `rosrun rattle_coordinator run_rattle.py [test number]`
@@ -20,6 +24,6 @@ There are a number of predefined test numbers available to trigger RATTLE's capa
 * Multi-node testing:
 1. `roslaunch rattle_coordinator debug.launch [rviz:={false, true}]`
 2. `rosrun rattle_coordinator run_rattle.py <rattle_test_name>` (to use debug interface) OR
-`rosrun execute_asap pub_gds_topics.py [--sim] [--ground] [--test] <reswarm_test_number>` (to use execute_asap interface)
+   `rosrun execute_asap pub_gds_topics.py [--sim] [--ground] [--test] <reswarm_test_number>` (to use execute_asap interface)
 
 

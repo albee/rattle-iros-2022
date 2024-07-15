@@ -38,17 +38,11 @@
 
   <!-- ISS start locations -->
   <arg if="$(eval arg('world')=='iss' and arg('axis')=='x')"
-    name="pose_bumble" default="11.0500   -9.6500    4.9000 0.0 0.0 0.0 1.0" />
-  <arg if="$(eval arg('world')=='iss' and arg('axis')=='x')"
     name="pose_queen" default="10.3500   -9.6500    4.9000 0.0 0.0 0.0 1.0" />
 
   <arg if="$(eval arg('world')=='iss' and arg('axis')=='y')"
-    name="pose_bumble" default="10.9 -9.65 4.9 0.0 0.0 0.0 1.0" />
-  <arg if="$(eval arg('world')=='iss' and arg('axis')=='y')"
-    name="pose_queen" default="10.9 -8.15 4.9 0.0 0.0 0.7071 -0.7071" />
+    name="pose_queen" default="10.8 -9.6 4.8 0.0 0.0 -0.7071 0.7071" />
 
-  <arg if="$(eval arg('world')=='iss' and arg('axis')=='z')"
-    name="pose_bumble" default="10.9 -9.65 5.15 0.0 0.0 0.0 1.0" />
   <arg if="$(eval arg('world')=='iss' and arg('axis')=='z')"
     name="pose_queen" default="10.9 -9.65 4.4 0.0 0.7071 0.0 -0.7071" />
 

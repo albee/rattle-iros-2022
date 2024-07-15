@@ -195,11 +195,11 @@ class Mixin:
             # if self.ground_ is True:
             #     marker_msg.pose.position.z = 0.0
             #     marker_msg.scale.z = 1.0
-            #     marker_msg.type = 3.0  # cylinders
+            #     marker_msg.type = 3  # cylinders
             # else:
             marker_msg.pose.position.z = obs[5]
             marker_msg.scale.z = 2*obs[2]
-            marker_msg.type = 2.0  # ellipsoids
+            marker_msg.type = 2  # ellipsoids
 
             markerarray.markers.append(marker_msg)
             i += 1
@@ -233,7 +233,7 @@ class Mixin:
 
         marker_msg.header.frame_id = "world"  # "map"
         marker_msg.id = 777
-        marker_msg.type = 2.0  # sphere
+        marker_msg.type = 2  # sphere
 
         marker_msg.pose.position.z = start[2]
 
@@ -257,7 +257,7 @@ class Mixin:
 
         marker_msg.header.frame_id = "world"  # "map"
         marker_msg.id = 778
-        marker_msg.type = 2.0  # sphere
+        marker_msg.type = 2  # sphere
 
         marker_msg.pose.position.z = goal[2]
 

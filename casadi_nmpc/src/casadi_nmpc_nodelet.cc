@@ -40,6 +40,7 @@ namespace casadi_nmpc {
     tube_mpc_func_serialized_ = casadi::Function::load(TUBE_MPC_FILE);
     mpc_func_serialized_ = casadi::Function::load(MPC_FILE);
     dynamics_func_serialized_ = casadi::Function::load(DYNAMICS_FILE);
+
     // mpc_func_casadi_ = casadi::external("mpc_func_casadi", CASADI_MPC_LIB);  // casadi needs to be able to find this .so
     // tube_mpc_func_casadi_ = casadi::external("tube_mpc_func_casadi", CASADI_ROBUST_TUBE_MPC_LIB);  // casadi needs to be able to find this .so
 

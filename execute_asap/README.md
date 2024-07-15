@@ -78,22 +78,9 @@ rosbags are automatically started for a new test. See `asap_config.py` for bag a
 
 
 ## Simulator (and `execute_asap`) Startup
-Start up the Astrobee sim with '/bumble' and '/honey' for the ISS:
+Start up the Astrobee sim with '/queen' in the ISS environment:
 
 `roslaunch astrobee sim_rattle.launch rviz:=true dds:=false`
 
-You can set additional parameters on what to launch in `sim_rattle.launch`.
-
-
-## Standalone `execute_asap` Startup
-```
-roslaunch execute_asap asap_astrobee.launch
-```
-
-
 ## Adding Tests
-You can add tests in the `coordinator`, consult the README.
-
-
-## Logging
-logging levels are set in astrobee/resources/logging/config
+You can add tests in the `coordinator`, consult the [README](coordinator/README.md).
