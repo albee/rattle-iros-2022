@@ -208,7 +208,12 @@ and the execution flow of test commands.
 - 77 RATTLE full test (A to B)
 - 78 RATTLE replan test (avoid an "astronaut" obstacle!)
 
-### Standalone Usage
+## Visualization
+
+Astrobee's simulation environment provides visualization using RViz. To visualize RATTLE topics, a custom RViz file is available in `rattle_astrobee_interface/config/iss_rattle.rviz`. To open this manually in RViz, select `File > Open Config`.
+
+
+## Standalone Usage
 
 Most packages separate ROS wrappers from core algorithms for standalone use; please consult individual READMEs in each package to adapt for use with
 other simulation frameworks.
